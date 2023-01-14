@@ -3,4 +3,4 @@
 
 The project has been initialized.
 
-feature/auth
+feature/auth/signin
