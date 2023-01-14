@@ -3,3 +3,5 @@
 
 The project has been initialized.
 test
+
+feed 내용 초기화
