@@ -35,6 +35,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
                 draft.me = action.data;
                 break;
             case 'LOG_IN_FAILURE' :
+                draft.isLoggedIn = true;
                 break;
     
             case 'SIGN_UP_REQUEST' :

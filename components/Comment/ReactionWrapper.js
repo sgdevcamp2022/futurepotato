@@ -1,11 +1,12 @@
 import Link from "next/link";
 
-const ReactionWrapper = (checkHeart, id) => {
+const ReactionWrapper = (props) => {
+    console.log(props.id);
     return(
         <div className="reaction-wrapper">
-            {checkHeart ? <img src="/like.PNG" className="icon" alt="" />
+            {props.checkHeart ? <img src="/like.PNG" className="icon" alt="" />
             : <img src="/like.PNG" className="icon" alt="" />}
-            <Link href = {`/detail/`} legacyBehavior>
+            <Link href = {`/detail/${props.id}`} legacyBehavior>
                 <img src="/comment.PNG" className="icon" alt="" />
             </Link>
             <img src="/send.PNG" className="icon" alt="" />

@@ -1,15 +1,13 @@
 import CommentItem from "./CommentItem";
 
 const CommentList = (commentList) => {
-    const comment = commentList.commentList;
-    
-    console.log(commentList);
+    const commentLists = commentList.commentList;
+    console.log(commentList.commentList);
     return(
         <div className="comment-list">
-            {comment.length != 0 ? comment.map((v) => {
-                console.log(v);
+            {commentLists.length != 0 ? commentLists.map((v) => (
                 <CommentItem commentItem = {v}/>
-}) : <div></div>}
+            )) : <div></div>}
         </div>
     );
 };

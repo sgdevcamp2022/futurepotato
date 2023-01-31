@@ -1098,3 +1098,37 @@ Remove or comment-out the code block below to see how the browser will fall-back
   padding-top: 2px;
   padding-bottom: 2px;
 }
+
+.comment_form{
+  min-height: 70px;
+  width: 280px;
+}
+
+.comment-info{
+  min-height:50px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.profile-content{
+  display: flex;
+  height: 100%;
+  width: 100%;
+  
+}
+
+.name-content-data{
+  display: flex;
+  flex-direction:column;
+}
+
+.name-content{
+  font-size: 15px;
+  padding-bottom: 10px;
+}
+
+.pic-wrapper{
+  height: 100%;
+  align-items: center;
+  padding-right: 10px;
+}

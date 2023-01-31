@@ -11,7 +11,7 @@ export const initialMainState = {
             {"name" : "user1", "profileImage" : "/cover 3.png"},
             {"name" : "user1", "profileImage" : "/cover 3.png"},
             {"name" : "user1", "profileImage" : "/cover 3.png"}],
-    postList:[{"id":1, "name" : "user1", "content": "게시글1","createdDate": "2023-01-01T12:11:00",
+    postList:[{id:1, name : "user1", "content": "게시글1","createdDate": "2023-01-01T12:11:00",
                 "modifiedDate": "2023-01-01T13:11:00",
                 "likeCount": 12,
                 "likesCheck": true,
