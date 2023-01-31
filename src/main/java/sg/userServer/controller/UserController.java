@@ -8,7 +8,6 @@ import sg.userServer.service.UserService;
 
 
 @RestController
-@RequestMapping("/user")
 public class UserController {
     @Autowired
     UserService userService;
@@ -23,7 +22,7 @@ public class UserController {
     public void createUser(@RequestParam String accountName ,@RequestParam String accountId) {
         UserEntity userEntity = new UserEntity(accountName, accountId);
         userService.saveUser(userEntity);
-    
     }
+
 
 }
