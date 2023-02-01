@@ -18,7 +18,8 @@ const CommentItem = (commentItem) => {
                         <div className = 'date-heart-reply' style = {{fontSize:11, color:'gray'}}>
                             <span>1일&nbsp;&nbsp;&nbsp;&nbsp;</span>
                             <span>좋아요 11개&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                            <span>답글 달기</span>
+                            <span>답글 달기&nbsp;&nbsp;&nbsp;</span>
+                            <span>● ● ●</span>
                         </div>
                     </div>
                 </div>

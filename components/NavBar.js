@@ -35,7 +35,7 @@ const NavBar = () => {
                     </Link>
 
                     <Modal isOpen={newPostOpen} onRequestClose={()=>setNewPost(false)}
-                        style={{content:{left:"30%", right:"30%", padding:0, borderRadius:13}}}
+                        style={{content:{left:"20%", right:"20%", padding:0, borderRadius:13}}}
                     >
                         <NewPost/>
                     </Modal>

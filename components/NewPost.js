@@ -36,7 +36,7 @@ const NewPost = () => {
                 <div className ='modal_title_side'></div>
             </div>
             <div className='modal_image_upload'>
-                <img src="./newpost.png" style={{width:200, height:150}}/>
+                <img src="./newpost.png" style={{width:200, height:150, textAlign:'center',paddingLeft:200, paddingBottom:20}}/>
                 <input type="file"  hidden multiple ref={imageInput} onChange={onChangeImages}/>
                 <button className="btn profile-edit-btn" onClick={onClickImageUpload}>컴퓨터에서 선택</button>
             </div>

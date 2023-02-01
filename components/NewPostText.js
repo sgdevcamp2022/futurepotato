@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -7,6 +7,10 @@ import { useSelector } from 'react-redux';
 
 const NewPostText = () => {
     const {newImage} = useSelector((state) => state.mainpage);
+    const [postText, setPostText] = useState('');
+    const onChangePostText = useCallback((e) => {
+        setPostText(e.target.value);
+    }, [])
     console.log(newImage);
     const [currentSlide, setCurrentSlide] = useState(0);
     const settings = {
@@ -15,6 +19,10 @@ const NewPostText = () => {
         speed:500,
         slidesToShow: 1,
         slidesToScroll: 1,
+    }
+
+    const onSubmit = () =>{
+        dispatchEvent({type:'ADD_POST_REQUEST', dataImage:newImage, dataText:postText});
     }
     return(
         <div className="flex-center">
@@ -36,11 +44,10 @@ const NewPostText = () => {
             <div className="right-col-detail" style={{padding:0, display:'flex', flexDirection:'column'}}>
                 <div>
                     <UserInfo />
-                    <textarea placeholder='내용을 입력하세요'>
-                
-                    </textarea>
+                    <textarea placeholder='내용을 입력하세요' style={{height:100, width:350}}
+                    value={postText} onChange={onChangePostText}/>
                 </div>
-                <button className="btn profile-edit-btn">공유하기</button>
+                <button className="btn profile-edit-btn" onClick={onSubmit}>공유하기</button>
             </div>
             </div>
 

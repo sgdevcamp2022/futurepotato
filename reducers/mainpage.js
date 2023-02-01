@@ -13,8 +13,8 @@ export const initialMainState = {
             {"name" : "user1", "profileImage" : "/cover 3.png"}],
     postList:[{id:1, name : "user1", "content": "게시글1","createdDate": "2023-01-01T12:11:00",
                 "modifiedDate": "2023-01-01T13:11:00",
-                "likeCount": 12,
-                "likesCheck": true,
+                likeCount: 12,
+                likesCheck: true,
                 "commentCount": 110,
                 "commentList" : [{"commentWriter": "user2",
                 "Image": "/cover 3.png",
@@ -83,6 +83,12 @@ const reducer = (state = initialMainState, action) => produce(state, (draft) => 
         case 'REMOVE_POST_FAILURE':
             break;
 
+        case 'ADD_COMMENT_REQUEST':
+            {
+                const post = draft.postList.find((v) => v.id === action.dataw.id);
+                post.commentList.push();
+                break;
+            }
         case 'IMAGE_UPLOAD_REQUEST':{
             console.log(action.data.name);
             draft.newImage.push(action.data.get("image").name);

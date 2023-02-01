@@ -3,9 +3,9 @@ import produce from 'immer'
 
 export const initialState = {
     isLoggedIn:false,
-    me:null,
+    me:{image: '/cover 1.png', username:'yusung'},
     signUpData:{},
-    loginData:{},
+    loginData:{image: '/cover 1.png', username:'yusung'},
 }
 
 export const loginRequestAction = (data) => ({

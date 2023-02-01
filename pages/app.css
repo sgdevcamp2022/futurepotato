@@ -446,7 +446,8 @@
 }
 
 .post-story{
-  height: 30%;
+  max-height: 30%;
+  padding-bottom: 15px;
 }
 
 .comment-wrapper{
@@ -456,11 +457,15 @@
   margin-bottom: 15px;
   display: flex;
   justify-content: space-between;
+  
   align-items: center;
 }
 
 .comment-post{
-  height: 660px;
+  height: 93%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .comment-wrapper .icon{
@@ -1023,17 +1028,18 @@ Remove or comment-out the code block below to see how the browser will fall-back
 }
 
 .modal_image_upload{
+  display: flex;
+  flex-direction: column;
   outline-offset:-10px;
   justify-content: center;
-  text-align: center;
   transition: all .15s ease-in-out;
   width:550px;
   height: 500px;
+  padding-left: 100px;
 }
 
 .comment-list{
   height:40%;
-  border-bottom: 1px solid lightgray;
 }
 
 .follwing-block{
@@ -1102,6 +1108,7 @@ Remove or comment-out the code block below to see how the browser will fall-back
 .comment_form{
   min-height: 70px;
   width: 280px;
+  padding-top: 8px;
 }
 
 .comment-info{

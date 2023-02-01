@@ -8,6 +8,8 @@ import 'slick-carousel/slick/slick-theme.css';
 
 const DetailItem = (prop) => {
     const postItem = prop.postItem;
+    console.log(postItem.likeCount)
+    console.log(postItem.likesCheck)
     const [currentSlide, setCurrentSlide] = useState(0);
     const settings = {
         dote:true,
@@ -31,13 +33,17 @@ const DetailItem = (prop) => {
                         </div>
                     <div className="right-col-detail">
                         <UserInfo />
-                        <div className="comment-post">
-                            <div style={{borderBottom:"1px solid lightgray;"}} className="post-story">
-                                <p className="description"><span>{postItem.name}</span> {postItem.content}</p>
-                                <p className="post-time">{postItem.modifiedDate}</p>
+                        <div className="comment-post" style={{}}>
+                            <div>
+                                <div style={{borderBottom:"1px solid lightgray"}} className="post-story">
+                                    <p className="description"><span>{postItem.name}</span> {postItem.content}</p>
+                                    <p className="post-time">{postItem.modifiedDate}</p>
+                                </div>
+                                {postItem.commentList.length != 0 ? <CommentList commentList = { postItem.commentList}/> : <></>}
                             </div>
-                            {postItem.commentList.length != 0 ? <CommentList commentList = { postItem.commentList}/> : <></>}
+                            <CommentForm checkHeart = {postItem.likesCheck} postId = {postItem.id} heartCount = {postItem.likeCount}/>
                         </div>
+                        
                     </div>
                 </div>
         </div>
