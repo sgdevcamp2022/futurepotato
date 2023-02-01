@@ -3,7 +3,7 @@ import produce from 'immer'
 
 export const initialState = {
     isLoggedIn:false,
-    me:{image: '/cover 1.png', username:'yusung'},
+    me:{image: '/cover 1.png', username:'yusung', accountId:'1'},
     signUpData:{},
     loginData:{image: '/cover 1.png', username:'yusung'},
 }

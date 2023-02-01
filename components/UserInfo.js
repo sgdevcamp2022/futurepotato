@@ -1,10 +1,14 @@
 import { useState } from "react";
 import Modal from "react-modal";
+import { useSelector } from "react-redux";
 import PostDeleteForm from './PostDeleteForm';
+import PostEditForm from "./PostEditForm";
 
-const UserInfo = () => {
+const UserInfo = (postId) => {
     const [optionOpen, setoptionOpen] = useState(false);
-
+    const {me} = useSelector((state) => state.user);
+    console.log(postId);
+    console.log(me.accountId);
     return(
         <div className="info">
             <div className="user">
@@ -13,7 +17,7 @@ const UserInfo = () => {
             </div>
             <img src="/option.PNG" className="options" alt="" onClick={() => setoptionOpen(true)}/>
             <Modal isOpen = {optionOpen} onRequestClose={()=>setoptionOpen(false)} style={{content:{height:450, width:400, padding:0, left:"35%", right:"35%", top:100}}}>
-                <PostDeleteForm />
+                {me.accountId != postId.postId ? <PostDeleteForm /> : <PostEditForm />}
             </Modal>
         </div>
     );

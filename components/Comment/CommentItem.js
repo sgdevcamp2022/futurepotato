@@ -1,5 +1,6 @@
 const CommentItem = (commentItem) => {
-    console.log(commentItem);
+    console.log(commentItem.commentItem);
+    const comment = commentItem.commentItem;
     const isReply = true;
     return(
         <div className="comment_form">
@@ -7,17 +8,16 @@ const CommentItem = (commentItem) => {
                 <div className='profile-content'>
                     <div className = 'pic-wrapper'>
                         <div className="profile-pic" style = {{width:30, height:30}}>
-                            <img src = '/cover 1.png' alt/>
+                            <img src = {comment.Image} alt/>
                         </div>
                     </div>
                     <div className="name-content-data">
                         <div className='name-content'>
-                            <span style = {{fontWeight:'bold'}}>이유성&nbsp;&nbsp;&nbsp;</span>
-                            <span style = {{maxWidth:"100%", display:"inline-block",wordBreak:"break-all"}}>너무 예뻐요</span>
+                            <span style = {{fontWeight:'bold'}}>{comment.commentWriter}&nbsp;&nbsp;&nbsp;</span>
+                            <span style = {{maxWidth:"100%", display:"inline-block",wordBreak:"break-all"}}>{comment.comment}</span>
                         </div>
                         <div className = 'date-heart-reply' style = {{fontSize:11, color:'gray'}}>
-                            <span>1일&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                            <span>좋아요 11개&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            <span>좋아요 {comment.likeCount}개&nbsp;&nbsp;&nbsp;&nbsp;</span>
                             <span>답글 달기&nbsp;&nbsp;&nbsp;</span>
                             <span>● ● ●</span>
                         </div>

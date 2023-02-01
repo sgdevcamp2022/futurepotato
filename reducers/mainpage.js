@@ -1,6 +1,7 @@
 import produce from 'immer';
 
 export const initialMainState = {
+    clearUpload : false,
     storyList:[{"name" : "user1", "profileImage" : "/cover 1.png"},
             {"name" : "user1", "profileImage" : "/cover 2.png"},
             {"name" : "user1", "profileImage" : "/cover 3.png"},
@@ -17,7 +18,7 @@ export const initialMainState = {
                 likesCheck: true,
                 "commentCount": 110,
                 "commentList" : [{"commentWriter": "user2",
-                "Image": "/cover 3.png",
+                Image: "/cover 3.png",
                 "comment": "게시글 댓글1",
                 "likeCount": 100,}],
                 "imageList":[
@@ -65,8 +66,12 @@ const reducer = (state = initialMainState, action) => produce(state, (draft) => 
         case 'ADD_POST_REQUEST':
             break;
         case 'ADD_POST_SUCCESS':
+            draft.clearUpload = true;
+            draft.newImage = [];
             break;
         case 'ADD_POST_FAILURE':
+            draft.clearUpload = true;
+            draft.newImage = [];
             break;
     
         case 'MOD_POST_REQUEST':

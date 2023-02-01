@@ -1,17 +1,24 @@
 import Link from 'next/link';
 import React, {useState} from 'react';
+import { useEffect } from 'react';
 import Modal from 'react-modal';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import { logoutRequestAction } from '../reducers/user';
 import NewPost from './NewPost';
 import NewPostText from './NewPostText'
 
 const NavBar = () => {
     const dispatch = useDispatch();
+    const {clearUpload} = useSelector((state) => state.mainpage);
     const [newPostOpen, setNewPost] = useState(false);
     const logOut = () => {
         dispatch(logoutRequestAction());
     }
+    
+    useEffect(() => {
+        if(clearUpload) setNewPost(false);
+    }, [clearUpload])
+    
     return(
         <nav className="navbar">
             <div className="nav-wrapper">

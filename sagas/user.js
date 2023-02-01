@@ -2,7 +2,7 @@ import { all , fork, takeLatest, put, call} from "redux-saga/effects";
 import axios from "axios";
 
 function logInAPI(data) {
-    return axios.post("/api/auth/signin", data);
+    return axios.post("/auth/signin", data);
 }
 
 function* logIn(action){

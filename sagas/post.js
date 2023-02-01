@@ -7,7 +7,7 @@ function checkPostAPI(postId){
 
 function* checkPost(action){
     try{
-        //const result = yield call(checkPostAPI, action.postList.postId);
+        const result = yield call(checkPostAPI, action.postList.postId);
         yield put({
             type:'POST_INFO_SUCCESS',
             data: result.data,
@@ -25,15 +25,16 @@ function* watchCheckPost(){
 }
 
 function addPostAPI(data){
-    return axios.post(`/${data.name}/media`,{
-        "content" : data.content,
-        "imageList" : [{"image" : data.image}],
+    console.log(data);
+    return axios.post(`/${data.accountId}/media`,{
+        "content" : data.data,
+        "imageList" : data.dataImage,
     })
 }
 
 function* addPost (action) {
     try{
-        //yield call(addPostAPI, action.data);
+        yield call(addPostAPI, action.data, action.dataImage, action.accountId);
         yield put({
             type:'ADD_POST_SUCCESS',
         })
@@ -57,7 +58,7 @@ function modifyPostAPI (data) {
 
 function* modifyPost(action){
     try{
-        //const result = yield call(modifyPostAPI, action.data);
+        const result = yield call(modifyPostAPI, action.name, action.postId, action.content);
         yield put({
             type:'MOD_POST_SUCCESS',
             data:result.data,
@@ -76,12 +77,12 @@ function* watchModifyPost(){
 }
 
 function removePostAPI(data) {
-    return axios.delete(`/${data.name}/media/${data.postId}`)
+    return axios.delete(`/${data.accountId}/media/${data.postId}`)
 }
 
 function* removePost(action) {
     try{
-        //const result = yield call(removePostAPI, action.data);
+        const result = yield call(removePostAPI, action.accountId,action.postId);
         yield put({
             type:'REMOVE_POST_SUCCESS',
             data:result.data,

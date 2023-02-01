@@ -4,9 +4,13 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import UserInfo from './UserInfo';
 import { useSelector } from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 const NewPostText = () => {
+    const dispatch = useDispatch();
+    const {me} = useSelector((state) => state.user);
     const {newImage} = useSelector((state) => state.mainpage);
+
     const [postText, setPostText] = useState('');
     const onChangePostText = useCallback((e) => {
         setPostText(e.target.value);
@@ -22,7 +26,7 @@ const NewPostText = () => {
     }
 
     const onSubmit = () =>{
-        dispatchEvent({type:'ADD_POST_REQUEST', dataImage:newImage, dataText:postText});
+        dispatch({type:'ADD_POST_REQUEST', dataId:me.accountId, data:postText, dataImage:newImage});
     }
     return(
         <div className="flex-center">

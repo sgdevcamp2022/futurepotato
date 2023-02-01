@@ -1,4 +1,4 @@
-import { all , fork, takeLatest, put} from "redux-saga/effects";
+import { all , fork, takeLatest, put, call} from "redux-saga/effects";
 
 function mainPageAPI() {
     return axios.get('/');
@@ -6,7 +6,7 @@ function mainPageAPI() {
 
 function* mainPage(){
     try{
-        //const result = yield call(mainPageAPI);
+        const result = yield call(mainPageAPI);
         yield put({
             type:'LOG_IN_SUCCESS',
             data:result.data,
