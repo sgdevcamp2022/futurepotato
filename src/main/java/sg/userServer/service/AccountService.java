@@ -2,27 +2,22 @@ package sg.userServer.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Service;
-import sg.userServer.domain.UserEntity;
+import sg.userServer.domain.Account;
 
-import sg.userServer.repository.UserRepository;
-
-import java.util.ArrayList;
-import java.util.List;
+import sg.userServer.repository.AccountRepository;
 
 @Service
 @Slf4j
-public class UserService {
+public class AccountService {
     @Autowired
     private DiscoveryClient discoveryClient;
 
     @Autowired
-    UserRepository userRepository;
-
-    public void saveUser(UserEntity userEntity){
-        userRepository.save(userEntity);
+    AccountRepository accountRepository;
+    public void saveAccount(Account account){
+        accountRepository.save(account);
     }
 
 //    public List getServices(){
