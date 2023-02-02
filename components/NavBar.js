@@ -11,6 +11,7 @@ const NavBar = () => {
     const dispatch = useDispatch();
     const {clearUpload} = useSelector((state) => state.mainpage);
     const [newPostOpen, setNewPost] = useState(false);
+    const{me} = useSelector((state) => state.user);
     const logOut = () => {
         dispatch(logoutRequestAction());
     }
@@ -36,7 +37,7 @@ const NavBar = () => {
                         <div className="icon user-profile">
                             <div className='profile-pic' style={{width:22, height:22, display:'inline-block', padding: 0
                             ,cursor:'pointer'}}>
-                                <img src='/cover 1.png' alt />
+                                <img src={me.profileimage} alt />
                             </div>
                         </div>
                     </Link>

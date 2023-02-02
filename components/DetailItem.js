@@ -32,7 +32,7 @@ const DetailItem = (prop) => {
                             </Slider>   
                         </div>
                     <div className="right-col-detail">
-                        <UserInfo />
+                        <UserInfo postId = {postItem.name}/>
                         <div className="comment-post" style={{}}>
                             <div>
                                 <div style={{borderBottom:"1px solid lightgray"}} className="post-story">

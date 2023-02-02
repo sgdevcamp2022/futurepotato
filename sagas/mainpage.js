@@ -6,14 +6,14 @@ function mainPageAPI() {
 
 function* mainPage(){
     try{
-        const result = yield call(mainPageAPI);
+        //const result = yield call(mainPageAPI);
         yield put({
-            type:'LOG_IN_SUCCESS',
-            data:result.data,
+            type:'MAIN_PAGE_SUCCESS',
+            //data:result.data,
         });
     } catch (err){
         yield put({
-            type:'LOG_IN_FAILURE',
+            type:'MAIN_PAGE_FAILURE',
             data: err.response.data,
         })
     }
@@ -23,7 +23,7 @@ function* watchMainPage(){
     yield takeLatest('MAIN_PAGE_REQUEST', mainPage);
 }
 
-export default function* userSaga(){
+export default function* pageSaga(){
     yield all([
         fork(watchMainPage),
     ])

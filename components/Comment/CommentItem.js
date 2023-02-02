@@ -1,6 +1,7 @@
 const CommentItem = (commentItem) => {
     console.log(commentItem.commentItem);
     const comment = commentItem.commentItem;
+    console.log(comment);
     const isReply = true;
     return(
         <div className="comment_form">
@@ -27,7 +28,7 @@ const CommentItem = (commentItem) => {
                     <p>♡</p>
                 </div>
             </div>
-            {isReply ? <div style = {{fontSize:13, paddingLeft:50, color:'gray'}}>--- 답글 보기(2개)</div> : <></>}
+            {comment.replyList.length != 0 ? <div style = {{fontSize:13, paddingLeft:50, color:'gray'}}>--- 답글 보기({comment.replyList.length}개)</div> : <></>}
         </div>
     );
 }

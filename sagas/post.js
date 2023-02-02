@@ -34,7 +34,7 @@ function addPostAPI(data){
 
 function* addPost (action) {
     try{
-        yield call(addPostAPI, action.data, action.dataImage, action.accountId);
+        //yield call(addPostAPI, action.data, action.dataImage, action.accountId);
         yield put({
             type:'ADD_POST_SUCCESS',
         })
@@ -82,10 +82,10 @@ function removePostAPI(data) {
 
 function* removePost(action) {
     try{
-        const result = yield call(removePostAPI, action.accountId,action.postId);
+        //const result = yield call(removePostAPI, action.accountId,action.postId);
         yield put({
             type:'REMOVE_POST_SUCCESS',
-            data:result.data,
+            data:1,
         })
     } catch (err){
         yield put ({
@@ -99,7 +99,7 @@ function* watchRemovePost(){
     yield takeLatest('REMOVE_POST_REQUEST', removePost);
 }
 
-export default function* userSaga(){
+export default function* crudSaga(){
     yield all([
         fork(watchAddPost),
         fork(watchRemovePost),

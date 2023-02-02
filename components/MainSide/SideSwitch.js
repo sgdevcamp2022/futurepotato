@@ -1,13 +1,15 @@
 import Link from 'next/link';
+import { useSelector } from 'react-redux';
 const SideSwitch = () => {
+    const {me} = useSelector((state) => state.user);
     return(
         <div className="profile-card">
             <div className="profile-pic">
-                <img src="/profile-pic.png" alt="" />
+                <img src={me.profileimage} alt="" />
             </div>
             <div>
-                <p className="username">iyusung2</p>
-                <p className="sub-text">이유성</p>
+                <p className="username">{me.accountId}</p>
+                <p className="sub-text">{me.username}</p>
             </div>
             <div className="action-btn-wrapper">
                 <Link href = '/profile' legacyBehavior>

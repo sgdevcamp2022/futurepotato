@@ -16,7 +16,7 @@ const UserInfo = (postId) => {
                 <p className="username">modern_web_channel</p>
             </div>
             <img src="/option.PNG" className="options" alt="" onClick={() => setoptionOpen(true)}/>
-            <Modal isOpen = {optionOpen} onRequestClose={()=>setoptionOpen(false)} style={{content:{height:450, width:400, padding:0, left:"35%", right:"35%", top:100}}}>
+            <Modal ariaHideApp={false} isOpen = {optionOpen} onRequestClose={()=>setoptionOpen(false)} style={{content:{height:450, width:400, padding:0, left:"35%", right:"35%", top:100}}}>
                 {me.accountId != postId.postId ? <PostDeleteForm /> : <PostEditForm />}
             </Modal>
         </div>

@@ -2,7 +2,16 @@ import AppLayout from "./AppLayout";
 import StoryForm from "./Story/StoryForm";
 import MainPosts from "./Mainpost/MainPosts";
 import Recommend from "./MainSide/Recommend";
+import { useDispatch, useSelector } from "react-redux";
+import { useCallback, useEffect } from "react";
 const Mainpage = () => {
+    const dispatch = useDispatch();
+    const {postList} = useSelector((state) => state.mainpage);
+    console.log(postList);
+    useEffect(() => {
+        console.log("포스트 로딩");
+        dispatch({type: 'MAIN_PAGE_REQUEST'});
+    },[])
     return(
         <>
         <AppLayout/>
