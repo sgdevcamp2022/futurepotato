@@ -1,28 +1,17 @@
 server:
   port: 8004
 
-org:
-  neo4j:
-    driver:
-      uri: neo4j://localhost:7687
-      authentication:
-        username: neo4j #default name. 따로 설정 안했으면 똑같이 적길 바람.
-        password: insta-users #neo4j 데스크톱 콘솔에서 설정한 값
-
 spring:
   application:
-    name: follow-server
-
+    name: graph-server
   data:
     neo4j:
-      database: insta-users #neo4j 데스톱에서 만든 데이터베이스명
-
-logging:
-  level:
-    org:
-      springframework:
-        data:
-          neo4j: DEBUG # 내부적으로 돌아가는 native cyperQuery를 로그로 찍어줌
+      database: neo4j
+  neo4j:
+    authentication:
+      password: '0000'
+      username: neo4j
+    uri: bolt://localhost:7687
 
 eureka:
   instance:
