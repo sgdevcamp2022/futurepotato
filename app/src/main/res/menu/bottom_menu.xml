@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_home"
+        android:enabled="true"
+        android:icon="@drawable/free_icon_home"
+        android:title="HOME"/>
+
+    <item
+        android:id="@+id/action_search"
+        android:enabled="true"
+        android:icon="@drawable/magnifier1"
+        android:title="SEARCH"/>
+
+
+    <item
+        android:id="@+id/action_post"
+        android:enabled="true"
+        android:icon="@drawable/plus"
+        android:title="POST" />
+
+    <item
+        android:id="@+id/action_notice"
+        android:enabled="true"
+        android:icon="@drawable/heart"
+        android:title="NOTICE" />
+
+    <item
+        android:id="@+id/action_profile"
+        android:enabled="true"
+        android:icon="@drawable/profile_white"
+        android:title="PROFILE"/>
+</menu>
