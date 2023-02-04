@@ -35,13 +35,16 @@ public class FeedResponse {
     private List<comment> commentList;
 
     @SerializedName("imageList")
-    private Map<String, String> imageList;
+    private List<String> imageList;
 
-    public Map<String, String> getImageList() {
+    @SerializedName("isMultyImage")
+    private boolean isMultyImage;
+
+    public List<String> getImageList() {
         return imageList;
     }
 
-    public void setImageList(Map<String, String> imageList) {
+    public void setImageList(List<String> imageList) {
         this.imageList = imageList;
     }
 
@@ -52,9 +55,6 @@ public class FeedResponse {
     public void setMultyImage(boolean multyImage) {
         isMultyImage = multyImage;
     }
-
-    @SerializedName("isMultyImage")
-    private boolean isMultyImage;
 
     public int getId() {
         return id;

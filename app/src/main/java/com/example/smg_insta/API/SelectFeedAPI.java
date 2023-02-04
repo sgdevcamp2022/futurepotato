@@ -11,5 +11,5 @@ import retrofit2.http.Path;
 // 게시물 조회
 public interface SelectFeedAPI {
     @GET("/feed/media/{postId}")
-    Call<FeedResponse> selectOne(@Path("postId") String id);
+    Call<FeedResponse> selectOne(@Path("postId") int postId);
 }

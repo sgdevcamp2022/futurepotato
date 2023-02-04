@@ -111,8 +111,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case 1:
-                EditProfileFrag editProfileFrag = new EditProfileFrag();
-                transaction.replace(R.id.main_frame, editProfileFrag).commit();
+                MyPostFrag myPostFrag = new MyPostFrag();
+                transaction.replace(R.id.main_frame, myPostFrag).commit();
                 break;
 
             case 2:
