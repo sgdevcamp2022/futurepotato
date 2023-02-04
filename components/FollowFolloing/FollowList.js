@@ -1,9 +1,14 @@
-import FollowForm from "./FollowForm";
+import { useSelector } from "react-redux";
+import FolloingForm from "./FollowForm";
 
 const FollowList = () => {
+    const {folloingList} = useSelector((state) => state.user);
+    console.log(folloingList);
     return(
         <div className="Follow_ing_list">
-            <FollowForm />
+            {folloingList.map((v) => (
+                <FolloingForm data = {v}/>
+            ))}
         </div>
     );
 }

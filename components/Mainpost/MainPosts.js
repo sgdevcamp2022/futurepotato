@@ -22,7 +22,7 @@ const MainPosts = () => {
         <>
             {postList.map((v) => (
                 <div className="post">
-                    <UserInfo postId = {v.name}/>
+                    <UserInfo postId = {v.id} postName = {v.name} postImage = {v.profileImage}/>
                     <div className="sliderWrapper">
                     <Slider {...settings} 
                         afterChange={(slide) => setCurrentSlide(slide)}

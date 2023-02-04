@@ -54,9 +54,82 @@ function* watchSignUp() {
     yield takeLatest('SIGN_UP_REQUEST', signUp);
 }
 
+function profileLoadAPI (data) {
+    return axios.get(`/feed/mypage/${data}`);
+}
+
+function* profileLoad(action){
+    try{
+         //const result = yield call(profileLoadAPI, action.data);
+         yield put({
+            type: 'PROFILE_LOAD_SUCCESS',
+            //data:action.data
+        })
+    }catch(err){
+        yield put({
+            type:'PROFILE_LOAD_FAILURE',
+            data:err.response.data,
+        })
+    }
+}
+
+function* watchProfileLoad() {
+    yield takeLatest('PROFILE_LOAD_REQUEST', profileLoad);
+}
+
+function folloingLoadAPI(data){
+    return axios.get(`/${data}/following`);
+}
+
+function* folloingLoad(action){
+    try{
+        //const result = yield call(folloingLoadAPI, action.accountId);
+        yield put({
+            type:'GET_FOLLOING_SUCCESS',
+            //data:result.data
+        })
+    } catch(err){
+        yield put({
+            type:'GET_FOLLOING_FAILURE',
+            data:err.response.data,
+        })
+    }
+}
+
+function* watchFolloingLoad() {
+    yield takeLatest('GET_FOLLOING_REQUEST', folloingLoad);
+}
+
+
+function followerLoadAPI(data){
+    return axios.get(`/${data}/followers`);
+}
+
+function* followerLoad(action){
+    try{
+        //const result = yield call(followerLoadAPI, action.accountId);
+        yield put({
+            type:'GET_FOLLOWER_SUCCESS',
+            //data:result.data
+        })
+    } catch(err){
+        yield put({
+            type:'GET_FOLLOWER_FAILURE',
+            data:err.response.data,
+        })
+    }
+}
+
+function* watchFollowerLoad() {
+    yield takeLatest('GET_FOLLOWER_REQUEST', followerLoad);
+}
+
 export default function* userSaga(){
     yield all([
         fork(watchLogIn),
         fork(watchSignUp),
+        fork(watchProfileLoad),
+        fork(watchFolloingLoad),
+        fork(watchFollowerLoad),
     ])
 }

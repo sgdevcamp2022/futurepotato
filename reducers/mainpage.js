@@ -23,11 +23,12 @@ const dummyData = {
     {"name" : "user1", "profileImage" : "/cover 3.png"},
     {"name" : "user1", "profileImage" : "/cover 3.png"}],
     "postList" : [
-        {id:1, name : "yusung", "content": "게시글1","createdDate": "2023-01-01T12:11:00",
+        {id:1, name : "user1", "content": "게시글1","createdDate": "2023-01-01T12:11:00",
                 "modifiedDate": "2023-01-01T13:11:00",
                 likeCount: 12,
                 likesCheck: true,
                 "commentCount": 110,
+                "profileImage" : '/cover 1.png',
                 "commentList" : [{"commentWriter": "user2",
                 "Image": "/cover 3.png",
                 "comment": "게시글 댓글1",
@@ -60,8 +61,9 @@ const dummyData = {
 
 const dummyPost = {
     id:3, 
-    name : "user3", 
+    name : "yusung", 
     "content": "게시글4",
+    "profileImage" : '/cover 8.png',
     "createdDate": "2023-01-01T12:11:00",
     "modifiedDate": "2023-01-01T13:11:00",
     likeCount: 0,
@@ -82,7 +84,6 @@ const reducer = (state = initialMainState, action) => produce(state, (draft) => 
         case 'MAIN_PAGE_REQUEST' : 
             break;
         case 'MAIN_PAGE_SUCCESS' :
-            console.log("tjdrhd");
             draft.storyList = draft.storyList.concat(dummyData.storyList);
             draft.postList = draft.postList.concat(dummyData.postList);
             draft.limit = dummyData.limit;
@@ -102,11 +103,12 @@ const reducer = (state = initialMainState, action) => produce(state, (draft) => 
     
         case 'ADD_POST_REQUEST':
             break;
-        case 'ADD_POST_SUCCESS':
+        case 'ADD_POST_SUCCESS':{
             draft.postList.unshift(dummyPost);
             draft.clearUpload = true;
             draft.newImage = [];
             break;
+        }
         case 'ADD_POST_FAILURE':
             draft.clearUpload = true;
             draft.newImage = [];
@@ -114,8 +116,10 @@ const reducer = (state = initialMainState, action) => produce(state, (draft) => 
     
         case 'MOD_POST_REQUEST':
             break;
-        case 'MOD_POST_SUCCESS':
+        case 'MOD_POST_SUCCESS':{
+            draft.postList.find((v) => v.name == action.dataId ? v.content = action.data : v.content);
             break;
+        }
         case 'MOD_POST_FAILURE':
             break;
     

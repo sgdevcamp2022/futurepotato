@@ -1,10 +1,11 @@
-const FolloingForm = () => {
+const FolloingForm = (prop) => {
+    const data = prop.data;
     return(
         <div className="follow-wrapper">
-            <div className="profile-pic"><img src="/cover 1.png" alt /></div>
+            <div className="profile-pic"><img src={data.profileImage} alt /></div>
             <div className="follow-name">
-                <p className="followname">iyusung2</p>
-                <p className="realname">이유성</p>
+                <p className="followname">{data.accountId}</p>
+                <p className="realname">{data.accountName}</p>
             </div>
             <button className="btn followbtn">취소</button>
         </div>

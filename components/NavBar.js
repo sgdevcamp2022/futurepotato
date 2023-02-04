@@ -20,6 +20,10 @@ const NavBar = () => {
         if(clearUpload) setNewPost(false);
     }, [clearUpload])
     
+    const onClickProfile = () => {
+        dispatch({type:'PROFILE_LOAD_REQUEST'});
+    }
+
     return(
         <nav className="navbar">
             <div className="nav-wrapper">
@@ -33,10 +37,10 @@ const NavBar = () => {
                     </Link>
                     <img src="/add.PNG" onClick={() => setNewPost(true)} className="icon" alt="" />
                     <img src="/like.PNG" className="icon" alt="" />
-                    <Link href = '/profile' legacyBehavior>
+                    <Link href = {`/profile/${me.accountId}`} legacyBehavior>
                         <div className="icon user-profile">
                             <div className='profile-pic' style={{width:22, height:22, display:'inline-block', padding: 0
-                            ,cursor:'pointer'}}>
+                            ,cursor:'pointer'}} onClick = {onClickProfile}>
                                 <img src={me.profileimage} alt />
                             </div>
                         </div>

@@ -26,7 +26,7 @@ const NewPost = () => {
 
     return(
         <div>
-        {isImage ? <NewPostText /> : 
+        {isImage ? <NewPostText isEdit = {false}/> : 
         <div className="flex-center">
         <div className = 'modal_window'>
             <div className ='modal_title' style={{borderBottom:"1px solid lightgray", paddingBottom:15,

@@ -58,10 +58,12 @@ function modifyPostAPI (data) {
 
 function* modifyPost(action){
     try{
-        const result = yield call(modifyPostAPI, action.name, action.postId, action.content);
+       // const result = yield call(modifyPostAPI, action.name, action.postId, action.content);
         yield put({
             type:'MOD_POST_SUCCESS',
-            data:result.data,
+            data:action.data,
+            dataId:action.dataId,
+            //data:result.data,
         });
 
     } catch(err){
