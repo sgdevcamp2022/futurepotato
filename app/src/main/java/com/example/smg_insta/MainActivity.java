@@ -109,6 +109,16 @@ public class MainActivity extends AppCompatActivity {
                 CommentsFrag commentsFrag = new CommentsFrag();
                 transaction.replace(R.id.main_frame, commentsFrag).commit();
                 break;
+
+            case 1:
+                EditProfileFrag editProfileFrag = new EditProfileFrag();
+                transaction.replace(R.id.main_frame, editProfileFrag).commit();
+                break;
+
+            case 2:
+                Frag5 profileFrag = new Frag5();
+                transaction.replace(R.id.main_frame, profileFrag).commit();
+                break;
         }
 
     }

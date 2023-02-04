@@ -11,8 +11,8 @@ public class MypageResponse {
 
     @SerializedName("name")
     private String name;
-    @SerializedName("image")
-    private String image;
+    @SerializedName("profileImage")
+    private String profileImage;
     @SerializedName("int")
     private int followerCount;
     @SerializedName("followingCount")
@@ -31,13 +31,9 @@ public class MypageResponse {
         this.name = name;
     }
 
-    public String getImage() {
-        return image;
-    }
+    public String getProfileImage() {return profileImage;}
 
-    public void setImage(String image) {
-        this.image = image;
-    }
+    public void setProfileImage(String profileImage) {this.profileImage = profileImage;}
 
     public int getFollowerCount() {
         return followerCount;
@@ -71,9 +67,18 @@ public class MypageResponse {
         this.imageList = imageList;
     }
 
-    public class MyImage {
+    public static class MyImage {
+
+        public MyImage(String image, int postId, boolean isMultyImage) {
+            this.image = image;
+            this.postId = postId;
+            this.isMultyImage = isMultyImage;
+        }
+
         @SerializedName("image")
         private String image;
+        @SerializedName("postId")
+        private int postId;
         @SerializedName("isMultyImage")
         private boolean isMultyImage;
 
@@ -84,6 +89,11 @@ public class MypageResponse {
         public void setImage(String image) {
             this.image = image;
         }
+
+        public int getPostId() {return postId;}
+
+        public void setPostId(int postId) {this.postId = postId;}
+
 
         public boolean isMultyImage() {
             return isMultyImage;

@@ -6,12 +6,15 @@ import com.google.gson.annotations.SerializedName;
 
 public class UpdateProfileData {
 
-    @Nullable
     @SerializedName("accountId")
     private String accountId;
 
-    @Nullable
     @SerializedName("accountName")
     private String accountName;
 
+    public UpdateProfileData(String updateId, String updateName) {
+        this.accountId = updateId;
+        this.accountName = updateName;
+    }
 }
+

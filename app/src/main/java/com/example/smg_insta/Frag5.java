@@ -14,12 +14,15 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smg_insta.API.CrudService;
+import com.example.smg_insta.Adapter.RVAdapter_profile;
 import com.example.smg_insta.DTO.MypageResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -47,6 +50,27 @@ public class Frag5 extends Fragment {
     public View onCreateView(@Nullable LayoutInflater inflater,@Nullable ViewGroup container,@Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.user_info, container, false);
 
+
+        //--------마이페이지 테스트 더미데이터-----------------
+        MypageResponse testData = new MypageResponse();
+        testData.setName("_user1_test_");
+        testData.setProfileImage("https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg");
+        testData.setFollowerCount(101);
+        testData.setFollowingCount(95);
+        testData.setPostCount(10);
+
+        List<MypageResponse.MyImage> images = new ArrayList<>();
+        images.add(new MypageResponse.MyImage("https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg", 12, true));
+        images.add(new MypageResponse.MyImage("https://cdn.pixabay.com/photo/2020/11/04/15/29/coffee-beans-5712780_1280.jpg", 14, false));
+        images.add(new MypageResponse.MyImage("https://cdn.pixabay.com/photo/2020/03/08/21/41/landscape-4913841_1280.jpg", 20, true));
+        images.add(new MypageResponse.MyImage("https://cdn.pixabay.com/photo/2020/09/02/18/03/girl-5539094_1280.jpg", 21, false));
+        images.add(new MypageResponse.MyImage("https://cdn.pixabay.com/photo/2014/03/03/16/15/mosque-279015_1280.jpg", 30, false));
+
+        testData.setImageList(images);
+
+
+        //----------------------------------
+
         userImage = view.findViewById(R.id.iv_account_profile);
         userId = view.findViewById(R.id.tv_useriInfo_id);
         post = view.findViewById(R.id.tv_postCount);
@@ -60,18 +84,23 @@ public class Frag5 extends Fragment {
         gridLayoutManager = new GridLayoutManager(getContext(),3);
         account_recyclerview.setLayoutManager(gridLayoutManager);
         //adapter = new RVAdapter_profile(feeds, getContext(), dataService);
+        //account_recyclerview.setAdapter(adapter);
+
+        //-----test----
+        adapter = new RVAdapter_profile(images, getContext(), dataService);
+        //-------
         account_recyclerview.setAdapter(adapter);
 
         dataService.selectMyPage.SelectMyPage(accountId).enqueue(new Callback<MypageResponse>() {
             @Override
             public void onResponse(Call<MypageResponse> call, Response<MypageResponse> response) {
                 feeds = response.body();
-                //adapter = new RVAdapter_profile(feeds, getContext(), dataService);
+
                 List<MypageResponse.MyImage> myImages = feeds.getImageList();
-                adapter.setMyImageList(myImages);
+                adapter = new RVAdapter_profile(myImages, getContext(), dataService);
 
                 userId.setText(feeds.getName());
-                userImage.setImageURI(Uri.parse(feeds.getImage()));
+                userImage.setImageURI(Uri.parse(feeds.getProfileImage()));
 
                 post.setText(feeds.getPostCount());
                 following.setText(feeds.getFollowingCount());
@@ -92,6 +121,17 @@ public class Frag5 extends Fragment {
             @Override
             public void onClick(View view) {
                 // 프로필 수정 부분!
+                // 프로필 수정 화면으로 넘어가기
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                EditProfileFrag editProfileFrag = new EditProfileFrag();
+
+                Bundle bundle = new Bundle();
+                //이름은 회원가입할 때 작성하는 듯. 있을수도있고 없을수도있음.
+                //bundle.putString("name", name);
+                bundle.putString("accountId", accountId);
+                editProfileFrag.setArguments(bundle);
+
+                transaction.replace(R.id.main_frame, editProfileFrag).commit();
 
             }
         });

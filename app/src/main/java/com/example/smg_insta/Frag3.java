@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.smg_insta.API.CrudService;
 
+import java.net.URI;
 import java.util.ArrayList;
 
 import okhttp3.MediaType;
@@ -64,7 +65,7 @@ public class Frag3 extends Fragment {
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);  // 다중 이미지를 가져올 수 있도록 세팅
-                intent.setAction(Intent.ACTION_PICK);
+                //intent.setAction(Intent.ACTION_PICK);
                 activityResultLauncher.launch(intent);
             }
         });
@@ -94,7 +95,7 @@ public class Frag3 extends Fragment {
                     files.add(filePart);
                 }
 
-                dataService.insertFeed.insertOne(accountId, content, files).enqueue(new Callback<ResponseBody>() {
+                dataService.insert.insertOne(accountId, content, files).enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         // 로딩화면 만들기

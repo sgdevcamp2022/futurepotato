@@ -60,7 +60,14 @@ public class MainPageResponse {
         this.nextPost = nextPost;
     }
 
-    public class Story {
+    public static class Story {
+
+        public Story(String name, String profileImage, String image) {
+            this.name = name;
+            this.profileImage = profileImage;
+            this.image = image;
+        }
+
         @SerializedName("name")
         private String name;
         @SerializedName("profileImage")
@@ -93,7 +100,20 @@ public class MainPageResponse {
         }
     }
 
-    public class Post {
+    public static class Post {
+
+        public Post(int id, String name, String content, String createdDate, String modifiedDate, int likeCount, boolean likesCheck, int commentCount, List<String> imageList) {
+            Id = id;
+            this.name = name;
+            this.content = content;
+            this.createdDate = createdDate;
+            this.modifiedDate = modifiedDate;
+            this.likeCount = likeCount;
+            this.likesCheck = likesCheck;
+            this.commentCount = commentCount;
+            this.imageList = imageList;
+        }
+
         @SerializedName("Id")
         private int Id;
         @SerializedName("name")
@@ -111,8 +131,7 @@ public class MainPageResponse {
         @SerializedName("commentCount")
         private int commentCount;
         @SerializedName("imageList")
-        private List<Uri> imageList;
-        // Uri로 받아오 되나??
+        private List<String> imageList;
 
 
         public int getId() {
@@ -179,11 +198,11 @@ public class MainPageResponse {
             this.commentCount = commentCount;
         }
 
-        public List<Uri> getImageList() {
+        public List<String> getImageList() {
             return imageList;
         }
 
-        public void setImageList(List<Uri> imageList) {
+        public void setImageList(List<String> imageList) {
             this.imageList = imageList;
         }
     }

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="10dp"
     android:orientation="vertical">
 
     <TextView
@@ -24,9 +25,10 @@
 
         <TextView
             android:id="@+id/tv_useriInfo_id"
-            android:layout_width="295dp"
+            android:layout_width="285dp"
             android:layout_height="40dp"
-            android:layout_margin="10dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
             android:gravity="left"
             android:text="user_id"
             android:textSize="24sp" />
@@ -159,7 +161,9 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_profile"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_margin="20dp"
+        tools:listitem="@layout/user_images_view" />
 
 
 </LinearLayout>
