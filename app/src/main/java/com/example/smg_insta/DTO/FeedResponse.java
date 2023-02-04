@@ -2,6 +2,7 @@ package com.example.smg_insta.DTO;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -35,16 +36,16 @@ public class FeedResponse {
     private List<comment> commentList;
 
     @SerializedName("imageList")
-    private List<String> imageList;
+    private ArrayList<String> imageList;
 
     @SerializedName("isMultyImage")
     private boolean isMultyImage;
 
-    public List<String> getImageList() {
+    public ArrayList<String> getImageList() {
         return imageList;
     }
 
-    public void setImageList(List<String> imageList) {
+    public void setImageList(ArrayList<String> imageList) {
         this.imageList = imageList;
     }
 

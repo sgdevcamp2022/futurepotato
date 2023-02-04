@@ -129,6 +129,8 @@ public class Frag5 extends Fragment {
                 //이름은 회원가입할 때 작성하는 듯. 있을수도있고 없을수도있음.
                 //bundle.putString("name", name);
                 bundle.putString("accountId", accountId);
+                // 아니면 게시물 조회에 프로필 사진 추가 부탁
+                bundle.putString("profileImage", String.valueOf(userImage));
                 editProfileFrag.setArguments(bundle);
 
                 transaction.replace(R.id.main_frame, editProfileFrag).commit();

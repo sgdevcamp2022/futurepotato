@@ -28,7 +28,7 @@ public class CrudService {
     public DeleteFeedAPI delete = retrofitClient.create(DeleteFeedAPI.class);
 
     // 2. 스토리
-
+    public StoryApi story = retrofitClient.create(StoryApi.class);
 
 
     // 3. 메인화면
@@ -38,6 +38,8 @@ public class CrudService {
     public SelectMyPageAPI selectMyPage = retrofitClient.create(SelectMyPageAPI.class);
     public UpdateProfileAPI updateProfile = retrofitClient.create(UpdateProfileAPI.class);
     public InsertProfileImageAPI insertProfileImage = retrofitClient.create(InsertProfileImageAPI.class);
+
+    // 5. 댓글
 }
 
 

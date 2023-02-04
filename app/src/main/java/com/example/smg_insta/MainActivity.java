@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity {
@@ -106,8 +105,6 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         switch(fragment) {
             case 0:
-                CommentsFrag commentsFrag = new CommentsFrag();
-                transaction.replace(R.id.main_frame, commentsFrag).commit();
                 break;
 
             case 1:

@@ -1,13 +1,26 @@
 package com.example.smg_insta;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.content.ClipData;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +32,8 @@ import com.example.smg_insta.DTO.MainPageResponse;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,6 +42,7 @@ public class Frag1 extends Fragment {
 
     private View view;
     private TextView id, profile, content, like, explain, comment_count;
+    private CircleImageView myStory;
 
     private RecyclerView mRV_post;
     //private RVAdapter_post mRVAdapter_post;  serAdapter함수 만ㄷ르어서 사용함.
@@ -38,6 +54,7 @@ public class Frag1 extends Fragment {
     String accountId;
     List<MainPageResponse.Post> posts;
     List<MainPageResponse.Story> stories;
+    Uri storyImageUri;   // 스토리
 
 
     @Nullable
@@ -85,7 +102,7 @@ public class Frag1 extends Fragment {
 
         //----post--------
         id = view.findViewById(R.id.tv_post_profile);
-        profile = view.findViewById(R.id.civ_post_profile);
+        profile = view.findViewById(R.id.civ_profile);
         content = view.findViewById(R.id.img_post_content);
         like = view.findViewById(R.id.tv_like_count);
         explain = view.findViewById(R.id.tv_explain);
@@ -99,6 +116,7 @@ public class Frag1 extends Fragment {
 
 
         //----story----
+        myStory = view.findViewById(R.id.civ_myStory);
         mRV_story = view.findViewById(R.id.recyclerview_story);
         // 가로 리싸이클러뷰
         mRV_story.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false));
@@ -108,7 +126,6 @@ public class Frag1 extends Fragment {
         mRV_post.setAdapter(new RVAdapter_post(test_postList, getContext(), dataService));
         mRV_story.setAdapter(new RVAdapter_story(test_storyList, getContext(), dataService));
         //-----------------------
-
 
         dataService.selectMainPage.SelectMainPage(accountId).enqueue(new Callback<MainPageResponse>() {
             @Override
@@ -127,6 +144,52 @@ public class Frag1 extends Fragment {
             }
         });
 
+        // 짧게 눌렀을 때, 스토리 확인
+        myStory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                StoryFrag storyFrag = new StoryFrag();
+
+                Bundle bundle = new Bundle();
+                // 스토리 조회할 때, 이미지가 필요한데... 으잉??
+                // 개인 스토리 따로 뺄 수 있는지 얘기해보기!
+                //bundle.putString("image", );
+                storyFrag.setArguments(bundle);
+
+                transaction.replace(R.id.main_frame, storyFrag).commit();
+
+            }
+        });
+
+        // 길게 눌렀을 때, 스토리 생성
+        myStory.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                // 사진 선택
+                //갤러리 호출
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                activityResultLauncher.launch(intent);
+
+                // 스토리 생성
+                dataService.story.InsertStory(accountId, storyImageUri.toString()).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        // 스토리 생성 성공
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {t.printStackTrace();}
+                });
+
+
+                return true;
+            }
+        });
+
+
 
 
         return view;
@@ -140,4 +203,24 @@ public class Frag1 extends Fragment {
     void setStoryAdapter(RecyclerView feedResponse_list) {
         feedResponse_list.setAdapter(new RVAdapter_story(stories, getContext(), dataService));
     }
+
+    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+
+                    if(result.getResultCode() == RESULT_OK){
+                        Intent data = result.getData();
+                        if(data == null){   // 어떤 이미지도 선택하지 않은 경우
+                            Toast.makeText(getContext(), "이미지를 선택하지 않았습니다.", Toast.LENGTH_LONG).show();
+                        }
+                        else{   // 이미지를 선택한 경우
+                            Log.e("single choice: ", String.valueOf(data.getData()));
+                            storyImageUri = data.getData();
+                        }
+                    }
+                }
+            }
+    );
 }

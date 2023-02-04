@@ -11,5 +11,5 @@ import retrofit2.http.Path;
 public interface UpdateFeedAPI {
     @FormUrlEncoded
     @PATCH("/feed/{accountId}/media/{postId}")
-    Call<ResponseBody> UpdateFeed(@Path("accountId") String accountId, @Path("postId") String postId, @Field("content") String content);
+    Call<ResponseBody> UpdateFeed(@Path("accountId") String accountId, @Path("postId") int postId, @Field("content") String content);
 }

@@ -60,7 +60,8 @@
                 android:ems="14"
                 android:hint="댓글 달기..."
                 android:inputType="textPersonName"
-                android:textColor="#757575" />
+                android:textColor="#757575"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <ImageView
                 android:id="@+id/iv_commnet_sendBtn"
