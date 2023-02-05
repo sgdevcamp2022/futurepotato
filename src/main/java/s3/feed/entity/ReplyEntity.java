@@ -19,13 +19,9 @@ public class ReplyEntity {
     private Long id;
 
     private  String reply;
-
     private String accountId;
-
     private LocalDateTime createdDt;
-
     private int likeCount;
-
     private String profileImage;
 
     @JsonBackReference

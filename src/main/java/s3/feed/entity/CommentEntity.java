@@ -29,7 +29,7 @@ public class CommentEntity {
     private int likeCount;
 
     private String profileImage;
-    @Relationship(type = "REPLIES")
+    @Relationship(type = "REPLIED", direction = Relationship.Direction.INCOMING)
     private List<ReplyEntity> replyEntityList = new ArrayList<>();
 
     @JsonBackReference

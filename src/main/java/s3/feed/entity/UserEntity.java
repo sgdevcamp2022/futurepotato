@@ -27,11 +27,9 @@ public class UserEntity {
 
     private String accountName;
 
-//    @JsonManagedReference
     @Relationship(type = "UPLOADS")
     private List<PostEntity> posts = new ArrayList<>();
 
-//    @JsonManagedReference
     @Relationship(type = "UPLOADS")
     private List<StoryEntity> storyList = new ArrayList<>();
 

@@ -2,6 +2,7 @@ package s3.feed.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.neo4j.core.schema.*;
 
 import java.time.LocalDateTime;
@@ -17,9 +18,10 @@ public class PostEntity {
     private Long id;
 
     private String content;
-
     private String accountId;
     private String profileImage;
+
+    @CreatedDate
     private LocalDateTime createdDt;
 
     private LocalDateTime modifiedDt;
@@ -30,10 +32,10 @@ public class PostEntity {
 
     private boolean isLikesCheck;
 
-    @Relationship(type = "ATTACHES")
+    @Relationship(type = "INCLUDES")
     private List<MediaEntity> mediaEntityList = new ArrayList<>();
 
-    @Relationship(type = "INCLUDES")
+    @Relationship(type = "COMMENTED", direction = Relationship.Direction.INCOMING)
     private List<CommentEntity> commentEntityList = new ArrayList<>();
 
     @JsonBackReference
