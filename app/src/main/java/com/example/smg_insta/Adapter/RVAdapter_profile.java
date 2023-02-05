@@ -13,7 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.smg_insta.API.CrudService;
+import com.example.smg_insta.API.Service;
 import com.example.smg_insta.DTO.MypageResponse;
 import com.example.smg_insta.EditProfileFrag;
 import com.example.smg_insta.MainActivity;
@@ -24,10 +24,10 @@ import java.util.List;
 
 public class RVAdapter_profile extends RecyclerView.Adapter<RVAdapter_profile.ViewHolder> {
     private Context context;
-    private CrudService dataService;
+    private Service dataService;
     private List<MypageResponse.MyImage> mMyImageList;
 
-    public RVAdapter_profile(List<MypageResponse.MyImage> data, Context context, CrudService dataService) {
+    public RVAdapter_profile(List<MypageResponse.MyImage> data, Context context, Service dataService) {
         this.mMyImageList = data;
         this.context = context;
         this.dataService = dataService;

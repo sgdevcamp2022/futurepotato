@@ -21,7 +21,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.smg_insta.API.CrudService;
+import com.example.smg_insta.API.Service;
 import com.example.smg_insta.CommentsActivity;
 import com.example.smg_insta.DTO.MainPageResponse;
 import com.example.smg_insta.Frag5;
@@ -39,9 +39,9 @@ import retrofit2.Response;
 public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHolder>{
     private Context context;
     private List<MainPageResponse.Post> data;
-    private CrudService dataService;
+    private Service dataService;
 
-    public RVAdapter_post(List<MainPageResponse.Post> data, Context context, CrudService dataService) {
+    public RVAdapter_post(List<MainPageResponse.Post> data, Context context, Service dataService) {
         this.data = data;
         this.context = context;
         this.dataService = dataService;
@@ -114,7 +114,7 @@ public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHold
                         switch (menuItem.getItemId()){
                             case R.id.menu_delete:
                                 // 게시물 삭제 시도
-                                dataService.delete.DeleteFeed(data.get(position).getName(), data.get(position).getId()).enqueue(new Callback<ResponseBody>() {
+                                dataService.feed.DeleteFeed(data.get(position).getName(), data.get(position).getId()).enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                         Toast.makeText(context.getApplicationContext(), "삭제 되었습니다.", Toast.LENGTH_SHORT).show();

@@ -12,20 +12,21 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.smg_insta.API.LoginApi;
 import com.example.smg_insta.API.RetrofitClient;
-import com.example.smg_insta.API.ServiceApi;
 import com.example.smg_insta.DTO.LoginData;
 import com.example.smg_insta.DTO.LoginResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
     private EditText email, password;
     private Button signUp;
     private TextView join;
-    private ServiceApi service;
+    private LoginApi service;
 
     String JWT,ID= "";
     Bundle JWTbundle;
@@ -40,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.et_login_email);
         password = findViewById(R.id.et_login_pw);
 
-        service = RetrofitClient.getClient().create(ServiceApi.class);
+        service = RetrofitClient.getClient().create(LoginApi.class);
 
         // 회원가입하러 가기
         join = findViewById(R.id.tv_login_join);
@@ -97,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
         service.userLogin(data).enqueue(new Callback<LoginResponse>() {
 
             @Override
-            public void onResponse(Call<LoginResponse> call, retrofit2.Response<LoginResponse> response) {
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if(!response.isSuccessful()) {
                     // 실패
                     Toast.makeText(LoginActivity.this, "실패" + response.code(), Toast.LENGTH_SHORT).show();

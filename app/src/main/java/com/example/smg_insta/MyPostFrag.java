@@ -21,7 +21,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
-import com.example.smg_insta.API.CrudService;
+import com.example.smg_insta.API.Service;
 import com.example.smg_insta.DTO.FeedResponse;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class MyPostFrag extends Fragment {
     private ViewPager2 info_img_content;
     private LinearLayout layoutIndicator;
 
-    CrudService dataService = new CrudService();
+    Service dataService = new Service();
     FeedResponse selectedFeed;
     ArrayList<String> images = new ArrayList<>();
 
@@ -93,7 +93,7 @@ public class MyPostFrag extends Fragment {
 
 
         // 2. 번들로 받아온 postId로 게시물 조회
-        dataService.select.selectOne(postId).enqueue(new Callback<FeedResponse>() {
+        dataService.feed.selectOne(postId).enqueue(new Callback<FeedResponse>() {
             @Override
             public void onResponse(Call<FeedResponse> call, Response<FeedResponse> response) {
                 // 성공시
@@ -143,7 +143,7 @@ public class MyPostFrag extends Fragment {
                         switch (menuItem.getItemId()){
                             case R.id.menu_delete:
                                 // 게시물 삭제 시도
-                                dataService.delete.DeleteFeed(String.valueOf(userId), postId).enqueue(new Callback<ResponseBody>() {
+                                dataService.feed.DeleteFeed(String.valueOf(userId), postId).enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                         Toast.makeText(getContext(), "삭제 되었습니다.", Toast.LENGTH_SHORT).show();

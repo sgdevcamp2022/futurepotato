@@ -18,7 +18,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.smg_insta.API.CrudService;
+import com.example.smg_insta.API.Service;
 import com.example.smg_insta.Adapter.RVAdapter_profile;
 import com.example.smg_insta.DTO.MypageResponse;
 
@@ -40,7 +40,7 @@ public class Frag5 extends Fragment {
     private GridLayoutManager gridLayoutManager;
     RVAdapter_profile adapter;
     MypageResponse feeds;
-    CrudService dataService = new CrudService();
+    Service dataService = new Service();
 
     // 로그인시 받아와야 함!!
     String accountId;

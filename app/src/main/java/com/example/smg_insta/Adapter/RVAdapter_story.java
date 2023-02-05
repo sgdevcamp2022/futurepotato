@@ -1,15 +1,17 @@
 package com.example.smg_insta.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.smg_insta.API.CrudService;
+import com.example.smg_insta.API.Service;
 import com.example.smg_insta.DTO.MainPageResponse;
 import com.example.smg_insta.R;
 
@@ -20,9 +22,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class RVAdapter_story extends RecyclerView.Adapter<RVAdapter_story.ViewHolder> {
     Context context;
     private List<MainPageResponse.Story> data;
-    private CrudService dataService;
+    private Service dataService;
 
-    public RVAdapter_story(List<MainPageResponse.Story> data, Context context, CrudService dataService) {
+    String bundleImage;
+
+    public RVAdapter_story(List<MainPageResponse.Story> data, Context context, Service dataService) {
         this.data = data;
         this.context = context;
         this.dataService = dataService;
@@ -37,13 +41,16 @@ public class RVAdapter_story extends RecyclerView.Adapter<RVAdapter_story.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RVAdapter_story.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RVAdapter_story.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.onBind(data.get(position));
 
         holder.storyImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // 스토리 어떻게 띄울지...
+                bundleImage = data.get(position).getImage();
+
+
             }
         });
     }
@@ -56,11 +63,13 @@ public class RVAdapter_story extends RecyclerView.Adapter<RVAdapter_story.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         CircleImageView storyImage;
+        TextView storyId;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             storyImage = itemView.findViewById(R.id.civ_storyImage);
+            storyId = itemView.findViewById(R.id.tv_storyId);
 
         }
 
@@ -68,6 +77,8 @@ public class RVAdapter_story extends RecyclerView.Adapter<RVAdapter_story.ViewHo
             Glide.with(context)
                     .load(item.getProfileImage())
                     .into(storyImage);
+
+            storyId.setText(item.getName());
         }
     }
 }

@@ -17,7 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.smg_insta.API.CrudService;
+import com.example.smg_insta.API.Service;
 import com.example.smg_insta.DTO.UpdateProfileData;
 import com.example.smg_insta.DTO.UpdateProfileId;
 import com.example.smg_insta.DTO.UpdateProfileName;
@@ -42,7 +42,7 @@ public class EditProfileFrag extends Fragment {
     private Uri selectedImageUri;
     private boolean isChangedPhoto = false;
 
-    CrudService dataService = new CrudService();
+    Service dataService = new Service();
     String accountId;
 
 

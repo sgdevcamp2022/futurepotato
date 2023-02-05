@@ -23,7 +23,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.smg_insta.API.CrudService;
+import com.example.smg_insta.API.Service;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class Frag3 extends Fragment {
 
     String accountId;  //로그인할때 저장해야하나?
 
-    CrudService dataService = new CrudService();
+    Service dataService = new Service();
     ArrayList<Uri> filePathList;
 
     @Nullable
@@ -95,7 +95,7 @@ public class Frag3 extends Fragment {
                     files.add(filePart);
                 }
 
-                dataService.insert.insertOne(accountId, content, files).enqueue(new Callback<ResponseBody>() {
+                dataService.feed.insertOne(accountId, content, files).enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         // 로딩화면 만들기

@@ -18,19 +18,15 @@ public class JoinData {
     @SerializedName("accountPw")
     private String accountPw;
 
+    @Nullable
     @SerializedName("accountName")
     private String accountName;
 
     public JoinData(String email, String accountId, String accountPw, String accountName) {
-        //this.email = email;
-        //this.accountId = accountId;
-        //this.accountPw = accountPw;
-        //this.accountName = accountName;
-        Map<String, String> map = new HashMap<>();
-        map.put("email",email);
-        map.put("accountId",accountId);
-        map.put("accountPw",accountPw);
-        map.put("accountName",accountName);
+        this.email = email;
+        this.accountId = accountId;
+        this.accountPw = accountPw;
+        this.accountName = accountName;
 
     }
 

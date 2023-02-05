@@ -25,11 +25,4 @@ public class LoginResponse {
         return this.token;
     }
 
-    // 이것도 여기에 포함?
-    @SerializedName("error")
-    private String error;
-
-    public String getError() {
-        return error;
-    }
 }

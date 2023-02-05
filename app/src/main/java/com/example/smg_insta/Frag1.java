@@ -24,7 +24,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.smg_insta.API.CrudService;
+import com.example.smg_insta.API.Service;
 import com.example.smg_insta.Adapter.RVAdapter_post;
 import com.example.smg_insta.Adapter.RVAdapter_story;
 import com.example.smg_insta.DTO.MainPageResponse;
@@ -49,14 +49,15 @@ public class Frag1 extends Fragment {
     private RecyclerView mRV_story;
     private RVAdapter_story mRVAdapter_story;
 
-    CrudService dataService = new CrudService();
+    Service dataService = new Service();
     MainPageResponse feeds;
     String accountId;
     List<MainPageResponse.Post> posts;
     List<MainPageResponse.Story> stories;
     Uri storyImageUri;   // 스토리
 
-
+    List<String> MyStories = new ArrayList<>(); // 내 스토리 담아둘 곳
+    
     @Nullable
     @Override
     public View onCreateView(@Nullable LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -149,17 +150,35 @@ public class Frag1 extends Fragment {
             @Override
             public void onClick(View view) {
 
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                StoryFrag storyFrag = new StoryFrag();
+                // 내 스토리가 있는지 확인
+                // stories를 불러오지 못해서 에러뜨는 듯..?
+                //for(int i = 0; i < stories.size(); i++) {
+                //    if (stories.get(i).getName().equals(accountId)){
+                //        MyStories.add(stories.get(i).getImage());
+                //    }
+                //}
 
-                Bundle bundle = new Bundle();
-                // 스토리 조회할 때, 이미지가 필요한데... 으잉??
-                // 개인 스토리 따로 뺄 수 있는지 얘기해보기!
-                //bundle.putString("image", );
-                storyFrag.setArguments(bundle);
+                MyStories.add("mystory");   //test용
+                
+                // 내 스토리가 있으면
+                if (MyStories.size() > 0) {
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    StoryFrag storyFrag = new StoryFrag();
 
-                transaction.replace(R.id.main_frame, storyFrag).commit();
+                    Bundle bundle = new Bundle();
+                    // 스토리 조회할 때, 이미지가 필요한데... 으잉??
+                    // 개인 스토리 따로 뺄 수 있는지 얘기해보기! -> accountId로 조회?
+                    bundle.putStringArrayList("image", (ArrayList<String>) MyStories);
+                    bundle.putString("accountId", accountId);
+                    storyFrag.setArguments(bundle);
 
+                    transaction.replace(R.id.main_frame, storyFrag).commit();
+
+                } else {    // 스토리가 없으면
+                    Toast.makeText(getContext(), "길게 눌러서 스토리를 생성하세요..", Toast.LENGTH_LONG).show();
+
+
+                }
             }
         });
 

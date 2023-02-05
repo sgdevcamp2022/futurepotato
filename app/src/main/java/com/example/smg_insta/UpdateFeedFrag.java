@@ -27,7 +27,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
-import com.example.smg_insta.API.CrudService;
+import com.example.smg_insta.API.Service;
 
 import java.util.ArrayList;
 
@@ -56,7 +56,7 @@ public class UpdateFeedFrag extends Fragment {
     String content;
     int postId;
 
-    CrudService dataService = new CrudService();
+    Service dataService = new Service();
 
     @Nullable
     @Override
@@ -126,7 +126,7 @@ public class UpdateFeedFrag extends Fragment {
 
                 // 수정...
                 et_modifiedContent.getContext().toString();
-                dataService.update.UpdateFeed(userId, postId, String.valueOf(et_modifiedContent)).enqueue(new Callback<ResponseBody>() {
+                dataService.feed.UpdateFeed(userId, postId, String.valueOf(et_modifiedContent)).enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         Toast.makeText(getActivity(), "수정 되었습니다.", Toast.LENGTH_SHORT).show();
