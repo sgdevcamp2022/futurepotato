@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import s3.feed.dto.StoryDto;
 import s3.feed.entity.StoryEntity;
 import s3.feed.entity.UserEntity;
+import s3.feed.exception.ForbiddenException;
 import s3.feed.repository.StoryRepository;
 import s3.feed.repository.UserRepository;
 
@@ -75,7 +76,8 @@ public class StoryService {
         }
         return new StoryDto.ResStoryListDto(accountId, storyList.get(0).getProfileImage(), resStoryListDto.getStoryList());
     }
-//    public PostDto.ResImageListDto getImageList(Long postId) {
+
+    //    public PostDto.ResImageListDto getImageList(Long postId) {
 //        PostDto.ResImageListDto resImageListDto = new PostDto.ResImageListDto();
 //        PostEntity postEntity = postRepository.findById(postId).get();
 //        List<MediaEntity> mediaEntityList = postEntity.getMediaEntityList();
@@ -85,25 +87,19 @@ public class StoryService {
 //        }
 //        return new PostDto.ResImageListDto(postEntity.getContent(), postEntity.getUserEntity().getName(), resImageListDto.getImageList());
 //    }
-    public ResponseEntity deleteStory(Long storyId,String accountId) {
+    public ResponseEntity deleteStory(Long storyId, String accountId) {
 
         StoryEntity storyEntity = storyRepository.findById(storyId).get();
-        System.out.println("로그인한 name:"+accountId);
         String storyWriter = storyEntity.getAccountId();
 
-        System.out.println("스토리 올린 name: " + storyWriter);
-
         if (storyWriter.equals(accountId)) {
-            //삭제 권한 없다는 에러메시지 추가하기
-            System.out.println("동일함");
-
             storyRepository.deleteById(storyEntity.getId());
             amazonS3.deleteObject(new DeleteObjectRequest(bucket, storyEntity.getImage()));
 
         } else {
-            System.out.println("동일x");
+            throw new ForbiddenException("권한이 없습니다.");
         }
         return ResponseEntity.ok("스토리 삭제 성공~");
     }
-    }
+}
 

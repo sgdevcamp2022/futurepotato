@@ -27,9 +27,7 @@ public class UserEntity {
 
     private String accountName;
 
-//    @Relationship(type = "follow")
-//    private List<UserDto.ReqFollowUserDto> followList = new ArrayList<>();
-////    @JsonManagedReference
+//    @JsonManagedReference
     @Relationship(type = "user-post")
     private List<PostEntity> posts = new ArrayList<>();
 

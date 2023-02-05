@@ -28,7 +28,8 @@ public class UserDto {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class ReqMypagePostDto {
+    public static class
+    ReqMypagePostDto {
         public String storedUrl;
         public Long postId;
         public boolean isMultyImage;
@@ -51,22 +52,6 @@ public class UserDto {
     }
 
 }
-
-
-
-//        "name": "user1",
-//        "image": "fsdf.png",
-//        "followerCount": 100,
-//        "followingCount": 95,
-//        "postCount": 10,
-//        "imageList": [
-//        {"image": “sdf.png", postId:14, “isMultyImage = true”},
-//        {"image": “asdf2.png", postId:11, “isMultyImage = false”},
-//        "}...
-
-
-
-
 
 
 /* @Data

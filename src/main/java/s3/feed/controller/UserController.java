@@ -1,6 +1,11 @@
 package s3.feed.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jdk.jshell.Snippet;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import s3.feed.dto.UserDto;
@@ -12,11 +17,12 @@ import s3.feed.feign.FeignWithAuth;
 import s3.feed.repository.UserRepository;
 import s3.feed.service.UserService;
 
+import javax.ws.rs.core.Response;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-//@RequestMapping("feed")
+@Tag(name = "USER", description = "user controller api")
 public class UserController {
     @Autowired
     UserService userService;
@@ -24,19 +30,25 @@ public class UserController {
     UserRepository userRepository;
     @Autowired
     FeignWithAuth feignWithAuth;
+
+    @Operation(summary = "마이페이지 조회", description = "마이페이지 조회 api")
     @GetMapping("/mypage/{accountId}")
     public UserDto.ResMypage getMypage(@PathVariable("accountId")String accountId){
     return userService.getMypage(accountId);
     }
+    @Operation(summary = "프로필사진 등록", description = "프로필 사진 등록 api")
     @PostMapping("/profileImage/{accountId}")
-    public void uploadProfileImage(@PathVariable("accountId") String accountId, @RequestPart MultipartFile multipartFile){
-        userService.uploadProfileImage(multipartFile, accountId);
+    public ResponseEntity uploadProfileImage(@PathVariable("accountId") String accountId, @RequestPart MultipartFile multipartFile){
+        return new ResponseEntity<>(userService.uploadProfileImage(multipartFile, accountId), HttpStatus.OK);
     }
+    @Operation(summary = "프로필 편집", description = "프로필 편집 api")
     @PatchMapping("/mypage/{accountId}")
-    public String updateProfile(@PathVariable("accountId")String accountId, @RequestBody UserDto.ReqProfileUpdate reqProfileUpdate){
-        return userService.updateProfile(accountId,reqProfileUpdate);
+    public ResponseEntity updateProfile(@PathVariable("accountId")String accountId, @RequestBody UserDto.ReqProfileUpdate reqProfileUpdate){
+
+        return new ResponseEntity<>(userService.updateProfile(accountId,reqProfileUpdate), HttpStatus.OK);
 //        feignWithAuth.updateUser(accountId, reqProfileUpdate.getAccountName(),reqProfileUpdate.getAccountId());
     }
+    @Operation(summary = "검색 조회", description = "검색 조회 api")
     @GetMapping("/users")
     public List<String>  getUsers(@RequestParam String keyword){
     return  userService.getSearchingUser(keyword);

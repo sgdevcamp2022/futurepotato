@@ -1,9 +1,11 @@
 package s3.feed.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import s3.feed.entity.*;
+import s3.feed.exception.ForbiddenException;
 import s3.feed.repository.CommentRepository;
 import s3.feed.repository.PostRepository;
 import s3.feed.repository.ReplyRepository;
@@ -22,7 +24,7 @@ public class CommentService {
     PostRepository postRepository;
     @Autowired
     ReplyRepository replyRepository;
-    public CommentEntity createComment(String accountId, Long postId, String comment){
+    public ResponseEntity createComment(String accountId, Long postId, String comment){
         UserEntity userEntity = userRepository.findByAccountId(accountId);
         CommentEntity cmtEntity = commentRepository.findByAccountId(accountId);
         CommentEntity commentEntity = new CommentEntity(comment, accountId, LocalDateTime.now(), 0, userEntity.getProfileImage());
@@ -30,31 +32,38 @@ public class CommentService {
         postEntity.upCommentCount(postEntity.getCommentCount());
         postEntity.getCommentEntityList().add(commentEntity);
         postRepository.save(postEntity);
-        return commentEntity;
+        return ResponseEntity.ok("댓글 등록");
     }
 
-    public void deleteComment(String accountId, Long commentId){
+    public ResponseEntity deleteComment(String accountId, Long commentId){
         CommentEntity commentEntity = commentRepository.findById(commentId).get();
         String commentWriter = commentEntity.getAccountId();
-        if(commentWriter.equals(accountId)){
-        commentRepository.deleteById(commentId);
+        if(commentWriter.equals(accountId)) {
+            commentRepository.deleteById(commentId);
+        }
+        else
+            throw new ForbiddenException("권한이 없습니다.");
+        return ResponseEntity.ok("댓글 삭제 성공");
     }
-    }
-    public ReplyEntity createReplies(String accountId, Long commentId, String reply){
+    public ResponseEntity createReplies(String accountId, Long commentId, String reply){
         UserEntity userEntity = userRepository.findByAccountId(accountId);
         ReplyEntity replyEntity = new ReplyEntity(reply, accountId, LocalDateTime.now(), 0, userEntity.getProfileImage());
         CommentEntity commentEntity = commentRepository.findById(commentId).get();
         commentEntity.getReplyEntityList().add(replyEntity);
         commentRepository.save(commentEntity);
-        return replyEntity;
+        return ResponseEntity.ok("대댓글 등록");
+
     }
 
-    public void deleteReply(String accountId, Long replyId){
+    public ResponseEntity deleteReply(String accountId, Long replyId){
         ReplyEntity replyEntity = replyRepository.findById(replyId).get();
         String replyWriter = replyEntity.getAccountId();
-        if(replyWriter.equals(accountId)){
+        if(replyWriter.equals(accountId)) {
             replyRepository.deleteById(replyId);
         }
+        else
+            throw new ForbiddenException("권한이 없습니다.");
+        return ResponseEntity.ok("대댓글 삭제 성공");
     }
 
 }

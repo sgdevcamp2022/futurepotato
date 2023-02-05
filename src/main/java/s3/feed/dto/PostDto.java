@@ -16,6 +16,7 @@ public class PostDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ResImageListDto {
+        public Long postId;
         public String content;
         public String accountId;
         public String profileImage;
@@ -31,7 +32,26 @@ public class PostDto {
         private boolean isLikesCheck;
         public List<String> imageList = new ArrayList<>();
 
-        public List<CommentEntity> commentEntityList = new ArrayList<>();
+         public List<ReqCommentListDto> commentList = new ArrayList<>();
     }
-
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ReqCommentListDto{
+        public String commentWriter;
+        public String image;
+        public String comment;
+        public Long commentId;
+        public int likeCount;
+        public LocalDateTime createdDt;
+        public List<ReqReplyDto> replyList = new ArrayList<>();
+    }
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ReqReplyDto{
+        public String replyWriter;
+        public String reply;
+        public LocalDateTime createdDt;
+    }
 }

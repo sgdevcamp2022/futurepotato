@@ -1,44 +1,52 @@
 package s3.feed.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import s3.feed.repository.PostRepository;
 import s3.feed.repository.UserRepository;
 import s3.feed.service.PostService;
 import s3.feed.dto.PostDto;
-import s3.feed.entity.PostEntity;
+
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-//@RequestMapping("feed")
+@Tag(name = "POST", description = "post controller api")
 public class PostController {
 
     private final PostService postService;
     private final UserRepository userRepository;
     private final PostRepository postRepository;
 
-    //게시물 한개 조회, 댓글, 대댓글까지 보여야함.
+    @Operation(summary = "게시물 조회", description = "특정 게시물 조회 api")
     @GetMapping("/media/{postId}")
     public PostDto.ResImageListDto getPosts(@PathVariable("postId")Long id){
         return postService.getImageList(id);
     }
-    //게시물 생성
+
+    @Operation(summary = "게시물 생성", description = "게시물 생성 api")
     @PostMapping("/{accountId}/media")
-    public PostEntity uploadFile(@RequestPart List<MultipartFile> multipartFile, @RequestParam  String content,@PathVariable("accountId")  String accountId) {
-        return postService.uploadFile(multipartFile, content, accountId);
+    public ResponseEntity uploadFile(@RequestPart List<MultipartFile> multipartFile, @RequestParam  String content,@PathVariable("accountId")  String accountId) {
+
+        return new ResponseEntity<>(postService.uploadFile(multipartFile, content, accountId),HttpStatus.OK);
     }
-    //게시물 내용 수정
+
+    @Operation(summary = "게시물 수정", description = "게시물 수정 api")
     @PatchMapping("/{accountId}/media/{postId}")
-    public String updatePost(@PathVariable("postId")Long postId, @PathVariable("accountId") String accountId, @RequestParam String content){
-        return postService.updatePost(postId, accountId, content);
+    public ResponseEntity updatePost(@PathVariable("postId")Long postId, @PathVariable("accountId") String accountId, @RequestParam String content){
+        return new ResponseEntity<>(postService.updatePost(postId, accountId, content), HttpStatus.OK);
     }
-    //게시물 삭제
+
+    @Operation(summary = "게시물 삭제", description = "게시물 삭제 api")
     @DeleteMapping("/{accountId}/media/{postId}")
-    public void deleteFile(@PathVariable("postId")Long id, @PathVariable("accountId") String accountId) {
-        postService.deletePost(id, accountId);
+    public ResponseEntity ResponseEntity(@PathVariable("postId")Long id, @PathVariable("accountId") String accountId) {
+        return new ResponseEntity<>(postService.deletePost(id, accountId), HttpStatus.OK);
     }
 
 }

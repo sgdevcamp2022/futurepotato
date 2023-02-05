@@ -10,12 +10,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import s3.feed.dto.UserDto;
 import s3.feed.entity.PostEntity;
 import s3.feed.entity.UserEntity;
+import s3.feed.exception.ForbiddenException;
 import s3.feed.feign.FeignWithAuth;
 import s3.feed.repository.UserRepository;
 
@@ -36,7 +38,7 @@ public class UserService {
     @Autowired
     PostService postService;
 
-    public void uploadProfileImage(MultipartFile multipartFile, String accountId){
+    public ResponseEntity uploadProfileImage(MultipartFile multipartFile, String accountId){
 
         UserEntity userEntity = userRepository.findByAccountId(accountId);
 
@@ -55,9 +57,10 @@ public class UserService {
         userEntity.uploadProfileImage(storedImageUrl);
 
         userRepository.save(userEntity);
+        return ResponseEntity.ok("프로필사진 등록");
     }
 
-    public String updateProfile(String accountId, UserDto.ReqProfileUpdate reqProfileUpdate){
+    public ResponseEntity updateProfile(String accountId, UserDto.ReqProfileUpdate reqProfileUpdate){
         UserEntity userEntity = userRepository.findByAccountId(accountId);
         String updateName = reqProfileUpdate.accountName;
         String updateId = reqProfileUpdate.accountId;
@@ -65,7 +68,7 @@ public class UserService {
             UserEntity byAccountId = userRepository.findByAccountId(updateId);
             if(byAccountId!=null) {
     log.error("error log: 이미 존재하는 id입니다." );
-                return "이미 존재하는 id입니다.";
+                throw new ForbiddenException("이미 존재하는 id입니다.");
             }
         }
         if(updateId!=null&&updateName!=null) {
@@ -78,7 +81,7 @@ public class UserService {
             userEntity.updateNameProfile(updateName);
         }
         userRepository.save(userEntity);
-        return "변경 성공";
+        return ResponseEntity.ok("프로필 업데이트 ok");
     }
 
     public UserDto.ResMypage getMypage(String accountId){
