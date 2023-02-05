@@ -27,7 +27,7 @@ public class UserEntity {
 
     private String accountName;
 
-    @Relationship(type = "UPLOADS")
+    @Relationship(type = "UPLOADED_LAST")
     private List<PostEntity> posts = new ArrayList<>();
 
     @Relationship(type = "UPLOADS")
