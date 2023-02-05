@@ -9,11 +9,10 @@ import org.springframework.data.neo4j.core.schema.Node;
 
 
 @Getter
-@Node
+@Node(labels = {"Media"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MediaEntity {
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue
     private Long id;
 
     private String image;

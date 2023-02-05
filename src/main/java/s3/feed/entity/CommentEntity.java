@@ -14,11 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Node
+@Node(labels = {"Comment"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentEntity {
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue
     private Long id;
 
     private String comment;
@@ -30,7 +29,7 @@ public class CommentEntity {
     private int likeCount;
 
     private String profileImage;
-    @Relationship(type = "comment-reply")
+    @Relationship(type = "REPLIES")
     private List<ReplyEntity> replyEntityList = new ArrayList<>();
 
     @JsonBackReference

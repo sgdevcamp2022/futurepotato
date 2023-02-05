@@ -11,11 +11,10 @@ import org.springframework.data.neo4j.core.schema.Node;
 import java.time.LocalDateTime;
 
 @Getter
-@Node
+@Node(labels = {"Story"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StoryEntity {
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue
     private Long id;
 
     private String image;

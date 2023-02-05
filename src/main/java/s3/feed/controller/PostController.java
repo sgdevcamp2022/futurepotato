@@ -24,6 +24,9 @@ public class PostController {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
 
+    @GetMapping("")
+    public String test() {return "feed server ok";  }
+
     @Operation(summary = "게시물 조회", description = "특정 게시물 조회 api")
     @GetMapping("/media/{postId}")
     public PostDto.ResImageListDto getPosts(@PathVariable("postId")Long id){

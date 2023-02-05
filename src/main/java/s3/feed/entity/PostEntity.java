@@ -10,11 +10,10 @@ import java.util.List;
 
 @Getter
 //@Setter
-@Node
+@Node(labels = {"Post"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostEntity {
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue
     private Long id;
 
     private String content;
@@ -31,10 +30,10 @@ public class PostEntity {
 
     private boolean isLikesCheck;
 
-    @Relationship(type = "post-media")
+    @Relationship(type = "ATTACHES")
     private List<MediaEntity> mediaEntityList = new ArrayList<>();
 
-    @Relationship(type = "post-comment")
+    @Relationship(type = "INCLUDES")
     private List<CommentEntity> commentEntityList = new ArrayList<>();
 
     @JsonBackReference
