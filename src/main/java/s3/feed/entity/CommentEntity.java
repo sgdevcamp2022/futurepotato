@@ -21,14 +21,11 @@ public class CommentEntity {
     private Long id;
 
     private String comment;
-
     private String accountId;
-
     private LocalDateTime createdDt;
-
     private int likeCount;
-
     private String profileImage;
+
     @Relationship(type = "REPLIED", direction = Relationship.Direction.INCOMING)
     private List<ReplyEntity> replyEntityList = new ArrayList<>();
 

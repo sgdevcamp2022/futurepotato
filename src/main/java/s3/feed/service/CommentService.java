@@ -30,9 +30,10 @@ public class CommentService {
         CommentEntity commentEntity = new CommentEntity(comment, accountId, LocalDateTime.now(), 0, userEntity.getProfileImage());
         PostEntity postEntity = postRepository.findById(postId).get();
         postEntity.upCommentCount(postEntity.getCommentCount());
-        userEntity.getCommentList().add(commentEntity);
         postEntity.getCommentEntityList().add(commentEntity);
         postRepository.save(postEntity);
+        userEntity.getCommentList().add(commentEntity);
+        commentRepository.write(userEntity.getAccountId(), commentEntity.getId());
         return ResponseEntity.ok("댓글 등록");
     }
 
@@ -50,9 +51,10 @@ public class CommentService {
         UserEntity userEntity = userRepository.findByAccountId(accountId);
         ReplyEntity replyEntity = new ReplyEntity(reply, accountId, LocalDateTime.now(), 0, userEntity.getProfileImage());
         CommentEntity commentEntity = commentRepository.findById(commentId).get();
-        userEntity.getReplyEntityList().add(replyEntity);
         commentEntity.getReplyEntityList().add(replyEntity);
         commentRepository.save(commentEntity);
+        userEntity.getReplyEntityList().add(replyEntity);
+        replyRepository.write(userEntity.getAccountId(), replyEntity.getId());
         return ResponseEntity.ok("대댓글 등록");
 
     }

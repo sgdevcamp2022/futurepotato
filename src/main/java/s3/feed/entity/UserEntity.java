@@ -33,10 +33,10 @@ public class UserEntity {
     @Relationship(type = "UPLOADS")
     private List<StoryEntity> storyList = new ArrayList<>();
 
-    @Relationship(type = "WRITES")
+    @Relationship(type = "WRITES", direction = Relationship.Direction.OUTGOING)
     private List<CommentEntity> commentList = new ArrayList<>();
 
-    @Relationship(type = "WRITES")
+    @Relationship(type = "WRITES", direction = Relationship.Direction.OUTGOING)
     private List<ReplyEntity> replyEntityList = new ArrayList<>();
 
     public UserEntity(String accountName,String accountId){
