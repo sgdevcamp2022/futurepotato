@@ -11,7 +11,7 @@ import org.springframework.data.neo4j.core.schema.Node;
 import java.time.LocalDateTime;
 
 @Getter
-@Node
+@Node(labels = {"Reply"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReplyEntity {
     @Id
