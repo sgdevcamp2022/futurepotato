@@ -29,14 +29,14 @@ public class LoginActivity extends AppCompatActivity {
     private LoginApi service;
 
     String JWT,ID= "";
-    Bundle JWTbundle;
+    //Bundle JWTbundle;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
-        JWTbundle = new Bundle(); // 번들을 통해 값 전달
+        //JWTbundle = new Bundle(); // 번들을 통해 값 전달
 
         email = findViewById(R.id.et_login_email);
         password = findViewById(R.id.et_login_pw);

@@ -49,6 +49,7 @@ public class StoryFrag extends Fragment {
     List<StoryResponse.StoryList> storyLists = new ArrayList<>();   // 스토리 조회해서 저장할 스토리 리스트
     StoryResponse storyResponse;
     String accountId;
+    String storyId;
 
     Service dataService = new Service();
 
@@ -111,9 +112,9 @@ public class StoryFrag extends Fragment {
                 });
 
                 //이동
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                StoryFrag storyFrag = new StoryFrag();
-                transaction.replace(R.id.main_frame, storyFrag).commit();
+//                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+//                StoryFrag storyFrag = new StoryFrag();
+//                transaction.replace(R.id.main_frame, storyFrag).commit();
             }
         }, 4000); // 4초후에
 
@@ -122,7 +123,9 @@ public class StoryFrag extends Fragment {
             @Override
             public void onClick(View view) {
                 //
-                //
+                // 스토리 포스트 이미지 수정하기!!
+                // 차라리 이미지 뷰랑 삭제 버튼 같이 있도록 해서.. 클릭시 스토리 아이디 얻어서 삭제하도록..
+                // 아니면 꾹 눌렀을 떄,, 삭제 버튼 뜨도록 하는 것도 괜찮을 듯..!!
 
 
             }
