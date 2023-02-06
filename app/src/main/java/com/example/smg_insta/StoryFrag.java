@@ -112,9 +112,10 @@ public class StoryFrag extends Fragment {
                 });
 
                 //이동
-//                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-//                StoryFrag storyFrag = new StoryFrag();
-//                transaction.replace(R.id.main_frame, storyFrag).commit();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                Frag1 mainFrag = new Frag1();
+                transaction.replace(R.id.main_frame, mainFrag).commit();
+
             }
         }, 4000); // 4초후에
 

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/linearLayout4"
@@ -12,17 +12,18 @@
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_comment_accountImage"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_margin="10dp"
-            app:srcCompat="@drawable/user_default" />
+            android:src="@drawable/user_default" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
@@ -40,6 +41,22 @@
                 android:text="comment" />
         </LinearLayout>
 
+
+        <ImageView
+            android:id="@+id/iv_comment_noLike"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/heart" />
+
+        <ImageView
+            android:id="@+id/iv_comment_like"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/hearts"
+            android:visibility="gone" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -49,10 +66,24 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/tv_commentLikeCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_marginLeft="75dp"
+            android:text="좋아요 0개" />
+
+        <TextView
+            android:id="@+id/tv_commentCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="댓글 0개" />
+
+        <TextView
+            android:id="@+id/tv_btnReply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:text="댓글달기" />
     </LinearLayout>
 

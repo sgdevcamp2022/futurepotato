@@ -2,6 +2,9 @@ package com.example.smg_insta.DTO;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.w3c.dom.Comment;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +36,7 @@ public class FeedResponse {
     private int commentCount;
 
     @SerializedName("commentList")
-    private List<comment> commentList;
+    private ArrayList<Comment> commentList;
 
     @SerializedName("imageList")
     private ArrayList<String> imageList;
@@ -121,99 +124,130 @@ public class FeedResponse {
         this.commentCount = commentCount;
     }
 
-    public List<comment> getCommentList() {
+    public ArrayList<Comment> getCommentList() {
         return commentList;
     }
 
-    public void setCommentList(List<comment> commentList) {
+    public void setCommentList(ArrayList<Comment> commentList) {
         this.commentList = commentList;
     }
+
+
+    public static class Comment {
+
+        public Comment(String commentWriter, String image, String comment, int commentId, int likeCount, String createdDt, ArrayList<reply> replyList) {
+            this.commentWriter = commentWriter;
+            this.image = image;
+            this.comment = comment;
+            this.commentId = commentId;
+            this.likeCount = likeCount;
+            this.createdDt = createdDt;
+            this.replyList = replyList;
+        }
+
+        @SerializedName("commentWriter")
+        private String commentWriter;
+        @SerializedName("Image")
+        private String image;
+        @SerializedName("comment")
+        private String comment;
+        @SerializedName("commentId")
+        private int commentId;
+        @SerializedName("likeCount")
+        private int likeCount;
+        @SerializedName("createdDt")
+        private String createdDt;
+        @SerializedName("replyList")
+        private ArrayList<reply> replyList;
+
+
+        public String getCommentWriter() {
+            return commentWriter;
+        }
+
+        public void setCommentWriter(String commentWriter) {
+            this.commentWriter = commentWriter;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            image = image;
+        }
+
+        public String getComment() {
+            return comment;
+        }
+
+        public void setComment(String comment) {
+            this.comment = comment;
+        }
+
+        public int getCommentId() {return commentId;}
+
+        public void setCommentId(int commentId) {this.commentId = commentId;}
+
+        public int getLikeCount() {
+            return likeCount;
+        }
+
+        public void setLikeCount(int likeCount) {
+            this.likeCount = likeCount;
+        }
+
+        public String getCreatedDt() {
+            return createdDt;
+        }
+
+        public void setCreatedDt(String createdDt) {
+            this.createdDt = createdDt;
+        }
+
+        public ArrayList<reply> getReplyList() {
+            return replyList;
+        }
+
+        public void setReplyList(ArrayList<reply> replyList) {
+            this.replyList = replyList;
+        }
+    }
+
+    class reply {
+        @SerializedName("replyWriter")
+        private String replyWriter;
+        @SerializedName("reply")
+        private String reply;
+        @SerializedName("createdDt")
+        private String createdDt;
+
+
+        public String getReplyWriter() {
+            return replyWriter;
+        }
+
+        public void setReplyWriter(String replyWriter) {
+            this.replyWriter = replyWriter;
+        }
+
+        public String getReply() {
+            return reply;
+        }
+
+        public void setReply(String reply) {
+            this.reply = reply;
+        }
+
+        public String getCreatedDt() {
+            return createdDt;
+        }
+
+        public void setCreatedDt(String createdDt) {
+            this.createdDt = createdDt;
+        }
+    }
 }
 
-class comment {
-    @SerializedName("commentWriter")
-    private String commentWriter;
-    @SerializedName("Image")
-    private String Image;
-    @SerializedName("comment")
-    private String comment;
-    @SerializedName("likeCount")
-    private int likeCount;
-    @SerializedName("replyList")
-    private List<reply> replyList;
 
-    public String getCommentWriter() {
-        return commentWriter;
-    }
-
-    public void setCommentWriter(String commentWriter) {
-        this.commentWriter = commentWriter;
-    }
-
-    public String getImage() {
-        return Image;
-    }
-
-    public void setImage(String image) {
-        Image = image;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public int getLikeCount() {
-        return likeCount;
-    }
-
-    public void setLikeCount(int likeCount) {
-        this.likeCount = likeCount;
-    }
-
-    public List<reply> getReplyList() {
-        return replyList;
-    }
-
-    public void setReplyList(List<reply> replyList) {
-        this.replyList = replyList;
-    }
-}
-
-class reply {
-    @SerializedName("replyWriter")
-    private String replyWriter;
-    @SerializedName("reply")
-    private String reply;
-    @SerializedName("createdDt")
-    private String createdDt;
-
-
-    public String getReplyWriter() {
-        return replyWriter;
-    }
-
-    public void setReplyWriter(String replyWriter) {
-        this.replyWriter = replyWriter;
-    }
-
-    public String getReply() {
-        return reply;
-    }
-
-    public void setReply(String reply) {
-        this.reply = reply;
-    }
-
-    public String getCreatedDt() {
-        return createdDt;
-    }
-
-    public void setCreatedDt(String createdDt) {
-        this.createdDt = createdDt;
-    }
-}
 

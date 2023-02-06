@@ -72,9 +72,8 @@ public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHold
         holder.info_likes.setText("좋아요 " + data.get(position).getLikeCount() + "개");
         holder.info_comment_count.setText("댓글 " + data.get(position).getCommentCount() + "개");
 
-        //이미지 어케 가져올지 생각...
+        //이미지들 가져오기
         List<String> images = data.get(position).getImageList();
-        // 여기서 다시 리싸이클러뷰 연결해야되나?!?!?!?!?
         holder.info_img_content.setOffscreenPageLimit(1);
         holder.info_img_content.setAdapter(new ImageSliderAdapter(context.getApplicationContext(), images));
 
@@ -148,6 +147,17 @@ public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHold
             }
         });
 
+        holder.btn_comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, CommentsActivity.class);
+                // myAccountId 랑 postId 가져와야함!!
+                //intent.putExtra("accountId", );
+                intent.putExtra("postId", data.get(position).getId());
+                context.startActivity(intent);
+            }
+        });
+
     }
 
 
@@ -161,7 +171,6 @@ public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHold
         TextView info_comment_count;
         ImageView btn_menu, btn_like, btn_noLike, btn_comment;
 
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -174,22 +183,9 @@ public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHold
 
             info_img_content = itemView.findViewById(R.id.sliderViewPager);
             layoutIndicator = itemView.findViewById(R.id.layoutIndicators);
-
             
             btn_comment = itemView.findViewById(R.id.iv_comment);
 
-            // 댓글 버튼 클릭시
-            btn_comment.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //MainActivity activity = (MainActivity) itemView.getContext();// 프래그먼트에서 메인엑티비티 접근
-                    //activity.FragmentView(0);
-
-                    Intent intent = new Intent(itemView.getContext(), CommentsActivity.class);
-                    context.startActivity(intent);
-
-                }
-            });
 
             // 좋아요 버튼! 클릭시 ...
             btn_like = itemView.findViewById(R.id.iv_btn_like);

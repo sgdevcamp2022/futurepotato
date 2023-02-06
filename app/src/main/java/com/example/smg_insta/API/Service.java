@@ -84,7 +84,7 @@ public class Service {
         // 댓글 작성
         @FormUrlEncoded
         @POST("/feed/{accountId}/{postId}/comment")
-        Call<ResponseBody> InsertComment(@Path("accountId") String accountId, @Path("postId") String postId, @Field("comment") String comment);
+        Call<ResponseBody> InsertComment(@Path("accountId") String accountId, @Path("postId") int postId, @Field("comment") String comment);
 
 
         // 댓글 삭제
