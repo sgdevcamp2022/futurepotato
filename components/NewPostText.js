@@ -51,7 +51,7 @@ const NewPostText = (props) => {
             </div>
             <div className="right-col-detail" style={{padding:0, display:'flex', flexDirection:'column'}}>
                 <div>
-                    <UserInfo postImage = {me.profileimage} postId = {me.accountId} postName = {me.username} />
+                    <UserInfo postImage = {me.profileimage} postId = {me.accountId} postName = {me.username} isMain = {false}/>
                     <textarea placeholder={props.isEdit ? '' : '내용 작성...'} style={{height:100, width:350}}
                     value={postText} onChange={onChangePostText}/>
                 </div>

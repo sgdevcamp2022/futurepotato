@@ -9,6 +9,8 @@ export const initialMainState = {
     nextPost:null,
     newImage:[],
     isImage:false,
+    detailPage:null,
+
 }
 
 const dummyData = {
@@ -82,10 +84,11 @@ export const mainPageRequestAction = () => ({
 const reducer = (state = initialMainState, action) => produce(state, (draft) => {
     switch(action.type){
         case 'MAIN_PAGE_REQUEST' : 
+            console.log("이게뭘까요?");
             break;
         case 'MAIN_PAGE_SUCCESS' :
             draft.storyList = draft.storyList.concat(dummyData.storyList);
-            draft.postList = draft.postList.concat(dummyData.postList);
+            draft.postList = draft.postList.concat(dummyData.postList);//dummyData.postList;//draft.postList.concat(dummyData.postList);
             draft.limit = dummyData.limit;
             draft.prePost = dummyData.prePost;
             draft.nextPost = dummyData.nextPost;
@@ -94,6 +97,9 @@ const reducer = (state = initialMainState, action) => produce(state, (draft) => 
             break;
 
         case 'POST_INFO_REQUEST':
+            draft.detailPage = {
+                
+            }
             break;
         case 'POST_INFO_SUCCESS':
             draft.postList = action.data;
@@ -142,12 +148,45 @@ const reducer = (state = initialMainState, action) => produce(state, (draft) => 
                 "comment" : action.data, "likeCount":0, "replyList" : []});
                 break;
             }
+        case 'ADD_COMMENT_SUCCESS':
+            break;
+        case 'ADD_COMMENT_FAILURE':
+            break;
+        
+        case 'DELETE_COMMENT_REQUEST':
+            break;
+        case 'DELETE_COMMENT_SUCCESS':
+            break;
+        case 'DELETE_COMMENT_FAILURE':
+            break;
+
         case 'IMAGE_UPLOAD_REQUEST':{
             console.log(action.data.name);
             draft.newImage.push(action.data.get("image").name);
             draft.isImage = true;
             break;
         }
+
+        case 'ADD_REPLY_REQUEST':
+            break;
+        case 'ADD_REPLY_SUCCESS':
+            break;
+        case 'ADD_REPLY_FAILURE':
+            break;
+
+        case 'DELETE_REPLY_REQUEST':
+            break;
+        case 'DELETE_REPLY_SUCCESS':
+            break;
+        case 'DELETE_REPLY_FAILURE':
+            break;
+        
+        case 'LOAD_DETAIL_REQUEST':
+            break;
+        case 'LOAD_DETAIL_SUCCESS':
+            break;
+        case 'LOAD_DETAIL_FAILURE':
+            break;
         default:
             break;
 

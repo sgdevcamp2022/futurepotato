@@ -1,4 +1,6 @@
 import { all , fork, takeLatest, put, call} from "redux-saga/effects";
+import axios from "axios";
+axios.defaults.baseURL = "http://localhost:8000";
 
 function mainPageAPI() {
     return axios.get('/');

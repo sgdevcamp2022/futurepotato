@@ -3,10 +3,12 @@ import { useState } from 'react';
 import FolloingModal from '../FollowFolloing/FolloingModal';
 import FollowModal from '../FollowFolloing/FollowModal';
 import { useDispatch, useSelector } from 'react-redux';
-const ProfileHead = () => {
+
+const ProfileHead = (prop) => {
+    const isMe = prop.isMe;
     const [followOpen, setFollowOpen] = useState(false);
     const [follingOpen, setFollingOpen] = useState(false);
-    const {profileData} = useSelector((state) => state.user);
+    const {profileData, isFollowing} = useSelector((state) => state.user);
     const dispatch = useDispatch();
 
     const onClickfollowerOpen = () => {
@@ -28,7 +30,7 @@ const ProfileHead = () => {
                     </div>
                     <div className="profile-user-settings">
                         <h1 className="profile-user-name">{profileData.name}</h1>
-                        <button className="btn profile-edit-btn">프로필 편집</button>
+                        <button className="btn profile-edit-btn">{isMe ? "프로필 편집" : isFollowing ? "팔로우" : "맞팔로우 하기"}</button>
                         <button className="btn profile-settings-btn" aria-label="profile settings"><img src="/setting.png" width="17px"/></button>
 					</div>
 

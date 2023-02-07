@@ -1,6 +1,6 @@
 import { all , fork, takeLatest, put, call} from "redux-saga/effects";
 import axios from "axios";
-
+axios.defaults.baseURL = "http://localhost:8000";
 function logInAPI(data) {
     return axios.post("/auth/signin", data);
 }
@@ -66,6 +66,7 @@ function* profileLoad(action){
             //data:action.data
         })
     }catch(err){
+        console.log("asdfasdf");
         yield put({
             type:'PROFILE_LOAD_FAILURE',
             data:err.response.data,
@@ -124,6 +125,85 @@ function* watchFollowerLoad() {
     yield takeLatest('GET_FOLLOWER_REQUEST', followerLoad);
 }
 
+function followRequestAPI(data){
+    return axios.post('/follow', {
+        senderId:data.senderId,
+        recipientId:data.recipientId,
+    })
+}
+
+function* followRequest(action){
+    try{
+        //const result = yield call(followRequestAPI, action.data);
+         yield put({
+            type:'FOLLOW_SUCCESS',
+            //data:result.data
+        })
+    }catch(err){
+        yield put({
+            type:'FOLLOW_FAILURE',
+            data:err.response.data,
+        })
+    }
+}
+
+function* watchFollow(){
+    yield takeLatest('FOLLOW_REQUEST', followRequest);
+}
+
+function followCancelAPI(data) {
+    return axios.delete('/follow', {
+        senderId:data.senderId,
+        recipientId:data.recipientId,
+    })
+}
+
+function* followCancel(action){
+    try{
+        //const result = yield call(followCancelAPI, action.data);
+        yield put({
+            type:'FOLLOW_CANCEL_SUCCESS',
+            //data:result.data
+        })
+    }catch(err){
+        yield put({
+            type:'FOLLOW_CANCEL_FAILURE',
+            data:err.response.data,
+        })
+    }
+}
+
+function* watchFollowCancel(){
+    yield takeLatest('FOLLOW_CANCEL_REQUEST', followCancel);
+}
+
+
+function isFollowAPI(data){
+    return axios.get('/isFollowing', {
+        senderId:data.senderId,
+        recipientId:data.recipientId
+    })
+}
+
+function* isFollow(action){
+    try{
+        const result = yield call(isFollowAPI, action.data);
+        yield put({
+            type:'GET_FOLLOING_SUCCESS',
+            data:result.result,
+        })
+    }catch(err){
+        yield put({
+            type:'GET_FOLLOING_FAILURE',
+            data:err.response.data,
+        })
+    }
+}
+
+function* watchIsFolloing(){
+    yield takeLatest('GET_FOLLOING_REQUEST', isFollow);
+}
+
 export default function* userSaga(){
     yield all([
         fork(watchLogIn),
@@ -131,5 +211,8 @@ export default function* userSaga(){
         fork(watchProfileLoad),
         fork(watchFolloingLoad),
         fork(watchFollowerLoad),
+        fork(watchFollow),
+        fork(watchFollowCancel),
+        fork(watchIsFolloing),
     ])
 }

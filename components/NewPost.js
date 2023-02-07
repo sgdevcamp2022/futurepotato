@@ -13,6 +13,7 @@ const NewPost = () => {
     console.log(isImage);
     const onChangeImages = useCallback((e) => {
         const imageFormData = new FormData();
+        console.log(e.target.files);
         [].forEach.call(e.target.files, (f) => {
             console.log("Asdfasdf", f);
           imageFormData.append('image', f);

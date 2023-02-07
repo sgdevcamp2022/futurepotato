@@ -10,9 +10,11 @@ export const initialState = {
     profileData:{},
     folloingList:[],
     followerList:[],
+    isFollowing:false,
 }
 
-const dummyfolloingList = [{
+const dummyfolloingList = [
+    {
     accountId: "user20",
     accountName:"박형우",
     profileImage:"../public/cover 9.png",
@@ -29,7 +31,8 @@ const dummyfolloingList = [{
     }
 ];
 
-const dummyfollowerList = [{
+const dummyfollowerList = [
+    {
     accountId: "user20",
     accountName:"박형우",
     profileImage:"./cover 9.png",
@@ -130,7 +133,28 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
                 }
             case 'GET_FOLLOWER_FAILURE':
                 break;
+            
+            case 'FOLLOW_REQUEST':
+                break;
+            case 'FOLLOW_SUCCESS':
+                break;
+            case 'FOLLOW_FAILURE':
+                break;
 
+            case 'FOLLOW_CANCEL_REQUEST':
+                break;
+            case 'FOLLOW_CANCEL_SUCCESS':
+                break;
+            case 'FOLLOW_CANCEL_FAILURE':
+                break;
+
+            case 'GET_FOLLOING_REQUEST':
+                break;
+            case 'GET_FOLLOING_SUCCESS':
+                draft.isFollowing = true;
+                break;
+            case 'GET_FOLLOING_FAILURE':
+                break;
 
             case 'LOG_OUT' :
                 localStorage.clear();

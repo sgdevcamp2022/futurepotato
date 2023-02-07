@@ -9,7 +9,6 @@ const Mainpage = () => {
     const {postList} = useSelector((state) => state.mainpage);
     console.log(postList);
     useEffect(() => {
-        console.log("포스트 로딩");
         dispatch({type: 'MAIN_PAGE_REQUEST'});
     },[])
     return(

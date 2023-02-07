@@ -1,16 +1,16 @@
 import axios from "axios";
-import { all , fork, takeLatest, put, call, putResolve, } from "redux-saga/effects";
-
+import { all , fork, takeLatest, put, call, putResolve, take, } from "redux-saga/effects";
+axios.defaults.baseURL = "http://localhost:8000";
 function checkPostAPI(postId){
     return axios.get(`/media/${postId}`);
 }
 
 function* checkPost(action){
     try{
-        const result = yield call(checkPostAPI, action.postList.postId);
+        //const result = yield call(checkPostAPI, action.postList.postId);
         yield put({
             type:'POST_INFO_SUCCESS',
-            data: result.data,
+            //data: result.data,
         })
     } catch (err) {
         yield put({
@@ -25,7 +25,6 @@ function* watchCheckPost(){
 }
 
 function addPostAPI(data){
-    console.log(data);
     return axios.post(`/${data.accountId}/media`,{
         "content" : data.data,
         "imageList" : data.dataImage,
@@ -101,11 +100,108 @@ function* watchRemovePost(){
     yield takeLatest('REMOVE_POST_REQUEST', removePost);
 }
 
+function addReplyAPI(data){
+    return axios.post(`/feed/${data.accountId}/${commentId}/reply`, {reply : data.content});
+}
+
+function* addReply(action){
+    try{
+        //const result = yield call(addReplyAPI, action.data);
+        yield put({
+            type:'ADD_REPLY_SUCCESS',
+            //data:1,
+        })
+    }catch(err){
+        yield put({
+            type:'ADD_REPLY_FAILURE',
+            data: err.response.data,
+        })
+    }
+}
+
+function* watchAddReply(){
+    yield takeLatest('ADD_REPLY_REQUEST', addReply);
+}
+
+
+function addCommentAPI(data){
+    //
+}
+
+function* addComment(action){
+    try{
+        //const result = yield call(addCommentAPI, action.data);
+        yield put({
+            type:'ADD_COMMENT_SUCCESS',
+            //data:1
+        })
+    }catch(err){
+        yield put({
+            type:"ADD_COMMENT_FAILURE",
+            data:err.response.data
+        })
+    }
+}
+
+function* watchAddComment(){
+    yield takeLatest('ADD_COMMENT_REQUEST', addComment);
+}
+
+function deleteCommentAPI(){
+    //return axios
+}
+
+function* deleteComment(action){
+    try{
+        const result = yield call(deleteCommentAPI, action.data);
+        yield put({
+            type:'DELETE_COMMENT_SUCCESS',
+            //data:result
+        })
+    }catch(err){
+        yield put({
+            type:"DELETE_COMMENT_FAILURE",
+            data: err.response.data,
+        })
+    }
+}
+
+function* watctRemoveComment(){
+    yield takeLatest('DELETE_COMMENT_REQUEST', deleteComment);
+}
+
+function deleteReplyAPI(){
+    //return axios
+}
+
+function* deleteReply(action){
+    try{
+        const result = yield call(deleteReplyAPI, action.data);
+        yield put({
+            type:'DELETE_REPLY_SUCCESS',
+            //data:result
+        })
+    }catch(err){
+        yield put({
+            type:"DELETE_REPLY_FAILURE",
+            data: err.response.data,
+        })
+    }
+}
+
+function* watchRemoveReply(){
+    yield takeLatest('DELETE_REPLY_REQUEST', deleteReply);
+}
+
 export default function* crudSaga(){
     yield all([
         fork(watchAddPost),
         fork(watchRemovePost),
         fork(watchModifyPost),
         fork(watchCheckPost),
+        fork(watchAddReply),
+        fork(watchAddComment),
+        fork(watctRemoveComment),
+        fork(watchRemoveReply),
     ])
 }
