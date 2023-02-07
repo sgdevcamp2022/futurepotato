@@ -29,7 +29,7 @@ import retrofit2.http.Path;
 
 public class Service {
 
-    private String BASE_URL = "http://10.0.2.2:8000";
+    private String BASE_URL = "http://10.0.2.2:8003";
 
     Retrofit retrofitClient =
             new Retrofit.Builder()
@@ -89,7 +89,7 @@ public class Service {
 
         // 댓글 삭제
         @POST("/feed/{accountId}/comment/{commentId}")
-        Call<ResponseBody> DeleteComment(@Path("accountId") String accountId, @Path("commentId") String commentId);
+        Call<ResponseBody> DeleteComment(@Path("accountId") String accountId, @Path("commentId") int commentId);
 
         // 대댓글 작성
         @FormUrlEncoded

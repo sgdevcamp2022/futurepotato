@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -36,6 +37,7 @@ public class Frag5 extends Fragment {
     private TextView userId, post, following, follower;
     private RecyclerView account_recyclerview;
     private Button btn_edit_profile;
+    private LinearLayout linearLayout_follower, linearLayout_following;
 
     private GridLayoutManager gridLayoutManager;
     RVAdapter_profile adapter;
@@ -77,6 +79,9 @@ public class Frag5 extends Fragment {
         following = view.findViewById(R.id.tv_followingCount);
         follower = view.findViewById(R.id.tv_followerCount);
 
+        linearLayout_follower = view.findViewById(R.id.lL_follower);
+        linearLayout_following = view.findViewById(R.id.lL_following);
+
 
         account_recyclerview = view.findViewById(R.id.recyclerview_profile);
         account_recyclerview.setHasFixedSize(true);
@@ -91,6 +96,7 @@ public class Frag5 extends Fragment {
         //-------
         account_recyclerview.setAdapter(adapter);
 
+        // 1. mypage 정보 보여주기
         dataService.selectMyPage.SelectMyPage(accountId).enqueue(new Callback<MypageResponse>() {
             @Override
             public void onResponse(Call<MypageResponse> call, Response<MypageResponse> response) {
@@ -115,7 +121,24 @@ public class Frag5 extends Fragment {
         });
 
 
-        // 프로필 편집 버튼
+        // 2. 팔로워 정보 보여주기
+        linearLayout_follower.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                
+            }
+        });
+
+        // 3. 팔로잉 정보 보여주기
+        linearLayout_following.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                
+            }
+        });
+
+
+        // 4. 프로필 편집 버튼
         btn_edit_profile = view.findViewById(R.id.btn_edit_profile);
         btn_edit_profile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,7 +163,7 @@ public class Frag5 extends Fragment {
 
 
 
-
+        // 5. 상단의 플러스 버튼(post추가)과 셋업 버튼(로그아웃)
         btn_addContent = view.findViewById(R.id.btn_addContent);
         btn_setup = view.findViewById(R.id.btn_setup);
 

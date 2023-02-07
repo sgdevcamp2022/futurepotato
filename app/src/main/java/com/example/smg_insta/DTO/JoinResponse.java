@@ -30,11 +30,4 @@ public class JoinResponse {
         return accountId;
     }
 
-
-    @SerializedName("error")
-    private String error;
-
-    public String getError() {
-        return error;
-    }
 }

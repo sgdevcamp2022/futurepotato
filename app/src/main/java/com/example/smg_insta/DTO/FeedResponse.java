@@ -135,7 +135,7 @@ public class FeedResponse {
 
     public static class Comment {
 
-        public Comment(String commentWriter, String image, String comment, int commentId, int likeCount, String createdDt, ArrayList<reply> replyList) {
+        public Comment(String commentWriter, String image, String comment, int commentId, int likeCount, String createdDt, ArrayList<Reply> replyList) {
             this.commentWriter = commentWriter;
             this.image = image;
             this.comment = comment;
@@ -158,7 +158,7 @@ public class FeedResponse {
         @SerializedName("createdDt")
         private String createdDt;
         @SerializedName("replyList")
-        private ArrayList<reply> replyList;
+        private ArrayList<Reply> replyList;
 
 
         public String getCommentWriter() {
@@ -205,20 +205,30 @@ public class FeedResponse {
             this.createdDt = createdDt;
         }
 
-        public ArrayList<reply> getReplyList() {
+        public ArrayList<Reply> getReplyList() {
             return replyList;
         }
 
-        public void setReplyList(ArrayList<reply> replyList) {
+        public void setReplyList(ArrayList<Reply> replyList) {
             this.replyList = replyList;
         }
     }
 
-    class reply {
+    public static class Reply {
+
+        public Reply(String replyWriter, String reply, String image, String createdDt) {
+            this.replyWriter = replyWriter;
+            this.reply = reply;
+            this.image = image;
+            this.createdDt = createdDt;
+        }
+
         @SerializedName("replyWriter")
         private String replyWriter;
         @SerializedName("reply")
         private String reply;
+        @SerializedName("image")
+        private String image;
         @SerializedName("createdDt")
         private String createdDt;
 
@@ -238,6 +248,10 @@ public class FeedResponse {
         public void setReply(String reply) {
             this.reply = reply;
         }
+
+        public String getImage() {return image;}
+
+        public void setImage(String image) {this.image = image;}
 
         public String getCreatedDt() {
             return createdDt;

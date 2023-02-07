@@ -2,6 +2,7 @@ package com.example.smg_insta;
 
 import static java.lang.Integer.parseInt;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -188,6 +189,24 @@ public class MyPostFrag extends Fragment {
 
                 popup.show();
 
+
+
+            }
+        });
+
+
+        // 4. 댓글 버튼 눌렀을 때
+        btn_comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // RVAdapter_post -> CommentsActivity 갈 때랑 똑같은 코드 & 똑같은 엑티비티로 넘어가는건데
+                // 잘 실행될지 모르겠음..
+
+                Intent intent = new Intent(getActivity(), CommentsActivity.class);
+                // myAccountId 랑 postId 가져와야함!!
+                intent.putExtra("accountId", bundle_id);
+                intent.putExtra("postId", postId);
+                startActivity(intent);
 
 
             }

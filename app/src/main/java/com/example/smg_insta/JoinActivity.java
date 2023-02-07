@@ -83,8 +83,7 @@ public class JoinActivity extends AppCompatActivity {
                 if(!response.isSuccessful()) {
                     // 실패
                     Toast.makeText(JoinActivity.this, "실패: " + response.code(), Toast.LENGTH_SHORT).show();
-
-
+                    Log.e("회원가입 실패", response.message());
                 } else {
                     Toast.makeText(JoinActivity.this, result.getAccountId()+"님 회원가입을 축하합니다.", Toast.LENGTH_SHORT).show();
 

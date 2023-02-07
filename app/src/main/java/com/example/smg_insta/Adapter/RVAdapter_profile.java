@@ -78,14 +78,6 @@ public class RVAdapter_profile extends RecyclerView.Adapter<RVAdapter_profile.Vi
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             info_private_image = itemView.findViewById(R.id.profile_image);
-
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-                    // 클릭시 post_item으로 확인할 수 있도록...
-
-//                }
-//            });
         }
 
         void onBind(MypageResponse.MyImage item){

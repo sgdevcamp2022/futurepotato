@@ -61,7 +61,13 @@ public class CommentsActivity extends AppCompatActivity {
 
 
         //------test
-        FeedResponse.Comment test1 = new FeedResponse.Comment("test1", "https://cdn.pixabay.com/photo/2020/03/08/21/41/landscape-4913841_1280.jpg", "게시글 댓글 테스트1", 12, 100, "날짜", new ArrayList<>());
+        ArrayList<FeedResponse.Reply> repliesTest1 = new ArrayList<>();
+        FeedResponse.Reply r_test1 = new FeedResponse.Reply("r1", "답글 테스트1", "https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg", "0");
+        FeedResponse.Reply r_test2 = new FeedResponse.Reply("r2", "답글 테스트2", "https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg", "0");
+        repliesTest1.add(r_test1);
+        repliesTest1.add(r_test2);
+
+        FeedResponse.Comment test1 = new FeedResponse.Comment("test1", "https://cdn.pixabay.com/photo/2020/03/08/21/41/landscape-4913841_1280.jpg", "게시글 댓글 테스트1", 12, 100, "날짜", repliesTest1);
         FeedResponse.Comment test2 = new FeedResponse.Comment("test2", "https://cdn.pixabay.com/photo/2020/09/02/18/03/girl-5539094_1280.jpg", "게시글 댓글 테스트1", 12, 100, "날짜", new ArrayList<>());
         FeedResponse.Comment test3 = new FeedResponse.Comment("test3", "https://cdn.pixabay.com/photo/2014/03/03/16/15/mosque-279015_1280.jpg", "게시글 댓글 테스트1", 12, 100, "날짜", new ArrayList<>());
 
@@ -80,24 +86,26 @@ public class CommentsActivity extends AppCompatActivity {
 
 
 
-
-
         et_comment = findViewById(R.id.et_insert_comment);
         Btn_sendComment = findViewById(R.id.iv_commnet_sendBtn);
 
-        comment = et_comment.getText().toString();
         Btn_sendComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // comment에 저장된 내용 POST
+                comment = et_comment.getText().toString();
                 // accountId 받아와야 함...! -> 아직 못 함.
-                Toast.makeText(getApplicationContext(), "보내기", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "보내기", Toast.LENGTH_LONG).show();
 
                 // 키보드 내리기----> 연동 성공하면 삭제하기
                 InputMethodManager mInputMethodManager = (InputMethodManager)getApplication().getSystemService(Context.INPUT_METHOD_SERVICE);
                 mInputMethodManager.hideSoftInputFromWindow(et_comment.getWindowToken(), 0);
                 // et_comment 내용 삭제----> 연동 성공하면 삭제하기
                 et_comment.setText(null);
+                FeedResponse.Comment test4 = new FeedResponse.Comment("test3", "https://cdn.pixabay.com/photo/2014/03/03/16/15/mosque-279015_1280.jpg",comment , 12, 100, "날짜", new ArrayList<>());
+                commentList.add(test4);
+                mRV_comments.setAdapter(new CommentAdapter(commentList, getApplication(), dataService));
+                //-----------------여기까지 테스트----
 
                 dataService.comment.InsertComment(accountId, postId, comment).enqueue(new Callback<ResponseBody>() {
                     @Override
@@ -129,7 +137,11 @@ public class CommentsActivity extends AppCompatActivity {
             }
         });
 
+
+
+
     }
+
 
 
     private void readComment(int postId) {
