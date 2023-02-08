@@ -41,10 +41,28 @@ const ProfileHead = (prop) => {
 					        <li>팔로잉 <span className="profile-stat-count" onClick={onClickfolloingOpen}>{profileData.followingCount}</span></li>
 				        </ul>
                     </div>
-                    <Modal isOpen = {followOpen} onRequestClose={() => setFollowOpen(false)} style = {{content:{top:110, bottom:130, height:450, width:400, left:"35%", right:"35%", }}}>
+                    <Modal isOpen = {followOpen} onRequestClose={() => setFollowOpen(false)} style={{content:{
+                            position: "relative",
+                            display: "inline-flex",
+                            left: "50%",
+                            top: "50%",
+                            transform: "translate(-50%, -50%)",
+                            padding: 0,
+                            borderRadius: 13,
+                            },
+                        }}>
                         <FolloingModal />
                     </Modal>
-                    <Modal isOpen = {follingOpen} onRequestClose = {() => setFollingOpen(false)}  style = {{content:{top:110, bottom:130, height:450, width:400, left:"35%", right:"35%", }}}>
+                    <Modal isOpen = {follingOpen} onRequestClose = {() => setFollingOpen(false)}  style={{content:{
+                            position: "relative",
+                            display: "inline-flex",
+                            left: "50%",
+                            top: "50%",
+                            transform: "translate(-50%, -50%)",
+                            padding: 0,
+                            borderRadius: 13,
+                            },
+                        }}>
                         <FollowModal />
                     </Modal>
 

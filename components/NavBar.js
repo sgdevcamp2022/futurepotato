@@ -43,14 +43,23 @@ const NavBar = () => {
                         <div className="icon user-profile">
                             <div className='profile-pic' style={{width:22, height:22, display:'inline-block', padding: 0
                             ,cursor:'pointer'}} onClick = {onClickProfile}>
-                                <img src={me.profileimage} alt />
+                                <img src={me.profileimage} alt=""/>
                             </div>
                         </div>
                         </a>
                     </Link>
 
                     <Modal isOpen={newPostOpen} onRequestClose={()=>setNewPost(false)}
-                        style={{content:{left:"20%", right:"20%", padding:0, borderRadius:13}}}
+                        style={{content:{
+                            position: "relative",
+                            display: "inline-flex",
+                            left: "50%",
+                            top: "50%",
+                            transform: "translate(-50%, -50%)",
+                            padding: 0,
+                            borderRadius: 13,
+                            },
+                        }}
                     >
                         <NewPost/>
                     </Modal>

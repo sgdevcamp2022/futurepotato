@@ -7,7 +7,11 @@ const ProfilePostList = () => {
     console.log(profileData);
     return(
         <>
-        {profileData.imageList.map((v) => (<ProfilePost image = {v.image}/>))}
+        {profileData.imageList.map((v, index) => (
+            <div key={index}>
+                <ProfilePost image = {v.image}/>
+            </div>
+        ))}
         </>
     );
 };

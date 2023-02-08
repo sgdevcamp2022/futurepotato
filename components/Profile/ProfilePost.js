@@ -3,7 +3,7 @@ const ProfilePost = (props) => {
     console.log(props);
     return(
         <>
-            <div className="gallery-item" tabindex="0">
+            <div className="gallery-item" tabIndex="0">
                     <img src={props.image} className="gallery-image" alt="" />
                         <div className="gallery-item-info">
                         <ul>

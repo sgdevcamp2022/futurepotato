@@ -1,8 +1,8 @@
 import { all , fork, takeLatest, put, call} from "redux-saga/effects";
 import axios from "axios";
-axios.defaults.baseURL = "http://localhost:8000";
+
 function logInAPI(data) {
-    return axios.post("/auth/signin", data);
+    return axios.post("/api/auth/signin", data);
 }
 
 function* logIn(action){
@@ -37,10 +37,10 @@ function signUpAPI(data){
 
 function* signUp(action){
     try{
-        //const result = yield call(signUpAPI, action.data);
+        const result = yield call(signUpAPI, action.data);
         yield put({
             type: 'SIGN_UP_SUCCESS',
-            data:action.data
+            data:result.data
         })
     }catch(err){
         yield put({

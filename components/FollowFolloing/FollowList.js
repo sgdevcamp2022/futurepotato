@@ -6,8 +6,10 @@ const FollowList = () => {
     console.log(folloingList);
     return(
         <div className="Follow_ing_list">
-            {folloingList.map((v) => (
+            {folloingList.map((v, index) => (
+                <div key={index}>
                 <FolloingForm data = {v}/>
+                </div>
             ))}
         </div>
     );

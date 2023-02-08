@@ -6,8 +6,8 @@ const StoryAvatarList = () => {
     console.log(storyList);
     return(
         <>
-            {storyList.map((v) => (
-                <div className="status-card">
+            {storyList.map((v, index) => (
+                <div key={index} className="status-card">
                     <div className="profile-pic-story">
                         <img src={v.profileImage} alt="" />
                     </div>

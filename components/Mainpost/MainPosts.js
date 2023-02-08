@@ -20,15 +20,15 @@ const MainPosts = () => {
 
     return (
         <>
-            {postList.map((v) => (
-                <div className="post">
+            {postList.map((v, index) => (
+                <div key={index} className="post">
                     <UserInfo postId = {v.id} postName = {v.name} postImage = {v.profileImage} isMain = {true}/>
                     <div className="sliderWrapper">
                     <Slider {...settings} 
                         afterChange={(slide) => setCurrentSlide(slide)}
                     >
-                        {v.imageList.map((i) => (
-                            <div style={{
+                        {v.imageList.map((i, index) => (
+                            <div key={index} style={{
                                 textAlign: "center"}}>
                             <img src={i.image} className="post-image" alt="" />
                             </div>

@@ -30,10 +30,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/detail/[pid]": [
+    "/profile/[profileid]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/detail/[pid].js"
+      "static/chunks/pages/profile/[profileid].js"
     ]
   },
   "ampFirstPages": []
