@@ -14,8 +14,8 @@ public interface LoginApi {
     @POST("/auth/signin")
     Call<LoginResponse> userLogin(@Body LoginData data);
 
-    //@POST("/auth/signup")
-    @POST("/signup")
+    @POST("/auth/signup")
+    //@POST("/signup")
     Call<JoinResponse> userJoin(@Body JoinData data);
 
 }

@@ -5,7 +5,6 @@ import static java.lang.Integer.parseInt;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -146,7 +144,7 @@ public class UpdateFeedFrag extends Fragment {
             }
         });
 
-        btn_back = view.findViewById(R.id.iv_update_comments_back);
+        btn_back = view.findViewById(R.id.iv_blockList_back);
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

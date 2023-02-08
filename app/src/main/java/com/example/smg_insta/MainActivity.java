@@ -21,20 +21,19 @@ public class MainActivity extends AppCompatActivity {
     private Frag3 frag3;
     private Frag4 frag4;
     private Frag5 frag5;
-    Bundle JWTbundle;
+    //Bundle JWTbundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = getIntent();
-        String JWT = intent.getStringExtra("JWT");
-        String ID = intent.getStringExtra("ID");
+        //Intent intent = getIntent();
+        //String ID = PreferenceManager.getString(getApplicationContext(), "accountID");
 
-        JWTbundle = new Bundle(); // 번들을 통해 값 전달
-        JWTbundle.putString("JWT",JWT);//번들에 넘길 값 저장
-        JWTbundle.putString("ID",ID);//번들에 넘길 값 저장
+        //JWTbundle = new Bundle(); // 번들을 통해 값 전달
+        //JWTbundle.putString("JWT",JWT);//번들에 넘길 값 저장
+        //JWTbundle.putString("ID",ID);//번들에 넘길 값 저장
 
 
         bottomNavigationView = findViewById(R.id.bottomNavi);
@@ -74,27 +73,27 @@ public class MainActivity extends AppCompatActivity {
         ft = fm.beginTransaction();
         switch(n){
             case 0:
-                frag1.setArguments(JWTbundle);
+                //frag1.setArguments(JWTbundle);
                 ft.replace(R.id.main_frame, frag1);
                 ft.commit();
                 break;
             case 1:
-                frag2.setArguments(JWTbundle);
+                //frag2.setArguments(JWTbundle);
                 ft.replace(R.id.main_frame, frag2);
                 ft.commit();
                 break;
             case 2:
-                frag3.setArguments(JWTbundle);
+                //frag3.setArguments(JWTbundle);
                 ft.replace(R.id.main_frame, frag3);
                 ft.commit();
                 break;
             case 3:
-                frag4.setArguments(JWTbundle);
+                //frag4.setArguments(JWTbundle);
                 ft.replace(R.id.main_frame, frag4);
                 ft.commit();
                 break;
             case 4:
-                frag5.setArguments(JWTbundle);
+                //frag5.setArguments(JWTbundle);
                 ft.replace(R.id.main_frame, frag5);
                 ft.commit();
                 break;
@@ -109,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
 
             case 1:
                 MyPostFrag myPostFrag = new MyPostFrag();
+                //myPostFrag.setArguments(JWTbundle);
                 transaction.replace(R.id.main_frame, myPostFrag).commit();
                 break;
 

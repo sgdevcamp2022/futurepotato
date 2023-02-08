@@ -8,6 +8,7 @@ import com.example.smg_insta.DTO.LoginResponse;
 import com.example.smg_insta.DTO.MainPageResponse;
 import com.example.smg_insta.DTO.StoryResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.MultipartBody;
@@ -29,7 +30,7 @@ import retrofit2.http.Path;
 
 public class Service {
 
-    private String BASE_URL = "http://10.0.2.2:8003";
+    private String BASE_URL = "http://10.0.2.2:8000";
 
     Retrofit retrofitClient =
             new Retrofit.Builder()
@@ -59,6 +60,8 @@ public class Service {
     // 6. 로그인/회원가입
     public LoginApi login = retrofitClient.create(LoginApi.class);
 
+    // 7. 팔로워/ 팔로우 목록 조회
+    public GraphServerAPI graph = retrofitClient.create(GraphServerAPI.class);
 
     public interface FeedApi {
 
@@ -67,7 +70,7 @@ public class Service {
 
         @Multipart
         @POST("/feed/{accountId}/media")
-        Call<ResponseBody> insertOne(@Path("accountId") String accountId, @Part String comment, @Part List<MultipartBody.Part> files);
+        Call<ResponseBody> insertOne(@Path("accountId") String accountId, @Part("content") String content, @Part ArrayList<MultipartBody.Part> files);
 
         @FormUrlEncoded
         @PATCH("/feed/{accountId}/media/{postId}")

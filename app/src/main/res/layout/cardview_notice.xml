@@ -12,7 +12,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/civ_follow_profile"
             android:layout_width="20dp"
             android:layout_height="80dp"
             android:layout_marginTop="10dp"
@@ -21,7 +21,7 @@
             app:srcCompat="@drawable/user_default" />
 
         <TextView
-            android:id="@+id/tv_notice"
+            android:id="@+id/tv_followId"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"

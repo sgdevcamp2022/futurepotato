@@ -13,7 +13,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/iv_update_comments_back"
+            android:id="@+id/iv_blockList_back"
             android:layout_width="45dp"
             android:layout_height="45dp"
             app:srcCompat="@drawable/back" />

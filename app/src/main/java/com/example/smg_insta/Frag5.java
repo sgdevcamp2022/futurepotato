@@ -4,16 +4,21 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -25,7 +30,9 @@ import com.example.smg_insta.DTO.MypageResponse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,14 +51,22 @@ public class Frag5 extends Fragment {
     MypageResponse feeds;
     Service dataService = new Service();
 
+
     // 로그인시 받아와야 함!!
     String accountId;
+    String JWT;
 
     @Nullable
     @Override
     public View onCreateView(@Nullable LayoutInflater inflater,@Nullable ViewGroup container,@Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.user_info, container, false);
 
+        //Bundle bundle = getArguments();
+        //accountId = bundle.getString("ID");
+        //JWT = bundle.getString("JWT");
+
+        accountId = PreferenceManager.getString(getContext(), "accountID");
+        Toast.makeText(getContext(), "accountId값 : " + accountId, Toast.LENGTH_LONG).show();
 
         //--------마이페이지 테스트 더미데이터-----------------
         MypageResponse testData = new MypageResponse();
@@ -75,6 +90,8 @@ public class Frag5 extends Fragment {
 
         userImage = view.findViewById(R.id.iv_account_profile);
         userId = view.findViewById(R.id.tv_useriInfo_id);
+        userId.setText(accountId);
+
         post = view.findViewById(R.id.tv_postCount);
         following = view.findViewById(R.id.tv_followingCount);
         follower = view.findViewById(R.id.tv_followerCount);
@@ -98,19 +115,21 @@ public class Frag5 extends Fragment {
 
         // 1. mypage 정보 보여주기
         dataService.selectMyPage.SelectMyPage(accountId).enqueue(new Callback<MypageResponse>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(Call<MypageResponse> call, Response<MypageResponse> response) {
                 feeds = response.body();
 
-                List<MypageResponse.MyImage> myImages = feeds.getImageList();
-                adapter = new RVAdapter_profile(myImages, getContext(), dataService);
+                if(feeds != null) {
+                    List<MypageResponse.MyImage> myImages = feeds.getImageList();
+                    adapter = new RVAdapter_profile(myImages, getContext(), dataService);
+                    userId.setText(feeds.getName());
+                    userImage.setImageURI(Uri.parse(feeds.getProfileImage()));
 
-                userId.setText(feeds.getName());
-                userImage.setImageURI(Uri.parse(feeds.getProfileImage()));
-
-                post.setText(feeds.getPostCount());
-                following.setText(feeds.getFollowingCount());
-                follower.setText(feeds.getFollowerCount());
+                    post.setText(feeds.getPostCount());
+                    following.setText(feeds.getFollowingCount());
+                    follower.setText(feeds.getFollowerCount());
+                }
 
             }
 
@@ -125,7 +144,8 @@ public class Frag5 extends Fragment {
         linearLayout_follower.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+                Intent intent = new Intent(getActivity(), FollowActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -133,7 +153,7 @@ public class Frag5 extends Fragment {
         linearLayout_following.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+
             }
         });
 
@@ -151,10 +171,8 @@ public class Frag5 extends Fragment {
                 Bundle bundle = new Bundle();
                 //이름은 회원가입할 때 작성하는 듯. 있을수도있고 없을수도있음.
                 //bundle.putString("name", name);
-                bundle.putString("accountId", accountId);
                 // 아니면 게시물 조회에 프로필 사진 추가 부탁
-                bundle.putString("profileImage", String.valueOf(userImage));
-                editProfileFrag.setArguments(bundle);
+                PreferenceManager.setString(getContext(), "profileImage", String.valueOf(userImage));
 
                 transaction.replace(R.id.main_frame, editProfileFrag).commit();
 
@@ -173,27 +191,59 @@ public class Frag5 extends Fragment {
             @Override
             public void onClick(View view) {
 
-                String[] strChoiceItems = {"로그아웃 하기", "..."};
-                builder.setTitle("설정");
-                builder.setItems(strChoiceItems, new DialogInterface.OnClickListener() {
+                //PopupMenu 객체 생성
+                PopupMenu popup= new PopupMenu(getActivity(), btn_setup); //두 번째 파라미터가 팝업메뉴가 붙을 뷰
+                popup.getMenuInflater().inflate(R.menu.profile_setup_popup, popup.getMenu());
+
+                //팝업메뉴의 메뉴아이템을 선택하는 것을 듣는 리스너 객체 생성 및 설정
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int position) {
-                        if (position == 0) {
-                            // logout 눌렀을 때
+                    public boolean onMenuItemClick(MenuItem menuItem) {
 
-                            // 로컬 스토리지에 저장한 토큰값 삭제해야함.
-                            //
+                        switch (menuItem.getItemId()){
+                            case R.id.getBlockerList:
+                                // blocker 목록 확인
+                                FragmentTransaction transaction1 = getActivity().getSupportFragmentManager().beginTransaction();
+                                Frag_blockList fragBlockerList = new Frag_blockList();
 
-                            Intent intent = new Intent(getActivity(),LoginActivity.class); //fragment라서 activity intent와는 다른 방식
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            startActivity(intent);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("Block", "Blocking");
+                                fragBlockerList.setArguments(bundle);
+                                transaction1.replace(R.id.main_frame, fragBlockerList).commit();
 
-                        } else if (position == 1) {
-                            // ... 눌렀을 때
+
+                                break;
+
+                            case R.id.getBlockingList:
+                                // blocking 목록 확인
+
+                                FragmentTransaction transaction2 = getActivity().getSupportFragmentManager().beginTransaction();
+                                Frag_blockList fragBlockingList = new Frag_blockList();
+
+                                Bundle bundle2 = new Bundle();
+                                bundle2.putString("Block", "Blocker");
+                                fragBlockingList.setArguments(bundle2);
+                                transaction2.replace(R.id.main_frame, fragBlockingList).commit();
+
+                                break;
+
+                            case R.id.logout:
+                                // 로그아웃
+
+                                // 로컬 스토리지에 저장한 토큰값 삭제해야함.
+                                // 지금은 일단 SharedPreferences 사용하고 있으니까..
+                                PreferenceManager.clear(getContext());
+
+                                Intent intent = new Intent(getActivity(),LoginActivity.class); //fragment라서 activity intent와는 다른 방식
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(intent);
+                                break;
                         }
+
+                        return false;
                     }
                 });
-                builder.show();
+                popup.show();
             }
         });
 

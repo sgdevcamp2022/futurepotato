@@ -81,7 +81,7 @@ public class CommentsActivity extends AppCompatActivity {
         //------------
 
         // 매번 불러와야 되는건가..?ㅋㅋㅋㅋ
-        readComment(postId);
+        //readComment(postId);
 
 
 

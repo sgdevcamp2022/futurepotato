@@ -17,6 +17,9 @@ import com.example.smg_insta.API.RetrofitClient;
 import com.example.smg_insta.DTO.LoginData;
 import com.example.smg_insta.DTO.LoginResponse;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,6 +31,9 @@ public class LoginActivity extends AppCompatActivity {
     private TextView join;
     private LoginApi service;
 
+    String accountId;
+    String accountPw;
+
     String JWT,ID= "";
     //Bundle JWTbundle;
 
@@ -36,12 +42,34 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
+
+
         //JWTbundle = new Bundle(); // 번들을 통해 값 전달
 
         email = findViewById(R.id.et_login_email);
         password = findViewById(R.id.et_login_pw);
 
         service = RetrofitClient.getClient().create(LoginApi.class);
+
+        // 자동 로그인..?
+        String accountID = PreferenceManager.getString(getApplicationContext(), "accountID");
+        String accountPW = PreferenceManager.getString(getApplicationContext(), "accountPW");
+        if (!accountID.isEmpty() && !accountPW.isEmpty()) {
+            LoginData data = new LoginData(accountID, accountPW);
+            service.userLogin(data).enqueue(new Callback<LoginResponse>() {
+                @Override
+                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                    Toast.makeText(LoginActivity.this, "자동로그인 되었습니다.", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void onFailure(Call<LoginResponse> call, Throwable t) {
+
+                }
+            });
+        }
 
         // 회원가입하러 가기
         join = findViewById(R.id.tv_login_join);
@@ -53,7 +81,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // 로그인 버튼 클릭시 실행..
+        
+        // 로그인 버튼 실행
         signUp = findViewById(R.id.btn_login);
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,8 +96,8 @@ public class LoginActivity extends AppCompatActivity {
         email.setError(null);
         password.setError(null);
 
-        String accountId = email.getText().toString();
-        String accountPw = password.getText().toString();
+        accountId = email.getText().toString();
+        accountPw = password.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -107,15 +136,23 @@ public class LoginActivity extends AppCompatActivity {
                     LoginResponse result = response.body();
                     Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
 
-                    Log.d("TAG", "response.body() 확인하기 : " + result.toString());
+                    Log.d("TAG", "result.getToken() 확인하기 : " + result.getToken());
 
-                    JWT = result.getToken();
-                    ID = result.getId();
+
+                    // 모든 저장 데이터 삭제 후 새로운 데이터 저장.
+                    PreferenceManager.clear(getApplicationContext());
+                    PreferenceManager.setString(getApplicationContext(), "accountID", result.getAccountId());
+                    PreferenceManager.setString(getApplicationContext(), "token", result.getToken());
+                    PreferenceManager.setString(getApplicationContext(), "accountPW", accountPw);
+
+                    //JWT = result.getToken();
+                    //ID = result.getAccountId();
 
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    intent.putExtra("JWT", JWT);
-                    intent.putExtra("ID", ID);
+                    //intent.putExtra("JWT", JWT);
+                    //intent.putExtra("ID", ID);
                     startActivity(intent);
+                    finish();
                 }
                 
             }

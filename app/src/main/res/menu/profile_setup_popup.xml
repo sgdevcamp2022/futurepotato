@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/getBlockerList"
+        android:enabled="true"
+        android:icon="@drawable/profile_user_b"
+        android:title="blocker 목록 조회" />
+
+    <item
+        android:id="@+id/getBlockingList"
+        android:enabled="true"
+        android:icon="@drawable/profile_white"
+        android:title="blocking 목록 조회" />
+
+    <item
+        android:id="@+id/logout"
+        android:enabled="true"
+        android:icon="@drawable/back"
+        android:title="로그아웃" />
+
+</menu>

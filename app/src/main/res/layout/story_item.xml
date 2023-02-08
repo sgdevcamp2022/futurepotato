@@ -11,7 +11,9 @@
         android:id="@+id/civ_storyImage"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:background="@drawable/user_default" />
+        android:background="@drawable/bg_story"
+        android:hapticFeedbackEnabled="true"
+        android:src="@drawable/user_default" />
 
     <TextView
         android:id="@+id/tv_storyId"

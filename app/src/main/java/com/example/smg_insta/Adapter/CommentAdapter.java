@@ -27,13 +27,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CommentAdapter<test1> extends RecyclerView.Adapter<CommentAdapter.ViewHolder>{
+public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder>{
 
     private Context context;
     private ArrayList<FeedResponse.Comment> data;
     private Service dataService;
 
     String accountId;
+
+    ArrayList<FeedResponse.Reply> replies = new ArrayList<>();
 
 
     public CommentAdapter(ArrayList<FeedResponse.Comment> data, Context context, Service dataService) {
@@ -61,15 +63,15 @@ public class CommentAdapter<test1> extends RecyclerView.Adapter<CommentAdapter.V
     public void onBindViewHolder(@NonNull CommentAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.onBind(data.get(position));
         //답글들 가져오기
-        ArrayList<FeedResponse.Reply> replies = data.get(position).getReplyList();
+        replies = data.get(position).getReplyList();
 
 
         // 대댓글(답글) 보기
         holder.replyCount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                holder.recyc_reply.setAdapter(new ReplyAdapter(context.getApplicationContext(), replies));
                 holder.recyc_reply.setVisibility(View.VISIBLE);
+                holder.recyc_reply.setAdapter(new ReplyAdapter(context, replies));
                 //holder.replyCount.setText("답글 닫기");
 
             }

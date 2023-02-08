@@ -22,19 +22,19 @@
 
         <activity android:name=".MainActivity"
             android:windowSoftInputMode="adjustNothing"
-            >
-        </activity>
-
-        <activity android:name=".JoinActivity"></activity>
-        <activity android:name=".CommentsActivity"></activity>
-
-        <activity
-            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity android:name=".JoinActivity"></activity>
+        <activity android:name=".CommentsActivity"></activity>
+        <activity android:name=".FollowActivity"></activity>
+
+        <activity
+            android:name=".LoginActivity">
 
         </activity>
     </application>

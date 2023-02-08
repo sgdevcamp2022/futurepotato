@@ -22,7 +22,9 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
 import com.example.smg_insta.API.Service;
 
 import java.net.URI;
@@ -44,25 +46,29 @@ public class Frag3 extends Fragment {
     private EditText explain;
     private TextView upload;
 
+    String content;
+    ArrayList<MultipartBody.Part> files;
+
     String accountId;  //로그인할때 저장해야하나?
 
     Service dataService = new Service();
-    ArrayList<Uri> filePathList;
+    ArrayList<Uri> filePathList = new ArrayList<>();
 
     @Nullable
     @Override
     public View onCreateView(@Nullable LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.upload, container, false);
 
+        accountId = PreferenceManager.getString(getActivity(),"accountID");
+
         // 사진 여러개 가져오기... 하아.. 리스트로 해서 리싸이클러뷰로 보여줘야 할듯...
-
-
         selectPhoto = view.findViewById(R.id.iv_selectPhoto);
         selectPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //갤러리 호출
                 Intent intent = new Intent(Intent.ACTION_PICK);
+                //Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);  // 다중 이미지를 가져올 수 있도록 세팅
                 //intent.setAction(Intent.ACTION_PICK);
@@ -76,10 +82,10 @@ public class Frag3 extends Fragment {
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String content = explain.getText().toString();
+                content = explain.getText().toString();
 
                 // 여러 file들을 담아줄 ArrayList
-                ArrayList<MultipartBody.Part> files = new ArrayList<>();
+                files = new ArrayList<>();
 
                 // 파일 경로들을 가지고있는 `ArrayList<Uri> filePathList`가 있다고 칩시다...
                 for (int i = 0; i < filePathList.size(); ++i) {
@@ -94,24 +100,31 @@ public class Frag3 extends Fragment {
                     // 추가
                     files.add(filePart);
                 }
+                if(!files.isEmpty()) {
+                    dataService.feed.insertOne(accountId, content, files).enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if(response.isSuccessful()) {
+                                // 로딩화면 만들기
+                                Toast.makeText(getContext(), "게시물 업로드 완료", Toast.LENGTH_SHORT).show();
+                                // 메인화면으로 이동하기!!
+                                explain.setText(null);
+                                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                Frag1 mainFrag = new Frag1();
+                                transaction.replace(R.id.main_frame, mainFrag).commit();
+                            } else {
+                                Toast.makeText(getContext(), response.code()+ " " + response.message(), Toast.LENGTH_SHORT).show();
+                            }
 
-                dataService.feed.insertOne(accountId, content, files).enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        // 로딩화면 만들기
-                        Toast.makeText(getContext(), "게시물 업로드 완료", Toast.LENGTH_SHORT).show();
-                    }
+                        }
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {t.printStackTrace();}
+                    });
+                }
 
             }
         });
-
-
 
         return view;
     }
@@ -158,7 +171,13 @@ public class Frag3 extends Fragment {
                             }
                         }
                     }
+                    if (!filePathList.isEmpty()) {
+                        Glide.with(getActivity())
+                                .load(filePathList.get(0))
+                                .into(selectPhoto);
+                    }
                 }
             }
+
     );
 }

@@ -7,6 +7,8 @@ import com.example.smg_insta.DTO.UpdateProfileName;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.PATCH;
 import retrofit2.http.Path;
 
@@ -15,8 +17,9 @@ public interface UpdateProfileAPI {
     @PATCH("/feed/mypage/{accountId}")
     Call<ResponseBody> UpdateProfile(@Path("accountId") String accountId, @Body UpdateProfileData updateProfile);
 
+    @FormUrlEncoded
     @PATCH("/feed/mypage/{accountId}")
-    Call<ResponseBody> UpdateProfile_id(@Path("accountId") String accountId, @Body UpdateProfileId UpdateProfileId);
+    Call<ResponseBody> UpdateProfile_id(@Path("accountId") String accountId, @Field("accountId") String UpdateProfileId);
 
     @PATCH("/feed/mypage/{accountId}")
     Call<ResponseBody> UpdateProfile_name(@Path("accountId") String accountId, @Body UpdateProfileName updateProfileName);

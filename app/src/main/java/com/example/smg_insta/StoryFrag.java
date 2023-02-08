@@ -88,8 +88,8 @@ public class StoryFrag extends Fragment {
                 Bundle bundle = getArguments();
                 if(bundle != null){
                     storyImages = bundle.getStringArrayList("image");
-                    accountId = bundle.getString("accountId");
                 }
+                accountId = PreferenceManager.getString(getActivity(), "accountID");
 
                 // 내 스토리 조회하기
                 dataService.story.SelectStory(accountId, storyImages.get(0)).enqueue(new Callback<StoryResponse>() {

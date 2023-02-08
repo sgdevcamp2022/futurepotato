@@ -10,7 +10,7 @@
         android:id="@+id/profile_image"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:background="#C6C6C6"
+        android:background="@color/material_dynamic_neutral60"
         android:scaleType="center"
         tools:ignore="InvalidId" />
 

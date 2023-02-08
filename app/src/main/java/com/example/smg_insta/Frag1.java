@@ -63,6 +63,8 @@ public class Frag1 extends Fragment {
     public View onCreateView(@Nullable LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.frag1, container, false);
 
+        accountId = PreferenceManager.getString(getActivity(), "accountID");
+
         //---테스트 더미데이터----
 
         List<MainPageResponse.Post> test_postList = new ArrayList<>();
@@ -132,11 +134,16 @@ public class Frag1 extends Fragment {
             @Override
             public void onResponse(Call<MainPageResponse> call, Response<MainPageResponse> response) {
                 feeds = response.body();
-                posts = feeds.getPostList();
-                stories = feeds.getStoryList();
+                Log.e("Feed", response.body()+"");
 
-                //setPostAdapter(mRV_post);
-                //setStoryAdapter(mRV_story);
+                if(feeds != null) {
+                    posts = feeds.getPostList();
+                    stories = feeds.getStoryList();
+
+                    setPostAdapter(mRV_post);
+                    setStoryAdapter(mRV_story);
+                }
+
             }
 
             @Override
@@ -169,9 +176,7 @@ public class Frag1 extends Fragment {
                     // 스토리 조회할 때, 이미지가 필요한데... 으잉??
                     // 개인 스토리 따로 뺄 수 있는지 얘기해보기! -> accountId로 조회?
                     bundle.putStringArrayList("image", (ArrayList<String>) MyStories);
-                    bundle.putString("accountId", accountId);
                     storyFrag.setArguments(bundle);
-
                     transaction.replace(R.id.main_frame, storyFrag).commit();
 
                 } else {    // 스토리가 없으면
