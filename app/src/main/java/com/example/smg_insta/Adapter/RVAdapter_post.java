@@ -5,6 +5,7 @@ import static java.security.AccessController.getContext;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.bumptech.glide.Glide;
 import com.example.smg_insta.API.Service;
 import com.example.smg_insta.CommentsActivity;
 import com.example.smg_insta.DTO.MainPageResponse;
@@ -66,13 +68,15 @@ public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHold
     // position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시
     @Override
     public void onBindViewHolder(@NonNull RVAdapter_post.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        //holder.info_img_profile.setImageBitmap();
+//        Glide.with(context)
+//                .load(data.get(position).get...)     // 해당 유저 프로필 사진 정보가 없음.
+//                .into(holder.info_img_profile);
         holder.info_tv_userId.setText(data.get(position).getName());
         holder.info_explain_content.setText(data.get(position).getName() + " " + data.get(position).getContent());
         holder.info_likes.setText("좋아요 " + data.get(position).getLikeCount() + "개");
         holder.info_comment_count.setText("댓글 " + data.get(position).getCommentCount() + "개");
 
-        //이미지들 가져오기
+        // 1. 이미지들 가져오기 + 어뎁터 연결
         List<String> images = data.get(position).getImageList();
         holder.info_img_content.setOffscreenPageLimit(1);
         holder.info_img_content.setAdapter(new ImageSliderAdapter(context.getApplicationContext(), images));
@@ -86,7 +90,8 @@ public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHold
         });
         holder.setupIndicators(images.size());
 
-
+        // 2. 좋아요 기능
+        //
         // 좋아요 true이면
         if(data.get(position).isLikesCheck()) {
             holder.btn_like.setVisibility(View.VISIBLE);
@@ -96,7 +101,8 @@ public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHold
             holder.btn_noLike.setVisibility(View.VISIBLE);
         }
 
-        // 상단 메뉴 바 클릭 시...(수정/삭제 버튼)
+
+        // 3. 상단 메뉴 바 클릭 시...(수정/삭제 버튼)
         holder.btn_menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -147,6 +153,7 @@ public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHold
             }
         });
 
+        // 4. 댓글
         holder.btn_comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -155,6 +162,17 @@ public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHold
                 //intent.putExtra("accountId", );
                 intent.putExtra("postId", data.get(position).getId());
                 context.startActivity(intent);
+            }
+        });
+        
+        // 5. 프로필 사진 클릭시 유저 정보 확인
+        holder.info_img_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity activity = (MainActivity) context;
+                Bundle bundle = new Bundle();
+                bundle.putString("userId", data.get(position).getName());
+                activity.FragmentViewAddBundle(0, bundle);
             }
         });
 

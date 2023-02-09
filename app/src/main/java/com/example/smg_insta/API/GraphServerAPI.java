@@ -24,12 +24,12 @@ public interface GraphServerAPI {
     // 팔로우 등록
     @FormUrlEncoded
     @POST("/graph/follow")
-    Call<ResponseBody> setFollow(@Field("senderId") String senderId, @Field("recipientId") String recipientId);
+    Call<ResponseBody> follow(@Field("senderId") String senderId, @Field("recipientId") String recipientId);
 
     // 팔로우 취소
     @FormUrlEncoded
     @DELETE("/graph/follow")
-    Call<ResponseBody> cancelFollow(@Field("senderId") String senderId, @Field("recipientId") String recipientId);
+    Call<ResponseBody> unfollow(@Field("senderId") String senderId, @Field("recipientId") String recipientId);
 
     // 차단
     @FormUrlEncoded
@@ -53,11 +53,11 @@ public interface GraphServerAPI {
     // 팔로우 여부 조회
     @FormUrlEncoded
     @GET("/graph/isFollowing")
-    Call<ResponseBody> isFollowing(@Field("senderId") String senderId, @Field("recipientId") String recipientId);
+    Call<Boolean> isFollowing(@Field("senderId") String senderId, @Field("recipientId") String recipientId);
 
     // 차단여부 조회
     @FormUrlEncoded
     @GET("/graph/isBlocking")
-    Call<ResponseBody> isBlocking(@Field("senderId") String senderId, @Field("recipientId") String recipientId);
+    Call<Boolean> isBlocking(@Field("senderId") String senderId, @Field("recipientId") String recipientId);
 
 }

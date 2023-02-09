@@ -49,7 +49,7 @@ public class RVAdapter_profile extends RecyclerView.Adapter<RVAdapter_profile.Vi
         holder.info_private_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainActivity activity = (MainActivity) context;// 프래그먼트에서 메인엑티비티 접근
+                MainActivity activity = (MainActivity) context;
 
                 MyPostFrag myPostFrag = new MyPostFrag();
                 Bundle bundle = new Bundle();

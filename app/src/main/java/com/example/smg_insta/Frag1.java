@@ -7,10 +7,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,8 +45,9 @@ import retrofit2.Response;
 public class Frag1 extends Fragment {
 
     private View view;
-    private TextView id, profile, content, like, explain, comment_count;
+    //private TextView id, profile, content, like, explain, comment_count;
     private CircleImageView myStory;
+    private EditText et_search;
 
     private RecyclerView mRV_post;
     //private RVAdapter_post mRVAdapter_post;  serAdapter함수 만ㄷ르어서 사용함.
@@ -55,6 +60,7 @@ public class Frag1 extends Fragment {
     List<MainPageResponse.Post> posts;
     List<MainPageResponse.Story> stories;
     Uri storyImageUri;   // 스토리
+    String text;      // 검색 내용
 
     List<String> MyStories = new ArrayList<>(); // 내 스토리 담아둘 곳
     
@@ -64,6 +70,8 @@ public class Frag1 extends Fragment {
         view = inflater.inflate(R.layout.frag1, container, false);
 
         accountId = PreferenceManager.getString(getActivity(), "accountID");
+
+        et_search = view.findViewById(R.id.et_search);
 
         //---테스트 더미데이터----
 
@@ -104,12 +112,12 @@ public class Frag1 extends Fragment {
 
 
         //----post--------
-        id = view.findViewById(R.id.tv_post_profile);
-        profile = view.findViewById(R.id.civ_profile);
-        content = view.findViewById(R.id.img_post_content);
-        like = view.findViewById(R.id.tv_like_count);
-        explain = view.findViewById(R.id.tv_explain);
-        comment_count = view.findViewById(R.id.tv_comment_count);
+//        id = view.findViewById(R.id.tv_post_profile);
+//        profile = view.findViewById(R.id.civ_profile);
+//        content = view.findViewById(R.id.img_post_content);
+//        like = view.findViewById(R.id.tv_like_count);
+//        explain = view.findViewById(R.id.tv_explain);
+//        comment_count = view.findViewById(R.id.tv_comment_count);
 
         mRV_post = view.findViewById(R.id.recyclerview_post);
         //mRecyclerView.setHasFixedSize(true);
@@ -213,6 +221,15 @@ public class Frag1 extends Fragment {
             }
         });
 
+
+        // 검색 기능!
+        et_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
 

@@ -104,6 +104,8 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         switch(fragment) {
             case 0:
+                FragUserInfo fragUserInfo = new FragUserInfo();
+                transaction.replace(R.id.main_frame, fragUserInfo).commit();
                 break;
 
             case 1:
@@ -120,5 +122,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    public void FragmentViewAddBundle(int fragment, Bundle bundle){
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        switch(fragment) {
+            case 0:
+                FragUserInfo fragUserInfo = new FragUserInfo();
+                fragUserInfo.setArguments(bundle);
+                transaction.replace(R.id.main_frame, fragUserInfo).commit();
+                break;
+        }
+
+    }
 
 }

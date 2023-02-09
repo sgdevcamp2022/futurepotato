@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -86,9 +87,13 @@ public class MyPostFrag extends Fragment {
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                Frag5 profileFrag = new Frag5();
-                transaction.replace(R.id.main_frame, profileFrag).commit();
+//                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+//                Frag5 profileFrag = new Frag5();
+//                transaction.replace(R.id.main_frame, profileFrag).commit();
+
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction().remove(MyPostFrag.this).commit();
+                fragmentManager.popBackStack();
             }
         });
 

@@ -30,9 +30,7 @@ import com.example.smg_insta.DTO.MypageResponse;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -59,7 +57,7 @@ public class Frag5 extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@Nullable LayoutInflater inflater,@Nullable ViewGroup container,@Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.user_info, container, false);
+        view = inflater.inflate(R.layout.my_info, container, false);
 
         //Bundle bundle = getArguments();
         //accountId = bundle.getString("ID");
@@ -89,7 +87,7 @@ public class Frag5 extends Fragment {
         //----------------------------------
 
         userImage = view.findViewById(R.id.iv_account_profile);
-        userId = view.findViewById(R.id.tv_useriInfo_id);
+        userId = view.findViewById(R.id.tv_myInfo_id);
         userId.setText(accountId);
 
         post = view.findViewById(R.id.tv_postCount);

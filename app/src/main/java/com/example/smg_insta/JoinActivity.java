@@ -15,6 +15,8 @@ import com.example.smg_insta.API.Service;
 import com.example.smg_insta.DTO.JoinData;
 import com.example.smg_insta.DTO.JoinResponse;
 
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -82,7 +84,13 @@ public class JoinActivity extends AppCompatActivity {
                 JoinResponse result = response.body();
                 if(!response.isSuccessful()) {
                     // 실패
-                    Toast.makeText(JoinActivity.this, "실패: " + response.code(), Toast.LENGTH_SHORT).show();
+                    try {
+                        String body = response.errorBody().string();
+                        Toast.makeText(JoinActivity.this, "실패(errorBody): " + body + " errorCode: " + response.code(), Toast.LENGTH_SHORT).show();
+                        Log.e("TAG", "error - body : " + body);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     Log.e("회원가입 실패", response.message());
                 } else {
                     Toast.makeText(JoinActivity.this, result.getAccountId()+"님 회원가입을 축하합니다.", Toast.LENGTH_SHORT).show();
@@ -95,7 +103,7 @@ public class JoinActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<JoinResponse> call, Throwable t) {
-                Toast.makeText(JoinActivity.this, "회원가입 에러 발생", Toast.LENGTH_SHORT).show();
+                Toast.makeText(JoinActivity.this, "회원가입 에러 발생: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.e("회원가입 에러 발생", t.getMessage());
             }
         });

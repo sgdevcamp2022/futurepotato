@@ -9,74 +9,80 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/imageView5"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="20dp"
-            app:srcCompat="@drawable/free_icon_lock" />
+            android:id="@+id/iv_btn_back_userInfo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
+            app:srcCompat="@drawable/back" />
 
         <TextView
-            android:id="@+id/tv_useriInfo_id"
-            android:layout_width="265dp"
-            android:layout_height="40dp"
+            android:id="@+id/tv_userInfo_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="8dp"
-            android:gravity="left"
+            android:layout_weight="1"
+            android:gravity="center"
             android:text="user_id"
             android:textColor="#000000"
             android:textSize="22dp" />
 
-        <ImageView
-            android:id="@+id/btn_addContent"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            app:srcCompat="@drawable/plus" />
 
         <ImageView
-            android:id="@+id/btn_setup"
-            android:layout_width="27dp"
-            android:layout_height="30dp"
+            android:id="@+id/btn_setup_userInfo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            app:srcCompat="@drawable/ic_baseline_menu_24" />
+            app:srcCompat="@drawable/menu" />
 
 
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="110dp"
+        android:layout_height="100dp"
         android:layout_margin="10dp">
 
         <ImageView
-            android:id="@+id/iv_account_profile"
+            android:id="@+id/iv_user_profile"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="false"
+            android:layout_marginStart="10dp"
             android:src="@drawable/user_default" />
 
         <Button
-            android:id="@+id/btn_edit_profile"
+            android:id="@+id/btn_user_follow"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="30dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_toRightOf="@id/iv_account_profile"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_toRightOf="@id/iv_user_profile"
+            android:layout_weight="1"
+            android:background="@drawable/round_btn_blue_bg"
+            android:text="팔로우"
+            tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck" />
+
+        <Button
+            android:id="@+id/btn_user_unfollow"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_toRightOf="@id/iv_user_profile"
             android:layout_weight="1"
             android:background="@drawable/round_btn_gray_bg"
-            android:text="프로필 편집"
+            android:text="팔로잉"
+            android:visibility="gone"
             tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck" />
 
         <LinearLayout
@@ -85,12 +91,12 @@
             android:layout_alignParentLeft="false"
             android:layout_alignParentTop="false"
             android:layout_marginTop="10dp"
-            android:layout_toEndOf="@+id/iv_account_profile"
+            android:layout_toEndOf="@+id/iv_user_profile"
             android:gravity="left"
             android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/lL_post"
+                android:id="@+id/lL_user_post"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -98,14 +104,14 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_postCount"
+                    android:id="@+id/tv_user_postCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="0" />
 
                 <TextView
-                    android:id="@+id/tv_post"
+                    android:id="@+id/tv_user_post"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -113,7 +119,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/lL_follower"
+                android:id="@+id/lL_user_follower"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -121,7 +127,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_followingCount"
+                    android:id="@+id/tv_user_followerCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -136,7 +142,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/lL_following"
+                android:id="@+id/lL_user_following"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -144,7 +150,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_followerCount"
+                    android:id="@+id/tv_user_followingCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -161,11 +167,24 @@
         </LinearLayout>
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/tv_introduce"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="userName"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_profile"
+        android:id="@+id/recyclerview_user_profile"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         tools:listitem="@layout/user_images_view" />
 
 

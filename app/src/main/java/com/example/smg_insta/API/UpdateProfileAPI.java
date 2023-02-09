@@ -21,6 +21,8 @@ public interface UpdateProfileAPI {
     @PATCH("/feed/mypage/{accountId}")
     Call<ResponseBody> UpdateProfile_id(@Path("accountId") String accountId, @Field("accountId") String UpdateProfileId);
 
+
+    // 수정 필요
     @PATCH("/feed/mypage/{accountId}")
     Call<ResponseBody> UpdateProfile_name(@Path("accountId") String accountId, @Body UpdateProfileName updateProfileName);
 }

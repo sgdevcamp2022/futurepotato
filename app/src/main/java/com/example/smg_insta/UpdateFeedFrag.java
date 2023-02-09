@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -149,9 +150,13 @@ public class UpdateFeedFrag extends Fragment {
             @Override
             public void onClick(View view) {
                 // 이전화면으로
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                MyPostFrag myPostFrag = new MyPostFrag();
-                transaction.replace(R.id.main_frame, myPostFrag).commit();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction().remove(UpdateFeedFrag.this).commit();
+                fragmentManager.popBackStack();
+
+//                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+//                MyPostFrag myPostFrag = new MyPostFrag();
+//                transaction.replace(R.id.main_frame, myPostFrag).commit();
             }
         });
 

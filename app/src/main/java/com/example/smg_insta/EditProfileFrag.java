@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.smg_insta.API.Service;
 import com.example.smg_insta.DTO.UpdateProfileData;
@@ -91,9 +92,9 @@ public class EditProfileFrag extends Fragment {
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 프로필 화면으로 넘어가기
-                MainActivity activity = (MainActivity)getActivity();// 프래그먼트에서 메인엑티비티 접근
-                activity.FragmentView(2);
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction().remove(EditProfileFrag.this).commit();
+                fragmentManager.popBackStack();
             }
         });
 

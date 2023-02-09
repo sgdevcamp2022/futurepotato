@@ -77,6 +77,7 @@ public class Frag3 extends Fragment {
         });
 
         explain = view.findViewById(R.id.et_explain);
+        explain.setText(null);
 
         upload = view.findViewById(R.id.tv_uploadBtn);
         upload.setOnClickListener(new View.OnClickListener() {
@@ -113,7 +114,9 @@ public class Frag3 extends Fragment {
                                 Frag1 mainFrag = new Frag1();
                                 transaction.replace(R.id.main_frame, mainFrag).commit();
                             } else {
+                                explain.setText(null);
                                 Toast.makeText(getContext(), response.code()+ " " + response.message(), Toast.LENGTH_SHORT).show();
+
                             }
 
                         }

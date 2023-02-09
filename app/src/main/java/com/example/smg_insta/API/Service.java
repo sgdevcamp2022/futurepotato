@@ -6,6 +6,7 @@ import com.example.smg_insta.DTO.JoinResponse;
 import com.example.smg_insta.DTO.LoginData;
 import com.example.smg_insta.DTO.LoginResponse;
 import com.example.smg_insta.DTO.MainPageResponse;
+import com.example.smg_insta.DTO.NoticeResponse;
 import com.example.smg_insta.DTO.StoryResponse;
 
 import java.util.ArrayList;
@@ -29,8 +30,11 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public class Service {
-
+    // 에뮬레이터용
     private String BASE_URL = "http://10.0.2.2:8000";
+
+    //안드로이드 폰 (오류...)
+    //private String BASE_URL = "http://192.168.0.28:8000";
 
     Retrofit retrofitClient =
             new Retrofit.Builder()
@@ -62,6 +66,13 @@ public class Service {
 
     // 7. 팔로워/ 팔로우 목록 조회
     public GraphServerAPI graph = retrofitClient.create(GraphServerAPI.class);
+
+    // 8. 검색 기능
+    public SearchAPI search = retrofitClient.create(SearchAPI.class);
+
+    // 9. 알림 기능
+    public NoticeAPI notice = retrofitClient.create(NoticeAPI.class);
+
 
     public interface FeedApi {
 
@@ -123,6 +134,20 @@ public class Service {
     public interface SelectMainPageAPI {
         @GET("/feed/{accountId}")
         Call<MainPageResponse> SelectMainPage(@Path("accountId") String accountId);
+    }
+
+
+    public interface SearchAPI {
+        // response 형식... 될까?
+        @FormUrlEncoded
+        @GET("/feed/users")
+        Call<List<String>> searchUser(@Field("keyword") String keyword);
+
+    }
+
+    public interface NoticeAPI {
+        @GET("/alarm/{accountId}")
+        Call<List<NoticeResponse>> getNoticeList (@Path("accountId") String accountId);
     }
 
 
