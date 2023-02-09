@@ -1,21 +1,26 @@
 import { useState } from "react";
 import Modal from "react-modal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import PostDeleteForm from './PostDeleteForm';
 import PostEditForm from "./PostEditForm";
 import Link from "next/link";
 const UserInfo = (props) => {
     const [optionOpen, setoptionOpen] = useState(false);
     const {me} = useSelector((state) => state.user);
-
-
+    const dispatch = useDispatch();
+    const onClickMoveProfile = () => {
+        dispatch({type:'PROFILE_LOAD_REQUEST'});
+    }
+    console.log(props.postName);
     return(
         <div className="info">
             <Link href = {`/profile/${props.postName}`} legacyBehavior>
-                <div className="user">
+                <a>
+                <div className="user" onClick={onClickMoveProfile}>
                     <div className="profile-pic"><img src={props.postImage} alt="" /></div>
                     <p className="username">{props.postName}</p>
                 </div>
+                </a>
             </Link>
             <img src="/option.PNG" className="options" alt="" onClick={() => setoptionOpen(true)}/>
             <Modal ariaHideApp={false} isOpen = {optionOpen} onRequestClose={()=>setoptionOpen(false)} 

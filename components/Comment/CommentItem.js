@@ -1,8 +1,15 @@
+import { useDispatch } from "react-redux";
+
 const CommentItem = (commentItem) => {
+    const dispatch = useDispatch();
     console.log(commentItem.commentItem);
     const comment = commentItem.commentItem;
     console.log(comment);
     const isReply = true;
+    const onClickDeleteComment = () => {
+        dispatch({type:"DELETE_COMMENT_REQUEST"});
+    }
+
     return(
         <div className="comment_form">
             <div className='comment-info'>
@@ -20,7 +27,7 @@ const CommentItem = (commentItem) => {
                         <div className = 'date-heart-reply' style = {{fontSize:11, color:'gray'}}>
                             <span>좋아요 {comment.likeCount}개&nbsp;&nbsp;&nbsp;&nbsp;</span>
                             <span>답글 달기&nbsp;&nbsp;&nbsp;</span>
-                            <span>삭제</span>
+                            <span onClick={onClickDeleteComment} style={{cursor:'pointer'}}>삭제</span>
                         </div>
                     </div>
                 </div>

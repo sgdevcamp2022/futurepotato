@@ -6,10 +6,16 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const ProfileHead = (prop) => {
     const isMe = prop.isMe;
+
     const [followOpen, setFollowOpen] = useState(false);
     const [follingOpen, setFollingOpen] = useState(false);
     const {profileData, isFollowing} = useSelector((state) => state.user);
+    
     const dispatch = useDispatch();
+
+    if(!isMe){
+        dispatch({type:'GET_IS_FOLLOING_REQUEST'})//, data:{senderId: me.accountId, recipientId:prop.id}}));
+    }
 
     const onClickfollowerOpen = () => {
         setFollowOpen(true);

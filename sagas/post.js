@@ -1,6 +1,6 @@
 import axios from "axios";
 import { all , fork, takeLatest, put, call, putResolve, take, } from "redux-saga/effects";
-axios.defaults.baseURL = "http://localhost:8000";
+
 function checkPostAPI(postId){
     return axios.get(`/media/${postId}`);
 }
@@ -153,7 +153,7 @@ function deleteCommentAPI(){
 
 function* deleteComment(action){
     try{
-        const result = yield call(deleteCommentAPI, action.data);
+        //const result = yield call(deleteCommentAPI, action.data);
         yield put({
             type:'DELETE_COMMENT_SUCCESS',
             //data:result
@@ -166,7 +166,7 @@ function* deleteComment(action){
     }
 }
 
-function* watctRemoveComment(){
+function* watchRemoveComment(){
     yield takeLatest('DELETE_COMMENT_REQUEST', deleteComment);
 }
 
@@ -201,7 +201,7 @@ export default function* crudSaga(){
         fork(watchCheckPost),
         fork(watchAddReply),
         fork(watchAddComment),
-        fork(watctRemoveComment),
+        fork(watchRemoveComment),
         fork(watchRemoveReply),
     ])
 }

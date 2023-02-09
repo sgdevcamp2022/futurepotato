@@ -1,5 +1,4 @@
 import { useSelector } from "react-redux";
-import DetailItem from "./DetailItem";
 import NavBar from "./NavBar";
 import { useState } from "react";
 import CommentForm from "./Comment/CommentForm";

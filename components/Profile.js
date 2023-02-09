@@ -5,7 +5,8 @@ import ProfilePageWrapper from "./Profile/ProfilePageWrapper";
 const Profile = (prop) => {
     const dispatch = useDispatch();
     const {me} = useSelector((state)=>state.user);
-    const isMe = prop.id == me.accountId ? true : dispatch({type:'GET_FOLLOING_REQUEST', data:{senderId: me.accountId, recipientId:prop.id}});
+    //const isMe = prop.id == me.accountId ? true : dispatch({type:'GET_FOLLOING_REQUEST', data:{senderId: me.accountId, recipientId:prop.id}});
+    const isMe = prop.id == me.accountId ? true : false;
     return (
         <>
             <AppLayout />

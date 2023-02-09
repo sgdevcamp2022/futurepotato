@@ -6,10 +6,8 @@ const profile = () => {
     const router = useRouter();
     const {profileid} = router.query;
     const dispatch = useDispatch();
+    console.log("로딩이 됬나요?");
     
-    useEffect(() => { 
-        dispatch({type:'PROFILE_LOAD_REQUEST', data: profileid});
-    },[])
 
     return(
         <Profile id={profileid}/>

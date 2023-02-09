@@ -145,7 +145,7 @@ const reducer = (state = initialMainState, action) => produce(state, (draft) => 
                 const post = draft.postList.find((v) => v.id === action.dataw);
                 console.log(post);
                 post.commentList.push({"commentWriter" : action.datame.username, "Image" : action.datame.profileimage, 
-                "comment" : action.data, "likeCount":0, "replyList" : []});
+                "comment" : action.data, "likeCount":0, "replyList" : [], commentId:0});
                 break;
             }
         case 'ADD_COMMENT_SUCCESS':
@@ -156,6 +156,7 @@ const reducer = (state = initialMainState, action) => produce(state, (draft) => 
         case 'DELETE_COMMENT_REQUEST':
             break;
         case 'DELETE_COMMENT_SUCCESS':
+            draft.postList[0].commentList[0].shift();
             break;
         case 'DELETE_COMMENT_FAILURE':
             break;

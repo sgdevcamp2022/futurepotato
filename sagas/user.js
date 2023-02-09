@@ -2,7 +2,7 @@ import { all , fork, takeLatest, put, call} from "redux-saga/effects";
 import axios from "axios";
 
 function logInAPI(data) {
-    return axios.post("/api/auth/signin", data);
+    return axios.post('/auth/signin', data);
 }
 
 function* logIn(action){
@@ -27,7 +27,7 @@ function* watchLogIn(){
 }
 
 function signUpAPI(data){
-    return axios.post('/signup', {
+    return axios.post('/auth/signup', {
         email: data.id,
         accountId: data.realname,
         accountPw: data.password,
@@ -66,7 +66,6 @@ function* profileLoad(action){
             //data:action.data
         })
     }catch(err){
-        console.log("asdfasdf");
         yield put({
             type:'PROFILE_LOAD_FAILURE',
             data:err.response.data,
@@ -187,21 +186,21 @@ function isFollowAPI(data){
 
 function* isFollow(action){
     try{
-        const result = yield call(isFollowAPI, action.data);
+        //const result = yield call(isFollowAPI, action.data);
         yield put({
-            type:'GET_FOLLOING_SUCCESS',
-            data:result.result,
+            type:'GET_IS_FOLLOING_SUCCESS',
+            //data:result.result,
         })
     }catch(err){
         yield put({
-            type:'GET_FOLLOING_FAILURE',
+            type:'GET_IS_FOLLOING_FAILURE',
             data:err.response.data,
         })
     }
 }
 
 function* watchIsFolloing(){
-    yield takeLatest('GET_FOLLOING_REQUEST', isFollow);
+    yield takeLatest('GET_IS_FOLLOING_REQUEST', isFollow);
 }
 
 export default function* userSaga(){

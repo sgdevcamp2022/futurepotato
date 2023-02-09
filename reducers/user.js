@@ -70,6 +70,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
                 draft.isLoggedIn = false;
                 break;
             case 'LOG_IN_SUCCESS' :
+                
                 localStorage.setItem('token', action.data.token);
                 tokenInsertHeader(action.data.token);
                 draft.isLoggedIn = true;
@@ -148,12 +149,12 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
             case 'FOLLOW_CANCEL_FAILURE':
                 break;
 
-            case 'GET_FOLLOING_REQUEST':
+            case 'GET_IS_FOLLOING_REQUEST':
                 break;
-            case 'GET_FOLLOING_SUCCESS':
+            case 'GET_IS_FOLLOING_SUCCESS':
                 draft.isFollowing = true;
                 break;
-            case 'GET_FOLLOING_FAILURE':
+            case 'GET_IS_FOLLOING_FAILURE':
                 break;
 
             case 'LOG_OUT' :
