@@ -12,7 +12,18 @@ export const initialState = {
     followerList:[],
     isFollowing:false,
 }
-
+const userdummyPage = {
+    name:'user1',
+    'profileImage' : '/cover 1.png',
+    "followerCount": 100,
+    "followingCount": 95,
+    'postCount':1,
+    'imageList':[
+        {image:'/cover 1.png',
+        postId:1,
+        isMultyImage:true}
+    ]
+}
 const dummyfolloingList = [
     {
     accountId: "user20",
@@ -91,22 +102,29 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
                 break;
             case 'PROFILE_LOAD_SUCCESS':
                 {
-                    draft.profileData = {
-                        "name": "yusung",
-                        "profileImage": "/cover 8.png",
-                        "followerCount": 100,
-                        "followingCount": 95,
-                        "postCount": 10,
-                        "imageList": [
-                            {"image": "/cover 3.png",
-                            "postId":12,
-                            "isMultyImage": true},
-                            {"image": "/cover 5.png",
-                            "postId":14,
-                            "isMultyImage" : false
-                            }
-                        ]
-                    }    
+                    console.log(action);
+                    if(action.data == draft.me.accountId){
+                        draft.profileData = {
+                            "name": "yusung",
+                            "profileImage": "/cover 8.png",
+                            "followerCount": 100,
+                            "followingCount": 95,
+                            "postCount": 10,
+                            "imageList": [
+                                {"image": "/cover 3.png",
+                                "postId":12,
+                                "isMultyImage": true},
+                                {"image": "/cover 5.png",
+                                "postId":14,
+                                "isMultyImage" : false
+                                }
+                            ]
+                        }
+                        console.log("좋아여여여");
+                    }
+                    else{
+                        draft.profileData = userdummyPage;
+                    }
                     draft.loadProfileSuccess = true;
                     break;
                 }

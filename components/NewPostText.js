@@ -8,10 +8,10 @@ import {useDispatch} from 'react-redux';
 
 const NewPostText = (props) => {
     const dispatch = useDispatch();
-
     const {me} = useSelector((state) => state.user);
     const {newImage} = useSelector((state) => state.mainpage);
-    
+    console.log(newImage[0]);
+    const imageSource = window.URL.createObjectURL(newImage[0].get('image'));
     const [postText, setPostText] = useState('');
     const onChangePostText = useCallback((e) => {
         setPostText(e.target.value);
@@ -42,12 +42,8 @@ const NewPostText = (props) => {
                     <div className ='modal_title_side'></div>
                 </div>
                 <div className='wrapper-detail' style={{girdTemplateColumns:"50% 50%"}}>
-            <div className="left-col-detail"> 
-                <Slider {...settings}  afterChange={(slide) => setCurrentSlide(slide)}>
-                    {newImage.map((p) => (
-                        <img src={p.image} className="post-image" alt="" style={{objectFit:"contain", height:200, width:400}}/>
-                    ))}
-                </Slider>
+            <div className="left-col-detail">
+                <img src={imageSource} className="post-image" alt="" style={{objectFit:"contain", height:200, width:400}}/>     
             </div>
             <div className="right-col-detail" style={{padding:0, display:'flex', flexDirection:'column'}}>
                 <div>

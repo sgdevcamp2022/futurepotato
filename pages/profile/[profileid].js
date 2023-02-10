@@ -6,9 +6,6 @@ const profile = () => {
     const router = useRouter();
     const {profileid} = router.query;
     const dispatch = useDispatch();
-    console.log("로딩이 됬나요?");
-    
-
     return(
         <Profile id={profileid}/>
     );

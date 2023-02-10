@@ -10,15 +10,15 @@ const NewPost = () => {
     }, [imageInput.current]);
 
     const {newImage, isImage} = useSelector((state) => state.mainpage);
-    console.log(isImage);
+    console.log(newImage);
+
     const onChangeImages = useCallback((e) => {
         const imageFormData = new FormData();
         console.log(e.target.files);
         [].forEach.call(e.target.files, (f) => {
-            console.log("Asdfasdf", f);
-          imageFormData.append('image', f);
-          console.log(imageFormData);
+            imageFormData.append('image', f);
         });
+        console.log(imageFormData.get('image'));
         return dispatch({
             type: "IMAGE_UPLOAD_REQUEST",
             data: imageFormData,

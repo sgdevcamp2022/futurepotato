@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AppLayout from "./AppLayout";
 import ProfileHead from "./Profile/ProfileHead";
@@ -7,6 +8,9 @@ const Profile = (prop) => {
     const {me} = useSelector((state)=>state.user);
     //const isMe = prop.id == me.accountId ? true : dispatch({type:'GET_FOLLOING_REQUEST', data:{senderId: me.accountId, recipientId:prop.id}});
     const isMe = prop.id == me.accountId ? true : false;
+    useEffect(() => {
+        dispatch({type:'PROFILE_LOAD_REQUEST', data: isMe ? me.accountId : prop.id});
+    }, [])
     return (
         <>
             <AppLayout />

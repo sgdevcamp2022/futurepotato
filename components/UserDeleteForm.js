@@ -12,9 +12,6 @@ const UserDeleteForm = () => {
                     <div> 신고 </div>
             </div>
             <div className ='modal_title_option_user'>
-                    <div> 퍼가기 </div>
-            </div>
-            <div className ='modal_title_option_user'>
                     <div> 이 계정 정보 </div>
             </div>
             <div className ='modal_title_option_user_two'>

@@ -61,9 +61,10 @@ function profileLoadAPI (data) {
 function* profileLoad(action){
     try{
          //const result = yield call(profileLoadAPI, action.data);
+        console.log(action);
          yield put({
             type: 'PROFILE_LOAD_SUCCESS',
-            //data:action.data
+            data:action.data,
         })
     }catch(err){
         yield put({

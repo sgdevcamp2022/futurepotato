@@ -10,7 +10,7 @@ export const initialMainState = {
     newImage:[],
     isImage:false,
     detailPage:null,
-
+    alarmData:[],
 }
 
 const dummyData = {
@@ -31,11 +31,12 @@ const dummyData = {
                 likesCheck: true,
                 "commentCount": 110,
                 "profileImage" : '/cover 1.png',
-                "commentList" : [{"commentWriter": "user2",
+                "commentList" : [{
+                "commentWriter": "user2",
                 "Image": "/cover 3.png",
                 "comment": "게시글 댓글1",
                 "likeCount": 100,
-                
+                'commentId' : 1,
                 "replyList":[{
                             "replyWriter": "user1", "reply":"reply1",
                             "createdDt":""
@@ -60,6 +61,33 @@ const dummyData = {
     "prePost" : 0,
     "nextPost" : true,
 }
+
+const dummyAlarm = [
+    {
+        "id": 9,
+        "sender": "user5",
+        "receiver": "user6",
+        "place": "user6's post",
+        "action": "댓글을 달았습니다.",
+        "actionMessage": "user5님이 user6's post에 댓글을 달았습니다."
+    },
+    {
+        "id": 10,
+        "sender": "user8",
+        "receiver": "user6",
+        "place": "user6's post",
+        "action": "댓글을 달았습니다.",
+        "actionMessage": "user8님이 user6's post에 댓글을 달았습니다."
+    },
+    {
+        "id": 12,
+        "sender": "user7",
+        "receiver": "user6",
+        "place": " ccmet",
+        "action": "대댓글을 달았습니다.",
+        "actionMessage": "user7님이  ccmet에 대댓글을 달았습니다."
+    } 
+]
 
 const dummyPost = {
     id:3, 
@@ -130,12 +158,14 @@ const reducer = (state = initialMainState, action) => produce(state, (draft) => 
             break;
     
         case 'REMOVE_POST_REQUEST':
+            console.log("포스트를 삭제합니다");
             break;
         case 'REMOVE_POST_SUCCESS':{
-            console.log(action);
-            draft.postList.filter((v) => v.id != action.data);
-        }
+            console.log(action.data);
+            const newPostList = draft.postList.filter((v) => v.id != action.data);
+            draft.postList = newPostList;
             break;
+        }
         case 'REMOVE_POST_FAILURE':
             break;
 
@@ -155,15 +185,20 @@ const reducer = (state = initialMainState, action) => produce(state, (draft) => 
         
         case 'DELETE_COMMENT_REQUEST':
             break;
-        case 'DELETE_COMMENT_SUCCESS':
-            draft.postList[0].commentList[0].shift();
+        case 'DELETE_COMMENT_SUCCESS':{
+            const post = draft.postList.find((v) => v.id == action.data.postId);
+            const index = draft.postList.findIndex((v) => v.id == action.data.postId);
+            
+            post.commentList.filter((v) => v.commentId != action.data.commentId);
+            draft.postList[index] = post;
             break;
+        }
         case 'DELETE_COMMENT_FAILURE':
             break;
 
         case 'IMAGE_UPLOAD_REQUEST':{
-            console.log(action.data.name);
-            draft.newImage.push(action.data.get("image").name);
+            draft.newImage.push(action.data);
+            
             draft.isImage = true;
             break;
         }
@@ -187,6 +222,14 @@ const reducer = (state = initialMainState, action) => produce(state, (draft) => 
         case 'LOAD_DETAIL_SUCCESS':
             break;
         case 'LOAD_DETAIL_FAILURE':
+            break;
+
+        case 'ALARM_REQUEST':
+            break;
+        case 'ALARM_REQUEST_SUCCESS':
+            draft.alarmData = dummyAlarm;
+            break;
+        case 'ALARM_REQUEST_FAILURE':
             break;
         default:
             break;

@@ -37,12 +37,12 @@ const DetailPage = (props) => {
                 <div className="right-col-detail">
                     <UserInfo postId = {item[0].id} postName = {item[0].name} postImage = {item[0].profileImage} isMain = {true}/>
                     <div className="comment-post" style={{}}>
-                        <div>
+                        <div style={{maxHeight: "80%"}}>
                             <div style={{borderBottom:"1px solid lightgray"}} className="post-story">
                                 <p className="description"><span>{item[0].name}</span> {item[0].content}</p>
                                 <p className="post-time">{item[0].modifiedDate}</p>
                             </div>
-                            {item[0].commentList.length != 0 ? <CommentList commentList = { item[0].commentList}/> : <></>}
+                            {item[0].commentList.length != 0 ? <CommentList commentList = { item[0].commentList} postId  = {item[0].id}/> : <></>}
                         </div>
                         <CommentForm checkHeart = {item[0].likesCheck} postId = {item[0].id} heartCount = {item[0].likeCount}/>
                     </div>  

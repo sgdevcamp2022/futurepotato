@@ -86,7 +86,7 @@ function* removePost(action) {
         //const result = yield call(removePostAPI, action.accountId,action.postId);
         yield put({
             type:'REMOVE_POST_SUCCESS',
-            data:1,
+            data:3,
         })
     } catch (err){
         yield put ({
@@ -156,6 +156,7 @@ function* deleteComment(action){
         //const result = yield call(deleteCommentAPI, action.data);
         yield put({
             type:'DELETE_COMMENT_SUCCESS',
+            data:action.data
             //data:result
         })
     }catch(err){
@@ -193,6 +194,29 @@ function* watchRemoveReply(){
     yield takeLatest('DELETE_REPLY_REQUEST', deleteReply);
 }
 
+function alarmRequestAPI(data){
+    return axios.get(`/alarm/${data}`);
+}
+
+function* alarmRequest(action){
+    try{
+        //const result = yield call(alarmRequestAPI, action.data);
+        yield put({
+            type:'ALARM_REQUEST_SUCCESS',
+            //data: result
+        })
+    }catch(err){
+        yield put({
+            type:'ALARM_REQUEST_FAILURE',
+            data: err.response.data,
+        })
+    }
+}
+
+function* watchAlarmRequest(){
+    yield takeLatest('ALARM_REQUEST', alarmRequest);
+}
+
 export default function* crudSaga(){
     yield all([
         fork(watchAddPost),
@@ -203,5 +227,6 @@ export default function* crudSaga(){
         fork(watchAddComment),
         fork(watchRemoveComment),
         fork(watchRemoveReply),
+        fork(watchAlarmRequest),
     ])
 }

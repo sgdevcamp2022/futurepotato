@@ -6,7 +6,7 @@ const CommentList = (commentList) => {
     return(
         <div className="comment-list">
             {commentLists.length != 0 ? commentLists.map((v) => (
-                <CommentItem commentItem = {v}/>
+                <CommentItem commentItem = {v} postId = {commentList.postId}/>
             )) : <div></div>}
         </div>
     );

@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 
 const ProfilePostList = () => {
     const {profileData} = useSelector((state) => state.user);
-    console.log("asd");
     console.log(profileData);
     return(
         <>

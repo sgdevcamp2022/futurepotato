@@ -4,12 +4,15 @@ import { useEffect } from 'react';
 import Modal from 'react-modal';
 import {useDispatch, useSelector} from 'react-redux';
 import { logoutRequestAction } from '../reducers/user';
+import AlarmForm from './AlarmForm';
 import NewPost from './NewPost';
 
 const NavBar = () => {
     const dispatch = useDispatch();
     const {clearUpload} = useSelector((state) => state.mainpage);
     const [newPostOpen, setNewPost] = useState(false);
+    const [alarmOpen, setAlarmopen] = useState(false);
+
     const{me} = useSelector((state) => state.user);
     const logOut = () => {
         dispatch(logoutRequestAction());
@@ -23,6 +26,11 @@ const NavBar = () => {
         dispatch({type:'PROFILE_LOAD_REQUEST'});
     }
 
+    const onClickAlarmPage = () => {
+        dispatch({type:'ALARM_REQUEST',data:me.accountId
+        })
+        setAlarmopen(true);
+    }
     return(
         <nav className="navbar">
             <div className="nav-wrapper">
@@ -37,7 +45,7 @@ const NavBar = () => {
                         </a>
                     </Link>
                     <img src="/add.PNG" onClick={() => setNewPost(true)} className="icon" alt="" />
-                    <img src="/like.PNG" className="icon" alt="" />
+                    <img src="/like.PNG" className="icon" alt="" onClick={onClickAlarmPage} />
                     <Link href = {`/profile/${me.accountId}`} legacyBehavior> 
                         <a>
                         <div className="icon user-profile">
@@ -62,6 +70,21 @@ const NavBar = () => {
                         }}
                     >
                         <NewPost/>
+                    </Modal>
+
+                    <Modal isOpen={alarmOpen} onRequestClose={()=>setAlarmopen(false)}
+                        style={{content:{
+                            position: "relative",
+                            display: "inline-flex",
+                            left: "50%",
+                            top: "50%",
+                            transform: "translate(-50%, -50%)",
+                            padding: 0,
+                            borderRadius: 13,
+                            },
+                        }}
+                    >
+                        <AlarmForm/>
                     </Modal>
 
                     <Link href = "/" legacyBehavior>

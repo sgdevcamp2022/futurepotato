@@ -274,7 +274,9 @@
 .right-col-detail{
   padding:20px;
   padding-top: 0px;
+  padding-bottom: 10px;
   height: 100%;
+  max-height: 800px;
   justify-content: space-between;
 }
 
@@ -465,6 +467,7 @@
 .comment-post{
   height: 93%;
   display: flex;
+  position: 'absoulte';
   flex-direction: column;
   justify-content: space-between;
 }
@@ -953,6 +956,7 @@ Remove or comment-out the code block below to see how the browser will fall-back
   border-bottom: 1px solid lightgray;
   font-size: 15px;
   height: 12.5%;
+  cursor: pointer;
 }
 .modal_title_option_bold{
   font-weight: bold;
@@ -964,6 +968,7 @@ Remove or comment-out the code block below to see how the browser will fall-back
   border-bottom: 1px solid lightgray;
   font-size: 15px;
   height: 12.5%;
+  cursor: pointer;
 }
 
 .modal_title_option_bold_user{
@@ -976,6 +981,7 @@ Remove or comment-out the code block below to see how the browser will fall-back
   border-bottom: 1px solid lightgray;
   font-size: 15px;
   height: 16.5%;
+  cursor: pointer;
 }
 
 .modal_title_option_user{
@@ -986,6 +992,7 @@ Remove or comment-out the code block below to see how the browser will fall-back
   border-bottom: 1px solid lightgray;
   font-size: 15px;
   height: 16.5%;
+  cursor: pointer;
 }
 
 .modal_title_option_two{
@@ -995,6 +1002,7 @@ Remove or comment-out the code block below to see how the browser will fall-back
   align-items: center;
   font-size: 15px;
   height: 12.5%;
+  cursor: pointer;
 }
 
 .modal_title_option_user_two{
@@ -1004,6 +1012,7 @@ Remove or comment-out the code block below to see how the browser will fall-back
   align-items: center;
   font-size: 15px;
   height: 16.5%;
+  cursor: pointer;
 }
 
 .detail_window{
@@ -1042,7 +1051,8 @@ Remove or comment-out the code block below to see how the browser will fall-back
 }
 
 .comment-list{
-  height:40%;
+  max-height: 85%;
+  overflow: auto;
 }
 
 .follwing-block{
