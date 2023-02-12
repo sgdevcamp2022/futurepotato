@@ -114,11 +114,11 @@ public class Service {
         // 대댓글 작성
         @FormUrlEncoded
         @POST("/feed/{accountId}/{commentId}/reply")
-        Call<ResponseBody> InsertReply(@Path("accountId") String accountId, @Path("commentId") String commentId, @Field("reply") String reply);
+        Call<ResponseBody> InsertReply(@Path("accountId") String accountId, @Path("commentId") int commentId, @Field("reply") String reply);
 
         // 대댓글 삭제
         @POST("/feed/{accountId}/reply/{replyId}")
-        Call<ResponseBody> DeleteReply(@Path("accountId") String accountId, @Path("replyId") String replyId);
+        Call<ResponseBody> DeleteReply(@Path("accountId") String accountId, @Path("replyId") int replyId);
 
     }
 

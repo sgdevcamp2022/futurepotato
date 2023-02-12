@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.example.smg_insta.API.Service;
 import com.example.smg_insta.DTO.FeedResponse;
 import com.example.smg_insta.MainActivity;
+import com.example.smg_insta.PreferenceManager;
 import com.example.smg_insta.R;
 
 import java.util.ArrayList;
@@ -29,11 +31,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder>{
+public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder> {
 
     private Context context;
     private ArrayList<FeedResponse.Comment> data;
     private Service dataService;
+    private OnCommentItemClickListener listener;
 
     String accountId;
 
@@ -64,25 +67,23 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull CommentAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.onBind(data.get(position));
+
         //답글들 가져오기
-        replies = data.get(position).getReplyList();
-
-
-        // 대댓글(답글) 보기
-        holder.replyCount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                holder.recyc_reply.setVisibility(View.VISIBLE);
-                holder.recyc_reply.setAdapter(new ReplyAdapter(context, replies));
-                //holder.replyCount.setText("답글 닫기");
-
-            }
-        });
+        holder.getReply(data.get(position));
 
         // 대댓글(답글) 달기
         holder.btnReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String reply;
+                //EditText editText =(EditText) view.findViewById(R.id.et_insert_comment);
+                //editText.requestFocus();
+
+                //키보드 보이게 하는 부분
+
+                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
 
                 
@@ -106,7 +107,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                         switch (menuItem.getItemId()){
                             case R.id.menu_delete:
                                 // 댓글 삭제
-                                // accountId 내부 데이터에서 가져와야 함.
+                                accountId = PreferenceManager.getString(context, "accountID");
                                 dataService.comment.DeleteComment(accountId, data.get(position).getCommentId()).enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -148,7 +149,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         CircleImageView profile;
-        TextView commentWriter, comment, likeCount, replyCount, btnReply;
+        TextView commentWriter;
+        TextView comment;
+        TextView likeCount;
+        TextView replyCount;
+        TextView btnReply;
         ImageView btnLike, btnNoLike;
         RecyclerView recyc_reply;
 
@@ -189,7 +194,29 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
             // isLike 추가되면 좋아요 여부 받아서 하트 받기
 
+        }
 
+
+        void getReply(FeedResponse.Comment item) {
+            replyCount.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (recyc_reply.getVisibility() == View.VISIBLE) {
+                        recyc_reply.setVisibility(View.GONE);
+                        replyCount.setText("답글 " + item.getReplyList().size() + "개 더보기");
+                    } else {
+                        recyc_reply.setVisibility(View.VISIBLE);
+                        recyc_reply.setAdapter(new ReplyAdapter(context, item.getReplyList()));
+                        replyCount.setText("답글 닫기");
+                    }
+
+                }
+            });
         }
     }
+
+    public FeedResponse.Comment getItem(int position){
+        return data.get(position);
+    }
+
 }

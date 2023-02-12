@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.smg_insta.API.Service;
 import com.example.smg_insta.Adapter.CommentAdapter;
 import com.example.smg_insta.DTO.FeedResponse;
-import com.example.smg_insta.DTO.JoinData;
 
 import java.util.ArrayList;
 
@@ -34,6 +33,7 @@ public class CommentsActivity extends AppCompatActivity {
     //private 어뎁터 추가하기 
     private ImageView Btn_back, Btn_sendComment;
     private EditText et_comment;
+    private CommentAdapter commentAdapter;
 
     String comment;
     Service dataService = new Service();
@@ -49,6 +49,8 @@ public class CommentsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.comments);
 
+        accountId = PreferenceManager.getString(getApplication(), "accountID");
+
         Intent intent = getIntent();
         //postId = Integer.parseInt(intent.getStringExtra("postId"));
 
@@ -62,14 +64,14 @@ public class CommentsActivity extends AppCompatActivity {
 
         //------test
         ArrayList<FeedResponse.Reply> repliesTest1 = new ArrayList<>();
-        FeedResponse.Reply r_test1 = new FeedResponse.Reply("r1", "답글 테스트1", "https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg", "0");
-        FeedResponse.Reply r_test2 = new FeedResponse.Reply("r2", "답글 테스트2", "https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg", "0");
+        FeedResponse.Reply r_test1 = new FeedResponse.Reply(1, "r1", "답글 테스트1", "https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg", "0");
+        FeedResponse.Reply r_test2 = new FeedResponse.Reply(2, "r2", "답글 테스트2", "https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg", "0");
         repliesTest1.add(r_test1);
         repliesTest1.add(r_test2);
 
-        FeedResponse.Comment test1 = new FeedResponse.Comment("test1", "https://cdn.pixabay.com/photo/2020/03/08/21/41/landscape-4913841_1280.jpg", "게시글 댓글 테스트1", 12, 100, "날짜", repliesTest1);
-        FeedResponse.Comment test2 = new FeedResponse.Comment("test2", "https://cdn.pixabay.com/photo/2020/09/02/18/03/girl-5539094_1280.jpg", "게시글 댓글 테스트1", 12, 100, "날짜", new ArrayList<>());
-        FeedResponse.Comment test3 = new FeedResponse.Comment("test3", "https://cdn.pixabay.com/photo/2014/03/03/16/15/mosque-279015_1280.jpg", "게시글 댓글 테스트1", 12, 100, "날짜", new ArrayList<>());
+        FeedResponse.Comment test1 = new FeedResponse.Comment("test1", "https://cdn.pixabay.com/photo/2020/03/08/21/41/landscape-4913841_1280.jpg", "게시글 댓글 테스트1", 12, 55, "날짜", repliesTest1);
+        FeedResponse.Comment test2 = new FeedResponse.Comment("test2", "https://cdn.pixabay.com/photo/2020/09/02/18/03/girl-5539094_1280.jpg", "게시글 댓글 테스트2", 35, 23, "날짜", new ArrayList<>());
+        FeedResponse.Comment test3 = new FeedResponse.Comment("test3", "https://cdn.pixabay.com/photo/2014/03/03/16/15/mosque-279015_1280.jpg", "게시글 댓글 테스트3", 71, 65, "날짜", new ArrayList<>());
 
         commentList.add(test1);
         commentList.add(test2);
@@ -136,9 +138,6 @@ public class CommentsActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-
-
 
     }
 

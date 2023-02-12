@@ -44,7 +44,7 @@ public class StoryActivity extends AppCompatActivity {
 
 
     ArrayList <String> storyImages = new ArrayList<>();     // 번들로 받아올 image
-    List<StoryResponse.StoryList> storyLists = new ArrayList<>();   // 스토리 조회해서 저장할 스토리 리스트
+    ArrayList<StoryResponse.StoryList> storyLists = new ArrayList<>();   // 스토리 조회해서 저장할 스토리 리스트
     StoryResponse storyResponse;
 
     StoryResponse testStoryResponse;
@@ -88,11 +88,12 @@ public class StoryActivity extends AppCompatActivity {
 
         //------------
         Intent intent = getIntent();
-        if(intent != null) {
+        if(intent.getStringExtra("userId") != null) {
             story_userId = intent.getStringExtra("userId");
             btn_add.setVisibility(View.GONE);   // 내 스토리가 아닌 경우, 추가 버튼 가리기
         } else {
             story_userId = PreferenceManager.getString(getApplication(), "accountID");
+            btn_add.setVisibility(View.VISIBLE);
         }
 
         viewFlipper.setAdapter(new StorySliderAdapter(this, testStoryResponse));

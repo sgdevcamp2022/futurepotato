@@ -178,22 +178,29 @@ public class FeedResponse {
 
     public static class Reply {
 
-        public Reply(String replyWriter, String reply, String image, String createdDt) {
+        public Reply(int replyId, String replyWriter, String reply, String profileImage, String createdDt) {
+            this.replyId = replyId;
             this.replyWriter = replyWriter;
             this.reply = reply;
-            this.image = image;
+            this.profileImage = profileImage;
             this.createdDt = createdDt;
         }
 
+        @SerializedName("replyId")
+        private int replyId;
         @SerializedName("replyWriter")
         private String replyWriter;
         @SerializedName("reply")
         private String reply;
-        @SerializedName("image")
-        private String image;
+        @SerializedName("profileImage")
+        private String profileImage;
         @SerializedName("createdDt")
         private String createdDt;
 
+
+        public int getReplyId() {return replyId;}
+
+        public void setReplyId(int replyId) {this.replyId = replyId;}
 
         public String getReplyWriter() {
             return replyWriter;
@@ -211,9 +218,13 @@ public class FeedResponse {
             this.reply = reply;
         }
 
-        public String getImage() {return image;}
+        public String getProfileImage() {return profileImage;}
 
-        public void setImage(String image) {this.image = image;}
+        public void setProfileImage(String profileImage) {this.profileImage = profileImage;}
+
+        public String getImage() {return profileImage;}
+
+        public void setImage(String profileImage) {this.profileImage = profileImage;}
 
         public String getCreatedDt() {
             return createdDt;

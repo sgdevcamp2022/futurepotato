@@ -2,11 +2,12 @@ package com.example.smg_insta.DTO;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StoryResponse {
 
-    public StoryResponse(String accountId, String profileImage, List<StoryList> storyImage) {
+    public StoryResponse(String accountId, String profileImage, ArrayList<StoryList> storyImage) {
         this.accountId = accountId;
         this.profileImage = profileImage;
         this.storyImage = storyImage;
@@ -17,7 +18,7 @@ public class StoryResponse {
     @SerializedName("profileImage")
     private String profileImage;
     @SerializedName("storyImage")
-    private List<StoryList> storyImage;
+    private ArrayList<StoryList> storyImage;
 
     public String getAccountId() {
         return accountId;
@@ -35,11 +36,11 @@ public class StoryResponse {
         this.profileImage = profileImage;
     }
 
-    public List<StoryList> getStoryImage() {
+    public ArrayList<StoryList> getStoryImage() {
         return storyImage;
     }
 
-    public void setStoryImage(List<StoryList> storyImage) {
+    public void setStoryImage(ArrayList<StoryList> storyImage) {
         this.storyImage = storyImage;
     }
 
