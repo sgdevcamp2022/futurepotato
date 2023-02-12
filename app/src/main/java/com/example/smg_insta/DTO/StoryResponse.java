@@ -6,6 +6,12 @@ import java.util.List;
 
 public class StoryResponse {
 
+    public StoryResponse(String accountId, String profileImage, List<StoryList> storyImage) {
+        this.accountId = accountId;
+        this.profileImage = profileImage;
+        this.storyImage = storyImage;
+    }
+
     @SerializedName("accountId")
     private String accountId;
     @SerializedName("profileImage")
@@ -13,11 +19,11 @@ public class StoryResponse {
     @SerializedName("storyImage")
     private List<StoryList> storyImage;
 
-    public String getName() {
+    public String getAccountId() {
         return accountId;
     }
 
-    public void setName(String accountId) {
+    public void setAccountId(String accountId) {
         this.accountId = accountId;
     }
 

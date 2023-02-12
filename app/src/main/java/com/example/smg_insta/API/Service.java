@@ -132,7 +132,7 @@ public class Service {
         Call<ResponseBody> InsertStory(@Path("accountId") String accountId, @Part("image") String image);
 
         @DELETE("/feed/{accountId}/story/{storyId}")
-        Call<ResponseBody> DeleteStory(@Path("accountId") String accountId, @Path("storyId") String storyId);
+        Call<ResponseBody> DeleteStory(@Path("accountId") String accountId, @Path("storyId") int storyId);
     }
 
     //-----메인화면/마이페이지------

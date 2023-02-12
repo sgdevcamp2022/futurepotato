@@ -2,21 +2,15 @@ package com.example.smg_insta;
 
 import static android.app.Activity.RESULT_OK;
 
-import android.content.ClipData;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -178,15 +172,8 @@ public class Frag1 extends Fragment {
                 
                 // 내 스토리가 있으면
                 if (MyStories.size() > 0) {
-                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                    StoryFrag storyFrag = new StoryFrag();
-
-                    Bundle bundle = new Bundle();
-                    // 스토리 조회할 때, 이미지가 필요한데... 으잉??
-                    // 개인 스토리 따로 뺄 수 있는지 얘기해보기! -> accountId로 조회?
-                    bundle.putStringArrayList("image", (ArrayList<String>) MyStories);
-                    storyFrag.setArguments(bundle);
-                    transaction.replace(R.id.main_frame, storyFrag).addToBackStack(null).commit();
+                    Intent intent = new Intent(getActivity(), StoryActivity.class);
+                    startActivity(intent);
 
                 } else {    // 스토리가 없으면
                     Toast.makeText(getContext(), "길게 눌러서 스토리를 생성하세요..", Toast.LENGTH_LONG).show();

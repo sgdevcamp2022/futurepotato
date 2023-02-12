@@ -1,7 +1,10 @@
 package com.example.smg_insta.Adapter;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.smg_insta.API.Service;
 import com.example.smg_insta.DTO.MainPageResponse;
+import com.example.smg_insta.Frag1;
 import com.example.smg_insta.R;
+import com.example.smg_insta.StoryActivity;
 
 import java.util.List;
 
@@ -48,7 +53,9 @@ public class RVAdapter_story extends RecyclerView.Adapter<RVAdapter_story.ViewHo
             @Override
             public void onClick(View view) {
                 // 스토리 어떻게 띄울지...
-                bundleImage = data.get(position).getImage();
+                Intent intent = new Intent(context, StoryActivity.class);
+                intent.putExtra("userId", data.get(position).getName());
+                context.startActivity(intent);
 
 
             }
