@@ -57,7 +57,7 @@ public class Frag5 extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@Nullable LayoutInflater inflater,@Nullable ViewGroup container,@Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.my_info, container, false);
+        view = inflater.inflate(R.layout.my_info_frag5, container, false);
 
         //Bundle bundle = getArguments();
         //accountId = bundle.getString("ID");
@@ -111,6 +111,7 @@ public class Frag5 extends Fragment {
         //-------
         account_recyclerview.setAdapter(adapter);
 
+
         // 1. mypage 정보 보여주기
         dataService.selectMyPage.SelectMyPage(accountId).enqueue(new Callback<MypageResponse>() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -143,6 +144,7 @@ public class Frag5 extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), FollowActivity.class);
+                intent.putExtra("NUM_PAGES", 0);
                 startActivity(intent);
             }
         });
@@ -151,7 +153,9 @@ public class Frag5 extends Fragment {
         linearLayout_following.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(getActivity(), FollowActivity.class);
+                intent.putExtra("NUM_PAGES", 1);
+                startActivity(intent);
             }
         });
 
@@ -246,6 +250,7 @@ public class Frag5 extends Fragment {
         });
 
 
+        // 6. 플러스 버튼(스토리 / 게시물 만들기)
         btn_addContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

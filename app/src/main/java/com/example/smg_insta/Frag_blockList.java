@@ -1,6 +1,7 @@
 package com.example.smg_insta;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,6 +78,8 @@ public class Frag_blockList extends Fragment {
 
                 @Override
                 public void onFailure(Call<FollowListResponse> call, Throwable t) {
+                    t.printStackTrace();
+                    Log.e("TAG", t.getMessage());
                     Toast.makeText(getContext(), "연결 실패.", Toast.LENGTH_LONG).show();
                 }
             });
@@ -105,6 +108,7 @@ public class Frag_blockList extends Fragment {
 
                 @Override
                 public void onFailure(Call<FollowListResponse> call, Throwable t) {
+                    t.printStackTrace();
                     Toast.makeText(getContext(), "연결 실패.", Toast.LENGTH_LONG).show();
                 }
             });
@@ -114,9 +118,9 @@ public class Frag_blockList extends Fragment {
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                fragmentManager.beginTransaction().remove(Frag_blockList.this).commit();
-                fragmentManager.popBackStack();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                Frag5 profileFrag = new Frag5();
+                transaction.replace(R.id.main_frame, profileFrag).commit();
             }
         });
 

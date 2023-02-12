@@ -4,6 +4,7 @@ import static java.lang.Integer.parseInt;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -77,20 +78,18 @@ public class MyPostFrag extends Fragment {
 
         Bundle bundle = getArguments();  //번들 받기. getArguments() 메소드로 받음.
         if(bundle != null){
-            postId = parseInt(bundle.getString("postId"));
+            postId = Integer.parseInt(bundle.getString("postId"));
             profile = bundle.getString("profileImage");
-
         }
 
-
         // 1. 뒤로가기 버튼 구현
+        //
+        // 넘어오는 화면
+        // (1) 마이페이지에서 피드 클릭했을 떄
+        // (2) 유저 정보 페이지에서 피드 클릭했을 때
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-//                Frag5 profileFrag = new Frag5();
-//                transaction.replace(R.id.main_frame, profileFrag).commit();
-
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 fragmentManager.beginTransaction().remove(MyPostFrag.this).commit();
                 fragmentManager.popBackStack();
@@ -103,37 +102,76 @@ public class MyPostFrag extends Fragment {
             @Override
             public void onResponse(Call<FeedResponse> call, Response<FeedResponse> response) {
                 // 성공시
-                selectedFeed = response.body();
-                bundle_id = selectedFeed.getName();
-                userId.setText(bundle_id);
-                likeCount.setText("좋아요 " + selectedFeed.getLikeCount() + "개");
-                commentCount.setText("댓글 " + selectedFeed.getCommentCount() + "개");
-                bundle_content = selectedFeed.getContent();
-                content.setText(selectedFeed.getName() + "  " + bundle_content);
+                if(response.isSuccessful()) {
+                    selectedFeed = response.body();
+                    bundle_id = selectedFeed.getAccountId();
+                    userId.setText(bundle_id);
+                    likeCount.setText("좋아요 " + selectedFeed.getLikeCount() + "개");
+                    commentCount.setText("댓글 " + selectedFeed.getCommentCount() + "개");
+                    bundle_content = selectedFeed.getContent();
+                    content.setText(selectedFeed.getAccountId() + "  " + bundle_content);
 
-                // 프로필 이미지
-                Glide.with(getContext())
-                        .load(profile)
-                        .into(profileImage);
+                    // 프로필 이미지
+                    Glide.with(getContext())
+                            .load(profile)
+                            .into(profileImage);
 
-                // 이미지들
-                images = selectedFeed.getImageList();
-                info_img_content.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-                    @Override
-                    public void onPageSelected(int position) {
-                        super.onPageSelected(position);
-                        setCurrentIndicator(position);
+                    // 이미지들
+                    images = selectedFeed.getImageList();
+                    info_img_content.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+                        @Override
+                        public void onPageSelected(int position) {
+                            super.onPageSelected(position);
+                            setCurrentIndicator(position);
+                        }
+                    });
+                    setupIndicators(images.size());
+
+                    // 좋아요 버튼 설정
+                    if(selectedFeed.isLikesCheck()) {
+                        btn_like.setVisibility(View.VISIBLE);
+                        btn_noLike.setVisibility(View.GONE);
+                    } else {
+                        btn_like.setVisibility(View.GONE);
+                        btn_noLike.setVisibility(View.VISIBLE);
                     }
-                });
-                setupIndicators(images.size());
 
+                } else {
+                    Log.e("TAG", "ErrorCode: " + response.code() + " / " + response.message());
+                }
             }
-
             @Override
             public void onFailure(Call<FeedResponse> call, Throwable t) {t.printStackTrace();}
         });
 
-        // 3. 메뉴 바 눌렀을 때(삭제, 수정)
+
+        // 3. 좋아요 기능
+        btn_noLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 좋아요 API 연결
+                //
+                //
+
+                btn_like.setVisibility(View.VISIBLE);
+                btn_noLike.setVisibility(View.GONE);
+            }
+        });
+
+        btn_like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 좋아요 취소 API 연결
+                //
+                //
+
+                btn_like.setVisibility(View.GONE);
+                btn_noLike.setVisibility(View.VISIBLE);
+            }
+        });
+
+
+        // 4. 메뉴 바 눌렀을 때(삭제, 수정)
         btn_menuBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -200,7 +238,7 @@ public class MyPostFrag extends Fragment {
         });
 
 
-        // 4. 댓글 버튼 눌렀을 때
+        // 5. 댓글 버튼 눌렀을 때
         btn_comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

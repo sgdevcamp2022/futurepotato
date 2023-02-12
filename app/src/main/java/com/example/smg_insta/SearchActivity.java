@@ -1,11 +1,11 @@
 package com.example.smg_insta;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.View;
-import android.widget.ListView;
-import android.widget.SearchView;
+
+import androidx.appcompat.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smg_insta.API.Service;
-import com.example.smg_insta.Adapter.RVAdapter_post;
 import com.example.smg_insta.Adapter.SearchAdapter;
 
 import java.util.ArrayList;
@@ -39,15 +38,16 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+
         mSearchView = findViewById(R.id.sv_search);
         btn_cancel= findViewById(R.id.tv_search_btnBack);
         mRecyclerView = findViewById(R.id.rcv_search);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         mRecyclerView.setLayoutManager(layoutManager);
-        //mRecyclerView.setAdapter(new SearchAdapter(result, this, dataService));
+        mRecyclerView.setAdapter(new SearchAdapter(result, this, dataService));
 
-
+        mSearchView.setIconified(false);
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -76,14 +76,21 @@ public class SearchActivity extends AppCompatActivity {
         dataService.search.searchUser(text).enqueue(new Callback<List<String>>() {
             @Override
             public void onResponse(Call<List<String>> call, Response<List<String>> response) {
-                if (response.body() != null) {
-                    mRecyclerView.setAdapter(new SearchAdapter(response.body(), getApplicationContext(), dataService));
+                if(response.isSuccessful()) {
+                    if (response.body().size() > 0) {
+                        mRecyclerView.setAdapter(new SearchAdapter(response.body(), getApplicationContext(), dataService));
+                    }
+                    else {
+                        // 검색 값이 없습니다. 띄우기..
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "ErrorCode: " + response.code(), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<String>> call, Throwable t) {
-
+                t.printStackTrace();
             }
         });
 

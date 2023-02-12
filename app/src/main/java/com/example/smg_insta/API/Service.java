@@ -1,16 +1,13 @@
 package com.example.smg_insta.API;
 
 import com.example.smg_insta.DTO.FeedResponse;
-import com.example.smg_insta.DTO.JoinData;
-import com.example.smg_insta.DTO.JoinResponse;
-import com.example.smg_insta.DTO.LoginData;
-import com.example.smg_insta.DTO.LoginResponse;
 import com.example.smg_insta.DTO.MainPageResponse;
 import com.example.smg_insta.DTO.NoticeResponse;
 import com.example.smg_insta.DTO.StoryResponse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -18,7 +15,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -28,6 +24,7 @@ import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public class Service {
     // 에뮬레이터용
@@ -36,12 +33,20 @@ public class Service {
     //안드로이드 폰 (오류...)
     //private String BASE_URL = "http://192.168.0.28:8000";
 
+    OkHttpClient okHttpClient = new OkHttpClient.Builder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .build();
+
+
     Retrofit retrofitClient =
             new Retrofit.Builder()
                     .baseUrl(BASE_URL)
-                    .client(new OkHttpClient.Builder().build())
+                    .client(okHttpClient)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
+
 
     //1. feed
     public FeedApi feed = retrofitClient.create(FeedApi.class);
@@ -76,6 +81,7 @@ public class Service {
 
     public interface FeedApi {
 
+        // 게시물 조회
         @GET("/feed/media/{postId}")
         Call<FeedResponse> selectOne(@Path("postId") int postId);
 
@@ -118,8 +124,8 @@ public class Service {
 
     public interface StoryApi {
 
-        @GET("/feed/story/{accountId}/{image}")
-        Call<StoryResponse> SelectStory(@Path("accountId") String accountId, @Path("image") String image);
+        @GET("/feed/story/{accountId}")
+        Call<StoryResponse> SelectStory(@Path("accountId") String accountId);
 
         @Multipart
         @POST("/feed/{accountId}/story")
@@ -138,15 +144,13 @@ public class Service {
 
 
     public interface SearchAPI {
-        // response 형식... 될까?
-        @FormUrlEncoded
         @GET("/feed/users")
-        Call<List<String>> searchUser(@Field("keyword") String keyword);
+        Call<List<String>> searchUser(@Query("keyword") String keyword);
 
     }
 
     public interface NoticeAPI {
-        @GET("/alarm/{accountId}")
+        @GET("/feed/alarm/{accountId}")
         Call<List<NoticeResponse>> getNoticeList (@Path("accountId") String accountId);
     }
 

@@ -28,6 +28,7 @@ public class Frag_following extends Fragment {
 
     Service dataService = new Service();
     String accountID;
+    Bundle bundle;
 
     ArrayList<FollowListResponse.Follow> followingData = new ArrayList<>();
 
@@ -36,7 +37,12 @@ public class Frag_following extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup view = (ViewGroup) inflater.inflate(R.layout.following_list_frag, container, false);
 
-        accountID = PreferenceManager.getString(getActivity(), "accountID");
+        bundle = getArguments();
+        if(bundle != null) {
+            accountID = bundle.getString("userId");
+        } else {
+            accountID = PreferenceManager.getString(getActivity(), "accountID");
+        }
 
         mRecyclerView = view.findViewById(R.id.rcv_followingList);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());

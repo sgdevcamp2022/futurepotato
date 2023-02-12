@@ -91,8 +91,8 @@ public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHold
         holder.setupIndicators(images.size());
 
         // 2. 좋아요 기능
-        //
-        // 좋아요 true이면
+
+        // 좋아요 기본 설정
         if(data.get(position).isLikesCheck()) {
             holder.btn_like.setVisibility(View.VISIBLE);
             holder.btn_noLike.setVisibility(View.GONE);
@@ -100,6 +100,34 @@ public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHold
             holder.btn_like.setVisibility(View.GONE);
             holder.btn_noLike.setVisibility(View.VISIBLE);
         }
+
+        // 좋아요 클릭시
+        holder.btn_noLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 좋아요 API 연결
+                //
+                //
+
+                // 이 부분 필요한지 모르겠음.. 위에 설정한 부분이랑 중복 되는건가?아ㅣㄴ가?
+                holder.btn_like.setVisibility(View.VISIBLE);
+                holder.btn_noLike.setVisibility(View.GONE);
+            }
+        });
+
+        // 좋아요 취소
+        holder.btn_like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //
+                //
+                //
+
+                holder.btn_like.setVisibility(View.GONE);
+                holder.btn_noLike.setVisibility(View.VISIBLE);
+            }
+        });
+
 
 
         // 3. 상단 메뉴 바 클릭 시...(수정/삭제 버튼)
@@ -165,8 +193,8 @@ public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHold
             }
         });
         
-        // 5. 프로필 사진 클릭시 유저 정보 확인
-        holder.info_img_profile.setOnClickListener(new View.OnClickListener() {
+        // 5. 유저 이름 클릭시 유저 정보 확인
+        holder.info_tv_userId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MainActivity activity = (MainActivity) context;

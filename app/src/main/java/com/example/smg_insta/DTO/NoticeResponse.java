@@ -4,6 +4,15 @@ import com.google.gson.annotations.SerializedName;
 
 public class NoticeResponse {
 
+    public NoticeResponse(int id, String sender, String receiver, String place, String action, String actionMessage) {
+        this.id = id;
+        this.sender = sender;
+        this.receiver = receiver;
+        this.place = place;
+        this.action = action;
+        this.actionMessage = actionMessage;
+    }
+
     @SerializedName("id")
     private int id;
     @SerializedName("sender")

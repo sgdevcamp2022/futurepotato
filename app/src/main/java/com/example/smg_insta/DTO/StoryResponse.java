@@ -6,19 +6,19 @@ import java.util.List;
 
 public class StoryResponse {
 
-    @SerializedName("name")
-    private String name;
+    @SerializedName("accountId")
+    private String accountId;
     @SerializedName("profileImage")
     private String profileImage;
     @SerializedName("storyImage")
     private List<StoryList> storyImage;
 
     public String getName() {
-        return name;
+        return accountId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String accountId) {
+        this.accountId = accountId;
     }
 
     public String getProfileImage() {
@@ -39,18 +39,18 @@ public class StoryResponse {
 
     public static class StoryList {
 
-        public StoryList(int storyId, String image, String createdDate) {
+        public StoryList(int storyId, String storedStoryImage, String createdDt) {
             this.storyId = storyId;
-            this.image = image;
-            this.createdDate = createdDate;
+            this.storedStoryImage = storedStoryImage;
+            this.createdDt = createdDt;
         }
 
         @SerializedName("storyId")
         private int storyId;
-        @SerializedName("image")
-        private String image;
-        @SerializedName("createdDate")
-        private String createdDate;
+        @SerializedName("storedStoryImage")
+        private String storedStoryImage;
+        @SerializedName("createdDt")
+        private String createdDt;
 
 
         public int getStoryId() {
@@ -62,19 +62,19 @@ public class StoryResponse {
         }
 
         public String getImage() {
-            return image;
+            return storedStoryImage;
         }
 
-        public void setImage(String image) {
-            this.image = image;
+        public void setImage(String storedStoryImage) {
+            this.storedStoryImage = storedStoryImage;
         }
 
         public String getCreatedDate() {
-            return createdDate;
+            return createdDt;
         }
 
-        public void setCreatedDate(String createdDate) {
-            this.createdDate = createdDate;
+        public void setCreatedDate(String createdDt) {
+            this.createdDt = createdDt;
         }
     }
 }

@@ -51,12 +51,10 @@ public class RVAdapter_profile extends RecyclerView.Adapter<RVAdapter_profile.Vi
             public void onClick(View view) {
                 MainActivity activity = (MainActivity) context;
 
-                MyPostFrag myPostFrag = new MyPostFrag();
                 Bundle bundle = new Bundle();
-                bundle.putString("postId", mMyImageList.get(position).getPostId()+"");
-                myPostFrag.setArguments(bundle);
+                bundle.putString("postId", String.valueOf(mMyImageList.get(position).getPostId()));
 
-                activity.FragmentView(1);
+                activity.FragmentViewAddBundle(1, bundle);
             }
         });
     }

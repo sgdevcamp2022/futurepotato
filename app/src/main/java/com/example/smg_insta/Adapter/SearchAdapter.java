@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smg_insta.API.Service;
@@ -44,9 +45,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         holder.mTextView.setText(data.get(position));
         
         // 검색한 유저 정보
-        holder.mTextView.setOnClickListener(new View.OnClickListener() {
+        holder.searchItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // FragUserInfo 로..
                 MainActivity activity = (MainActivity) context;
                 Bundle bundle = new Bundle();
                 bundle.putString("userId", data.get(position));
@@ -63,10 +65,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView mTextView;
+        ConstraintLayout searchItem;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mTextView = itemView.findViewById(R.id.tv_searchItem);
+            searchItem = itemView.findViewById(R.id.cl_searchItem);
         }
     }
 }

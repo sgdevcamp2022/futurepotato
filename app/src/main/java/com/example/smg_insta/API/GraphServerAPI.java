@@ -2,6 +2,8 @@ package com.example.smg_insta.API;
 
 import com.example.smg_insta.DTO.FollowListResponse;
 
+import java.util.List;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.DELETE;
@@ -10,6 +12,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface GraphServerAPI {
 
@@ -51,13 +54,11 @@ public interface GraphServerAPI {
     Call<FollowListResponse> getBlockingList(@Path("accountId") String accountId);
 
     // 팔로우 여부 조회
-    @FormUrlEncoded
     @GET("/graph/isFollowing")
-    Call<Boolean> isFollowing(@Field("senderId") String senderId, @Field("recipientId") String recipientId);
+    Call<Boolean> isFollowing(@Query("senderId") String senderId, @Query("recipientId") String recipientId);
 
     // 차단여부 조회
-    @FormUrlEncoded
     @GET("/graph/isBlocking")
-    Call<Boolean> isBlocking(@Field("senderId") String senderId, @Field("recipientId") String recipientId);
+    Call<Boolean> isBlocking(@Query("senderId") String senderId, @Query("recipientId") String recipientId);
 
 }

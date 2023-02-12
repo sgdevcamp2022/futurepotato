@@ -9,26 +9,36 @@ import java.util.List;
 
 public class MypageResponse {
 
-    @SerializedName("name")
-    private String name;
+    @SerializedName("accountName")
+    private String accountName;
+    @SerializedName("accountId")
+    private String accountId;
     @SerializedName("profileImage")
     private String profileImage;
-    @SerializedName("int")
-    private int followerCount;
+    @SerializedName("followCount")
+    private int followCount;
     @SerializedName("followingCount")
     private int followingCount;
     @SerializedName("postCount")
     private int postCount;
-    @SerializedName("imageList")
-    private List<MyImage> imageList;
+    @SerializedName("mypagePostDtos")
+    private List<MyImage> mypagePostDtos;
 
 
     public String getName() {
-        return name;
+        return accountName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public String getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
     }
 
     public String getProfileImage() {return profileImage;}
@@ -36,11 +46,11 @@ public class MypageResponse {
     public void setProfileImage(String profileImage) {this.profileImage = profileImage;}
 
     public int getFollowerCount() {
-        return followerCount;
+        return followCount;
     }
 
-    public void setFollowerCount(int followerCount) {
-        this.followerCount = followerCount;
+    public void setFollowerCount(int followCount) {
+        this.followCount = followCount;
     }
 
     public int getFollowingCount() {
@@ -60,40 +70,40 @@ public class MypageResponse {
     }
 
     public List<MyImage> getImageList() {
-        return imageList;
+        return mypagePostDtos;
     }
 
-    public void setImageList(List<MyImage> imageList) {
-        this.imageList = imageList;
+    public void setImageList(List<MyImage> mypagePostDtos) {
+        this.mypagePostDtos = mypagePostDtos;
     }
 
     public static class MyImage {
 
-        public MyImage(String image, int postId, boolean isMultyImage) {
-            this.image = image;
+        public MyImage(String storedUrl, int postId, boolean isMultyImage) {
+            this.storedUrl = storedUrl;
             this.postId = postId;
             this.isMultyImage = isMultyImage;
         }
 
-        @SerializedName("image")
-        private String image;
+        @SerializedName("storedUrl")
+        private String storedUrl;
         @SerializedName("postId")
         private int postId;
         @SerializedName("isMultyImage")
         private boolean isMultyImage;
+        @SerializedName("multyImage")
+        private boolean multyImage;
+
 
         public String getImage() {
-            return image;
+            return storedUrl;
         }
 
-        public void setImage(String image) {
-            this.image = image;
-        }
+        public void setImage(String storedUrl) {this.storedUrl = storedUrl;}
 
         public int getPostId() {return postId;}
 
         public void setPostId(int postId) {this.postId = postId;}
-
 
         public boolean isMultyImage() {
             return isMultyImage;

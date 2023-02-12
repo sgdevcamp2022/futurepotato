@@ -131,6 +131,12 @@ public class MainActivity extends AppCompatActivity {
                 fragUserInfo.setArguments(bundle);
                 transaction.replace(R.id.main_frame, fragUserInfo).commit();
                 break;
+            case 1:
+                MyPostFrag myPostFrag = new MyPostFrag();
+                myPostFrag.setArguments(bundle);
+                // MyPostFrag에서 뒤로가기 문제 때문에 addToBackStack(null) 추가함
+                transaction.replace(R.id.main_frame, myPostFrag).addToBackStack(null).commit();
+                break;
         }
 
     }

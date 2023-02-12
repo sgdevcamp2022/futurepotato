@@ -11,20 +11,23 @@ import java.util.Map;
 
 public class FeedResponse {
 
-    @SerializedName("Id")
-    private int id; // int형 맞는지 확인
+    @SerializedName("postId")
+    private int postId;
 
-    @SerializedName("name")
-    private String name;
+    @SerializedName("accountId")
+    private String accountId;
+
+    @SerializedName("profileImage")
+    private String profileImage;
 
     @SerializedName("content")
     private String content;
 
-    @SerializedName("createdDate")
-    private String createdDate;
+    @SerializedName("createdDt")
+    private String createdDt;
 
-    @SerializedName("modifiedDate")
-    private String modifiedDate;
+    @SerializedName("modifiedDt")
+    private String modifiedDt;
 
     @SerializedName("likeCount")
     private int likeCount;
@@ -44,94 +47,53 @@ public class FeedResponse {
     @SerializedName("isMultyImage")
     private boolean isMultyImage;
 
-    public ArrayList<String> getImageList() {
-        return imageList;
-    }
+    public int getPostId() {return postId;}
 
-    public void setImageList(ArrayList<String> imageList) {
-        this.imageList = imageList;
-    }
+    public void setPostId(int postId) {this.postId = postId;}
 
-    public boolean isMultyImage() {
-        return isMultyImage;
-    }
+    public String getAccountId() {return accountId;}
 
-    public void setMultyImage(boolean multyImage) {
-        isMultyImage = multyImage;
-    }
+    public void setAccountId(String accountId) {this.accountId = accountId;}
 
-    public int getId() {
-        return id;
-    }
+    public String getProfileImage() {return profileImage;}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public void setProfileImage(String profileImage) {this.profileImage = profileImage;}
 
-    public String getName() {
-        return name;
-    }
+    public String getContent() {return content;}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setContent(String content) {this.content = content;}
 
-    public String getContent() {
-        return content;
-    }
+    public String getCreatedDt() {return createdDt;}
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+    public void setCreatedDt(String createdDt) {this.createdDt = createdDt;}
 
-    public String getCreatedDate() {
-        return createdDate;
-    }
+    public String getModifiedDt() {return modifiedDt;}
 
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
-    }
+    public void setModifiedDt(String modifiedDt) {this.modifiedDt = modifiedDt;}
 
-    public String getModifiedDate() {
-        return modifiedDate;
-    }
+    public int getLikeCount() {return likeCount;}
 
-    public void setModifiedDate(String modifiedDate) {
-        this.modifiedDate = modifiedDate;
-    }
+    public void setLikeCount(int likeCount) {this.likeCount = likeCount;}
 
-    public int getLikeCount() {
-        return likeCount;
-    }
+    public boolean isLikesCheck() {return likesCheck;}
 
-    public void setLikeCount(int likeCount) {
-        this.likeCount = likeCount;
-    }
+    public void setLikesCheck(boolean likesCheck) {this.likesCheck = likesCheck;}
 
-    public boolean isLikesCheck() {
-        return likesCheck;
-    }
+    public int getCommentCount() {return commentCount;}
 
-    public void setLikesCheck(boolean likesCheck) {
-        this.likesCheck = likesCheck;
-    }
+    public void setCommentCount(int commentCount) {this.commentCount = commentCount;}
 
-    public int getCommentCount() {
-        return commentCount;
-    }
+    public ArrayList<Comment> getCommentList() {return commentList;}
 
-    public void setCommentCount(int commentCount) {
-        this.commentCount = commentCount;
-    }
+    public void setCommentList(ArrayList<Comment> commentList) {this.commentList = commentList;}
 
-    public ArrayList<Comment> getCommentList() {
-        return commentList;
-    }
+    public ArrayList<String> getImageList() {return imageList;}
 
-    public void setCommentList(ArrayList<Comment> commentList) {
-        this.commentList = commentList;
-    }
+    public void setImageList(ArrayList<String> imageList) {this.imageList = imageList;}
 
+    public boolean isMultyImage() {return isMultyImage;}
+
+    public void setMultyImage(boolean multyImage) {isMultyImage = multyImage;}
 
     public static class Comment {
 

@@ -2,6 +2,7 @@ package com.example.smg_insta.Adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.smg_insta.API.Service;
 import com.example.smg_insta.DTO.FeedResponse;
+import com.example.smg_insta.MainActivity;
 import com.example.smg_insta.R;
 
 import java.util.ArrayList;
@@ -87,6 +89,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             }
         });
 
+        // 댓글 삭제
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -122,6 +125,18 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                 });
                 popup.show();
                 return true;
+            }
+        });
+
+        // 아이디 클릭시 유저 정보 확인
+        holder.commentWriter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // FragUserInfo 로..
+                MainActivity activity = (MainActivity) context;
+                Bundle bundle = new Bundle();
+                bundle.putString("userId", data.get(position).getCommentWriter());
+                activity.FragmentViewAddBundle(0, bundle);
             }
         });
     }

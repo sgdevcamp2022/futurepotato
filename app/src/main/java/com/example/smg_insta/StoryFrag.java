@@ -2,28 +2,28 @@ package com.example.smg_insta;
 
 import static java.lang.Integer.parseInt;
 
-import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterViewFlipper;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.example.smg_insta.API.Service;
-import com.example.smg_insta.Adapter.ImageSliderAdapter;
 import com.example.smg_insta.Adapter.StorySliderAdapter;
 import com.example.smg_insta.DTO.StoryResponse;
 
@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,8 +40,8 @@ public class StoryFrag extends Fragment {
     private View view;
     private CircleImageView profileImage;
     private TextView userId;
-    private ViewPager2 viewPager;
-    private ImageView btn_back, btn_menu;
+    private AdapterViewFlipper viewFlipper;
+    private ImageView btn_back, btn_menu, btn_add;
 
 
     ArrayList <String> storyImages = new ArrayList<>();     // 번들로 받아올 image
@@ -52,6 +51,7 @@ public class StoryFrag extends Fragment {
     String storyId;
 
     Service dataService = new Service();
+    int delay;
 
     @Nullable
     @Override
@@ -60,9 +60,10 @@ public class StoryFrag extends Fragment {
 
         profileImage = view.findViewById(R.id.civ_stroy_profile);
         userId = view.findViewById(R.id.tv_story_userId);
-        viewPager = view.findViewById(R.id.vp_story);
-        btn_back = view.findViewById(R.id.iv_story_back);
+        viewFlipper = view.findViewById(R.id.avf_story);
+        btn_back = view.findViewById(R.id.iv_btn_storyBack);
         btn_menu = view.findViewById(R.id.iv_story_bar);
+        btn_add = view.findViewById(R.id.iv_story_add);
 
         //-----------test---
         StoryResponse.StoryList test1 = new StoryResponse.StoryList(12, "https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg", "2023-01-01T12:11:00");
@@ -81,43 +82,72 @@ public class StoryFrag extends Fragment {
 
         //------------
 
+        Bundle bundle = getArguments();
+        if(bundle != null){
+            storyImages = bundle.getStringArrayList("image");
+        }
+        accountId = PreferenceManager.getString(getActivity(), "accountID");
 
-        new Handler().postDelayed(new Runnable() {
+        viewFlipper.setAdapter(new StorySliderAdapter(getContext(), storyLists));
+
+        viewFlipper.startFlipping();
+
+        // 내 스토리 조회하기
+        dataService.story.SelectStory(accountId).enqueue(new Callback<StoryResponse>() {
             @Override
-            public void run() {
-                Bundle bundle = getArguments();
-                if(bundle != null){
-                    storyImages = bundle.getStringArrayList("image");
+            public void onResponse(Call<StoryResponse> call, Response<StoryResponse> response) {
+                if(response.isSuccessful()) {
+                    storyResponse = response.body();
+
+                    // 프로필 이미지 설정
+                    Glide.with(getContext())
+                            .load(storyResponse.getProfileImage())
+                            .into(profileImage);
+                    // 유저 아이디 설정
+                    userId.setText(storyResponse.getName());
+
+                    // 일단 스토리 하나만 올린다고 가정했을때....
+                    storyLists = storyResponse.getStoryImage();
+                    viewFlipper.setAdapter(new StorySliderAdapter(requireContext().getApplicationContext(), storyLists));
+
+                    viewFlipper.startFlipping();
                 }
-                accountId = PreferenceManager.getString(getActivity(), "accountID");
-
-                // 내 스토리 조회하기
-                dataService.story.SelectStory(accountId, storyImages.get(0)).enqueue(new Callback<StoryResponse>() {
-                    @Override
-                    public void onResponse(Call<StoryResponse> call, Response<StoryResponse> response) {
-                        storyResponse = response.body();
-
-                        Glide.with(getContext())
-                                .load(storyResponse.getProfileImage())
-                                .into(profileImage);
-                        userId.setText(storyResponse.getName());
-
-                        // 일단 스토리 하나만 올린다고 가정했을때....
-                        //storyLists = storyResponse.getStoryImage();
-                        viewPager.setAdapter(new StorySliderAdapter(requireContext().getApplicationContext(), storyLists));
-
-                    }
-                    @Override
-                    public void onFailure(Call<StoryResponse> call, Throwable t) {t.printStackTrace();}
-                });
-
-                //이동
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                Frag1 mainFrag = new Frag1();
-                transaction.replace(R.id.main_frame, mainFrag).commit();
-
             }
-        }, 4000); // 4초후에
+            @Override
+            public void onFailure(Call<StoryResponse> call, Throwable t) {t.printStackTrace();}
+        });
+
+        // 누르고 있으면..
+        viewFlipper.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) { //눌렀을 때 동작
+                    viewFlipper.stopFlipping();
+                }
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) { //뗐을 때 동작
+                    viewFlipper.startFlipping();
+                }
+                return false;
+            }
+        });
+
+
+
+
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                이동
+//                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                fragmentManager.beginTransaction().remove(StoryFrag.this).commit();
+//                fragmentManager.popBackStack();
+//                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+//                Frag1 mainFrag = new Frag1();
+//                transaction.replace(R.id.main_frame, mainFrag).commit();
+
+//            }
+//        }, 4000); // 4초후에
 
 
         btn_back.setOnClickListener(new View.OnClickListener() {

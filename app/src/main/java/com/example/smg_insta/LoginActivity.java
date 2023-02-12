@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.smg_insta.API.LoginApi;
 import com.example.smg_insta.API.RetrofitClient;
+import com.example.smg_insta.API.Service;
 import com.example.smg_insta.DTO.LoginData;
 import com.example.smg_insta.DTO.LoginResponse;
 
@@ -29,10 +30,11 @@ public class LoginActivity extends AppCompatActivity {
     private EditText email, password;
     private Button signUp;
     private TextView join;
-    private LoginApi service;
+    //private LoginApi service;
 
     String accountId;
     String accountPw;
+    Service service;
 
     String JWT,ID= "";
     //Bundle JWTbundle;
@@ -49,14 +51,15 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.et_login_email);
         password = findViewById(R.id.et_login_pw);
 
-        service = RetrofitClient.getClient().create(LoginApi.class);
+        //service = RetrofitClient.getClient().create(LoginApi.class);
+        service = new Service();
 
         // 자동 로그인..?
         String accountID = PreferenceManager.getString(getApplicationContext(), "accountID");
         String accountPW = PreferenceManager.getString(getApplicationContext(), "accountPW");
         if (!accountID.isEmpty() && !accountPW.isEmpty()) {
             LoginData data = new LoginData(accountID, accountPW);
-            service.userLogin(data).enqueue(new Callback<LoginResponse>() {
+            service.login.userLogin(data).enqueue(new Callback<LoginResponse>() {
                 @Override
                 public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                     Toast.makeText(LoginActivity.this, "자동로그인 되었습니다.", Toast.LENGTH_SHORT).show();
@@ -125,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void startLogin(LoginData data) {
-        service.userLogin(data).enqueue(new Callback<LoginResponse>() {
+        service.login.userLogin(data).enqueue(new Callback<LoginResponse>() {
 
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {

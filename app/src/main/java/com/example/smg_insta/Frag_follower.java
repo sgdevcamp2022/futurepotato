@@ -18,6 +18,7 @@ import com.example.smg_insta.Adapter.RVAdapter_story;
 import com.example.smg_insta.DTO.FollowListResponse;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,6 +30,7 @@ public class Frag_follower extends Fragment {
 
     Service dataService = new Service();
     String accountID;
+    Bundle bundle;
 
     ArrayList<FollowListResponse.Follow> followerData = new ArrayList<>();
 
@@ -37,7 +39,13 @@ public class Frag_follower extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup view = (ViewGroup) inflater.inflate(R.layout.follower_list_frag, container, false);
 
-        accountID = PreferenceManager.getString(getActivity(), "accountID");
+        bundle = getArguments();
+        if(bundle != null) {
+            accountID = bundle.getString("userId");
+        } else {
+            accountID = PreferenceManager.getString(getActivity(), "accountID");
+        }
+
 
         mRecyclerView = view.findViewById(R.id.rcv_followerList);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -45,20 +53,20 @@ public class Frag_follower extends Fragment {
 
 
         //------test
-        followerData.add(new FollowListResponse.Follow(1, "test2", "nameTest2", "https://cdn.pixabay.com/photo/2020/09/02/18/03/girl-5539094_1280.jpg"));
-        followerData.add(new FollowListResponse.Follow(2, "test3", "nameTest3", "https://cdn.pixabay.com/photo/2020/09/02/18/03/girl-5539094_1280.jpg"));
+        //followerData.add(new FollowListResponse.Follow(1, "test2", "nameTest2", "https://cdn.pixabay.com/photo/2020/09/02/18/03/girl-5539094_1280.jpg"));
+        //followerData.add(new FollowListResponse.Follow(2, "test3", "nameTest3", "https://cdn.pixabay.com/photo/2020/09/02/18/03/girl-5539094_1280.jpg"));
 
 
         //---------
 
-        mRecyclerView.setAdapter(new FollowerListAdapter(followerData, getContext(), dataService));
+        //mRecyclerView.setAdapter(new FollowerListAdapter(followerData, getContext(), dataService));
 
         // 리싸이클러뷰 어뎁터 만들어서 연결하기!
         dataService.graph.readFollower(accountID).enqueue(new Callback<FollowListResponse>() {
             @Override
             public void onResponse(Call<FollowListResponse> call, Response<FollowListResponse> response) {
                 if(response.isSuccessful()) {
-                    //followerData = response.body().getData();
+                    followerData = response.body().getData();
                     mRecyclerView.setAdapter(new FollowerListAdapter(followerData, getContext(), dataService));
                     Toast.makeText(getContext(), "연결 성공.", Toast.LENGTH_LONG).show();
                 }
@@ -69,6 +77,7 @@ public class Frag_follower extends Fragment {
 
             @Override
             public void onFailure(Call<FollowListResponse> call, Throwable t) {
+                t.printStackTrace();
                 Toast.makeText(getContext(), "연결 실패.", Toast.LENGTH_LONG).show();
             }
         });

@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,7 +48,7 @@ public class Frag1 extends Fragment {
     private View view;
     //private TextView id, profile, content, like, explain, comment_count;
     private CircleImageView myStory;
-    private EditText et_search;
+    private LinearLayout searchBox;
 
     private RecyclerView mRV_post;
     //private RVAdapter_post mRVAdapter_post;  serAdapter함수 만ㄷ르어서 사용함.
@@ -71,7 +72,7 @@ public class Frag1 extends Fragment {
 
         accountId = PreferenceManager.getString(getActivity(), "accountID");
 
-        et_search = view.findViewById(R.id.et_search);
+        searchBox = view.findViewById(R.id.lL_searchBox);
 
         //---테스트 더미데이터----
 
@@ -185,7 +186,7 @@ public class Frag1 extends Fragment {
                     // 개인 스토리 따로 뺄 수 있는지 얘기해보기! -> accountId로 조회?
                     bundle.putStringArrayList("image", (ArrayList<String>) MyStories);
                     storyFrag.setArguments(bundle);
-                    transaction.replace(R.id.main_frame, storyFrag).commit();
+                    transaction.replace(R.id.main_frame, storyFrag).addToBackStack(null).commit();
 
                 } else {    // 스토리가 없으면
                     Toast.makeText(getContext(), "길게 눌러서 스토리를 생성하세요..", Toast.LENGTH_LONG).show();
@@ -223,7 +224,7 @@ public class Frag1 extends Fragment {
 
 
         // 검색 기능!
-        et_search.setOnClickListener(new View.OnClickListener() {
+        searchBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), SearchActivity.class);

@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,7 +20,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class StorySliderAdapter extends RecyclerView.Adapter<StorySliderAdapter.SliderViewHolder>{
+public class StorySliderAdapter extends BaseAdapter {
     private static final String TAG = "SliderAdapter";
 
     private Context mContext;
@@ -30,40 +31,30 @@ public class StorySliderAdapter extends RecyclerView.Adapter<StorySliderAdapter.
         this.sliderItems = sliderImage;
     }
 
-    @NonNull
     @Override
-    public SliderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.story_slide_item, parent, false);
-        return new StorySliderAdapter.SliderViewHolder((ImageView) view);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull SliderViewHolder holder, int position) {
-        holder.bind(sliderItems.get(position).getImage());
-
-    }
-
-    @Override
-    public int getItemCount() {
+    public int getCount() {
         return sliderItems.size();
     }
 
-    class SliderViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public Object getItem(int i) {
+        return sliderItems.get(i);
+    }
 
-        private ImageView mImageView;
+    @Override
+    public long getItemId(int i) {
+        return i;
+    }
 
-        public SliderViewHolder(@NonNull View itemView) {
-            super(itemView);
-            mImageView = itemView.findViewById(R.id.tv_storyImage);
-        }
+    @Override
+    public View getView(int i, View view, ViewGroup parent) {
+        view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.story_slide_item, parent, false);
 
-        void bind(String sliderItem) {
-            try {
-                Glide.with(mContext).load(sliderItem).into(mImageView);
-            } catch (Exception e) {
-                Log.d(TAG, "ERROR: " + e.getMessage());
-            }
-        }
+        ImageView mImageView = view.findViewById(R.id.iv_storyImage);
+        Glide.with(mContext)
+                .load(sliderItems.get(i).getImage())
+                .into(mImageView);
+        return view;
     }
 }
