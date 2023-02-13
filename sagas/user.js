@@ -204,6 +204,29 @@ function* watchIsFolloing(){
     yield takeLatest('GET_IS_FOLLOING_REQUEST', isFollow);
 }
 
+function editProfileImageAPI(data){
+    return axios.post(`feed/profileImage/${data.accountId}`,{image:data.image});
+}
+
+function* editProfileImage(action){
+    try{
+        //const result = yield call(editProfileImageAPI, action.data);
+        yield put({
+            type:'PROFILE_IMAGE_SUCCESS',
+            //data:result.result,
+        })
+    }catch(err){
+        yield put({
+            type:'PROFILE_IMAGE_FAILURE',
+            data:err.response.data,
+        })
+    }
+}
+
+function* watchProfileImage() {
+    yield takeLatest('PROFILE_IMAGE_REQUEST', editProfileImage);
+}
+
 export default function* userSaga(){
     yield all([
         fork(watchLogIn),
@@ -214,5 +237,6 @@ export default function* userSaga(){
         fork(watchFollow),
         fork(watchFollowCancel),
         fork(watchIsFolloing),
+        fork(watchProfileImage),
     ])
 }

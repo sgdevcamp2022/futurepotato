@@ -25,25 +25,30 @@ const dummyData = {
     {"name" : "user1", "profileImage" : "/cover 3.png"},
     {"name" : "user1", "profileImage" : "/cover 3.png"}],
     "postList" : [
-        {id:1, name : "user1", "content": "게시글1","createdDate": "2023-01-01T12:11:00",
-                "modifiedDate": "2023-01-01T13:11:00",
+        {postId:1, accountId : "user1", "content": "게시글1","createdDt": "2023-01-01T12:11:00",
+                "modifiedDt": "2023-01-01T13:11:00",
                 likeCount: 12,
                 likesCheck: true,
                 "commentCount": 110,
                 "profileImage" : '/cover 1.png',
                 "commentList" : [{
                 "commentWriter": "user2",
-                "Image": "/cover 3.png",
+                "profileImage": "/cover 3.png",
                 "comment": "게시글 댓글1",
                 "likeCount": 100,
                 'commentId' : 1,
+                'replyCount' : 2,
+                'createdDt' : "2023-02-10T12:18:57.614259",
                 "replyList":[{
+                            'replyId':3,
                             "replyWriter": "user1", "reply":"reply1",
+                            'profileImage': '/cover 8.png',
                             "createdDt":""
                         },
                         {
+                            'replyId':1,
                             "replyWriter": "user2", "reply":"reply2",
-                            "image":"dsfj.png",
+                            "profileImage":'/cover 8.png',
                             "createdDt":""
                         },
                     ]}
@@ -140,7 +145,6 @@ const reducer = (state = initialMainState, action) => produce(state, (draft) => 
         case 'ADD_POST_SUCCESS':{
             draft.postList.unshift(dummyPost);
             draft.clearUpload = true;
-            draft.newImage = [];
             break;
         }
         case 'ADD_POST_FAILURE':
@@ -205,8 +209,13 @@ const reducer = (state = initialMainState, action) => produce(state, (draft) => 
 
         case 'ADD_REPLY_REQUEST':
             break;
-        case 'ADD_REPLY_SUCCESS':
+        case 'ADD_REPLY_SUCCESS':{
+            console.log("ssssssss");
+            const comment = draft.postList[0].commentList.findIndex((v) => v.commentId == action.data.commentId)
+            draft.postList[0].commentList[comment].replyList.push({"replyWriter": "user1", "reply":action.data.reply,
+            'image': '/cover 8.png',})
             break;
+        }
         case 'ADD_REPLY_FAILURE':
             break;
 

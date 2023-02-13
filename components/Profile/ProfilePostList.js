@@ -8,7 +8,7 @@ const ProfilePostList = () => {
         <>
         {profileData.imageList.map((v, index) => (
             <div key={index}>
-                <ProfilePost image = {v.image}/>
+                <ProfilePost image = {v.image} postId = {v.postId}/>
             </div>
         ))}
         </>

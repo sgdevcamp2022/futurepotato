@@ -11,27 +11,19 @@ const NewPostText = (props) => {
     const {me} = useSelector((state) => state.user);
     const {newImage} = useSelector((state) => state.mainpage);
     console.log(newImage[0]);
+    
     const imageSource = window.URL.createObjectURL(newImage[0].get('image'));
+    
     const [postText, setPostText] = useState('');
     const onChangePostText = useCallback((e) => {
         setPostText(e.target.value);
     }, []);
 
-    const [currentSlide, setCurrentSlide] = useState(0);
-    const settings = {
-        dote:true,
-        infinite:true,
-        speed:500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-    }
-
-
-
     const onSubmit = () =>{
         props.isEdit ? dispatch({type:'MOD_POST_REQUEST', data:postText, dataId:me.accountId})
         : dispatch({type:'ADD_POST_REQUEST', dataId:me.accountId, data:postText, dataImage:newImage});
     }
+
     return(
         <div className="flex-center">
             <div className="modal_window" >

@@ -11,7 +11,6 @@ import 'slick-carousel/slick/slick-theme.css';
 const DetailPage = (props) => {
     const {postList} = useSelector((state) => state.mainpage);
     const item = postList.filter((v) => v.id == props.id ? v : null);
-    console.log(item);
     const [currentSlide, setCurrentSlide] = useState(0);
     const settings = {
         dote:true,
@@ -29,8 +28,8 @@ const DetailPage = (props) => {
                     <Slider {...settings} 
                         afterChange={(slide) => setCurrentSlide(slide)}
                     >
-                        {item[0].imageList.map((i) => (
-                            <img src={i.image} className="post-image" alt="" />
+                        {item[0].imageList.map((i, index) => (
+                            <img key={index} src={i.image} className="post-image" alt="" />
                         ))}
                     </Slider>   
                 </div>

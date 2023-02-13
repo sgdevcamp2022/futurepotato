@@ -175,6 +175,13 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
             case 'GET_IS_FOLLOING_FAILURE':
                 break;
 
+            case 'PROFILE_IMAGE_REQUEST':
+                break;
+            case 'PROFILE_IMAGE_SUCCESS':
+                break;
+            case 'PROFILE_IMAGE_FAILURE':
+                break;
+
             case 'LOG_OUT' :
                 localStorage.clear();
                 draft.isLoggedIn = false;

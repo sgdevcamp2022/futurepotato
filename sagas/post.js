@@ -2,7 +2,7 @@ import axios from "axios";
 import { all , fork, takeLatest, put, call, putResolve, take, } from "redux-saga/effects";
 
 function checkPostAPI(postId){
-    return axios.get(`/media/${postId}`);
+    return axios.get(`feed/media/${postId}`);
 }
 
 function* checkPost(action){
@@ -109,7 +109,7 @@ function* addReply(action){
         //const result = yield call(addReplyAPI, action.data);
         yield put({
             type:'ADD_REPLY_SUCCESS',
-            //data:1,
+            data:action.data,
         })
     }catch(err){
         yield put({

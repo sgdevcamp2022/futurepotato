@@ -29,7 +29,7 @@ const CommentForm = (props) => {
             <div className="comment-wrapper">
                 <img src="/smile.PNG" className="icon" alt="" />
                 <input type="text" className="comment-box" placeholder="Add a comment"  value={comment} onChange={onChangeComment}/>
-                <button className="comment-btn" onClick={onSubmit}>post</button>
+                <button className="comment-btn" onClick={onSubmit} style={{cursor:'pointer'}}>post</button>
             </div>
             </div>
     );

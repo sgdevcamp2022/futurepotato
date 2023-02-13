@@ -3,10 +3,12 @@ import { useState } from 'react';
 import FolloingModal from '../FollowFolloing/FolloingModal';
 import FollowModal from '../FollowFolloing/FollowModal';
 import { useDispatch, useSelector } from 'react-redux';
+import ProfileEditForm from '../Comment/ProfileEditForm';
 
 const ProfileHead = (prop) => {
     const isMe = prop.isMe;
 
+    const [profileEdit, setProfileEdit] = useState(false);
     const [followOpen, setFollowOpen] = useState(false);
     const [follingOpen, setFollingOpen] = useState(false);
     const {profileData, isFollowing} = useSelector((state) => state.user);
@@ -27,6 +29,12 @@ const ProfileHead = (prop) => {
         dispatch({type:'GET_FOLLOING_REQUEST'});
     }
 
+    const onClickProfileOrFollow = () => {
+        if(isMe){
+            setProfileEdit(true);
+        }
+    }
+
     return (
         <header>
             <div className="container">
@@ -36,7 +44,7 @@ const ProfileHead = (prop) => {
                     </div>
                     <div className="profile-user-settings">
                         <h1 className="profile-user-name">{profileData.name}</h1>
-                        <button className="btn profile-edit-btn">{isMe ? "프로필 편집" : isFollowing ? "팔로우" : "맞팔로우 하기"}</button>
+                        <button className="btn profile-edit-btn" onClick={onClickProfileOrFollow}>{isMe ? "프로필 편집" : isFollowing ? "팔로우" : "맞팔로우 하기"}</button>
                         <button className="btn profile-settings-btn" aria-label="profile settings"><img src="/setting.png" width="17px"/></button>
 					</div>
 
@@ -59,7 +67,7 @@ const ProfileHead = (prop) => {
                         }}>
                         <FolloingModal />
                     </Modal>
-                    <Modal isOpen = {follingOpen} onRequestClose = {() => setFollingOpen(false)}  style={{content:{
+                    <Modal isOpen = {profileEdit} onRequestClose = {() => setProfileEdit(false)}  style={{content:{
                             position: "relative",
                             display: "inline-flex",
                             left: "50%",
@@ -70,6 +78,21 @@ const ProfileHead = (prop) => {
                             },
                         }}>
                         <FollowModal />
+                    </Modal>
+                    
+                    <Modal isOpen={profileEdit} onRequestClose={()=>setProfileEdit(false)}
+                        style={{content:{
+                            position: "relative",
+                            display: "inline-flex",
+                            left: "50%",
+                            top: "50%",
+                            transform: "translate(-50%, -50%)",
+                            padding: 0,
+                            borderRadius: 13,
+                            },
+                        }}
+                    >
+                        <ProfileEditForm />
                     </Modal>
 
 			        <div className="profile-bio">
