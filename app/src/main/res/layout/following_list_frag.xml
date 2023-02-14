@@ -19,7 +19,22 @@
         android:layout_height="729dp"
         android:layout_marginTop="1dp"
         android:layout_marginEnd="1dp"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3"
-        tools:listitem="@layout/cardview_follow" />
+        tools:listitem="@layout/cardview_follow">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/tv_noFollowing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:gravity="center|center_vertical"
+        android:text="내가 팔로우한 사람이 없습니다."
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -39,7 +39,7 @@ public class Frag5 extends Fragment {
 
     private View view;
     private ImageView btn_addContent, btn_setup, userImage;
-    private TextView userId, post, following, follower;
+    private TextView userId, userName, post, following, follower;
     private RecyclerView account_recyclerview;
     private Button btn_edit_profile;
     private LinearLayout linearLayout_follower, linearLayout_following;
@@ -68,6 +68,7 @@ public class Frag5 extends Fragment {
 
         //--------마이페이지 테스트 더미데이터-----------------
         MypageResponse testData = new MypageResponse();
+        testData.setAccountId("_id_Test1");
         testData.setName("_user1_test_");
         testData.setProfileImage("https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg");
         testData.setFollowerCount(101);
@@ -89,6 +90,7 @@ public class Frag5 extends Fragment {
         userImage = view.findViewById(R.id.iv_account_profile);
         userId = view.findViewById(R.id.tv_myInfo_id);
         userId.setText(accountId);
+        userName = view.findViewById(R.id.tv_info_myName);
 
         post = view.findViewById(R.id.tv_postCount);
         following = view.findViewById(R.id.tv_followingCount);
@@ -114,7 +116,7 @@ public class Frag5 extends Fragment {
 
         // 1. mypage 정보 보여주기
         dataService.selectMyPage.SelectMyPage(accountId).enqueue(new Callback<MypageResponse>() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
+            //@RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(Call<MypageResponse> call, Response<MypageResponse> response) {
                 feeds = response.body();
@@ -122,12 +124,15 @@ public class Frag5 extends Fragment {
                 if(feeds != null) {
                     List<MypageResponse.MyImage> myImages = feeds.getImageList();
                     adapter = new RVAdapter_profile(myImages, getContext(), dataService);
-                    userId.setText(feeds.getName());
-                    userImage.setImageURI(Uri.parse(feeds.getProfileImage()));
+                    userId.setText(feeds.getAccountId());
+                    userName.setText(feeds.getName());
+                    if (feeds.getProfileImage() != null) {
+                        userImage.setImageURI(Uri.parse(feeds.getProfileImage()));
+                    }
 
-                    post.setText(feeds.getPostCount());
-                    following.setText(feeds.getFollowingCount());
-                    follower.setText(feeds.getFollowerCount());
+                    post.setText(feeds.getPostCount()+"");
+                    following.setText(feeds.getFollowingCount()+"");
+                    follower.setText(feeds.getFollowerCount()+"");
                 }
 
             }
@@ -176,7 +181,7 @@ public class Frag5 extends Fragment {
                 // 아니면 게시물 조회에 프로필 사진 추가 부탁
                 PreferenceManager.setString(getContext(), "profileImage", String.valueOf(userImage));
 
-                transaction.replace(R.id.main_frame, editProfileFrag).commit();
+                transaction.replace(R.id.main_frame, editProfileFrag).addToBackStack(null).commit();
 
             }
         });

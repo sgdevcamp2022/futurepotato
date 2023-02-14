@@ -3,6 +3,7 @@ package com.example.smg_insta.DTO;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FollowListResponse {
 
@@ -21,9 +22,7 @@ public class FollowListResponse {
         return error;
     }
 
-    public void setError(String error) {
-        this.error = error;
-    }
+    public void setError(String error) {this.error = error;}
 
     public ArrayList<Follow> getData() {
         return data;
@@ -35,7 +34,7 @@ public class FollowListResponse {
 
     public static class Follow {
 
-        public Follow(int id, String accountId, String accountName, String profileImage) {
+        public Follow(String id, String accountId, String accountName, String profileImage) {
             this.id = id;
             this.accountId = accountId;
             this.accountName = accountName;
@@ -43,19 +42,24 @@ public class FollowListResponse {
         }
 
         @SerializedName("id")
-        private int id;
+        private String id;
         @SerializedName("accountId")
         private String accountId;
         @SerializedName("accountName")
         private String accountName;
         @SerializedName("profileImage")
         private String profileImage;
+        @SerializedName("followingList")
+        private List<String> followingList;
+        @SerializedName("blockingList")
+        private List<String> blockingList;
 
-        public int getId() {
+
+        public String getId() {
             return id;
         }
 
-        public void setId(int id) {
+        public void setId(String id) {
             this.id = id;
         }
 

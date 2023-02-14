@@ -29,6 +29,7 @@ import com.example.smg_insta.DTO.MypageResponse;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,7 +39,8 @@ public class FragUserInfo extends Fragment {
 
     private View view;
 
-    private ImageView btn_back, btn_menu, profileImage;
+    private ImageView btn_back, btn_menu;
+    private CircleImageView profileImage;
     private TextView userId, userName, postCount, follower, following;
     private Button btnFollow, btnUnfollow;
     private LinearLayout linearLayout_follower, linearLayout_following;
@@ -58,6 +60,8 @@ public class FragUserInfo extends Fragment {
 
         bundle = getArguments();
         id = bundle.getString("userId");
+
+        myId = PreferenceManager.getString(getActivity(),"accountID");
 
         // 1. 뒤로가기
         // remove하니까 빈 화면 떠서.. 메인페이지로 넘어가게끔 했는데
@@ -198,18 +202,20 @@ public class FragUserInfo extends Fragment {
                 if(response.body() != null) {
                     MypageResponse data = response.body();
                     // 프로필 이미지 설정
-                    Glide.with(getActivity())
-                        .load(data.getProfileImage())
-                        .into(profileImage);
+                    if(data.getProfileImage() != null) {
+                        Glide.with(getActivity())
+                                .load(data.getProfileImage())
+                                .into(profileImage);
+                    }
 
                     // 유저 아이디/이름
                     userId.setText(data.getAccountId());
                     userName.setText(data.getName());
 
                     // count
-                    postCount.setText(data.getPostCount());
-                    follower.setText(data.getFollowerCount());
-                    following.setText(data.getFollowingCount());
+                    postCount.setText(data.getPostCount()+"");
+                    follower.setText(data.getFollowerCount()+"");
+                    following.setText(data.getFollowingCount()+"");
 
                     // feed들
                     mRecyclerView.setAdapter(new RVAdapter_profile(data.getImageList(), getContext(), dataService));
@@ -238,6 +244,7 @@ public class FragUserInfo extends Fragment {
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if(response.isSuccessful()) {
                             checkFollow(myId, id);
+                            Toast.makeText(getContext(), "언팔 ㅅ성공", Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(getContext(), "ErrorCode: "+response.code(), Toast.LENGTH_SHORT).show();
                         }
@@ -258,6 +265,7 @@ public class FragUserInfo extends Fragment {
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if(response.isSuccessful()) {
                             checkFollow(myId, id);
+                            Toast.makeText(getContext(), "팔로우 성공", Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(getContext(), "ErrorCode: "+response.code(), Toast.LENGTH_SHORT).show();
                         }
@@ -302,31 +310,38 @@ public class FragUserInfo extends Fragment {
         dataService.graph.isFollowing(SenderId, recipientId).enqueue(new Callback<Boolean>() {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                if(response.isSuccessful() && response.body()) {
-                    // 팔로우 하고 있을 때
-                    // 버튼 팔로잉(회색) 으로 바꾸기
-                    btnFollow.setVisibility(View.GONE);
-                    btnUnfollow.setVisibility(View.VISIBLE);
-                }
+                if(response.isSuccessful()) {
+                    if (response.body()) {
+                        // 팔로우 하고 있을 때
+                        // 버튼 팔로잉(회색) 으로 바꾸기
+                        btnFollow.setVisibility(View.GONE);
+                        btnUnfollow.setVisibility(View.VISIBLE);
+                        Toast.makeText(getContext(), "현재 팔로우하고 있음, 팔로잉 버튼", Toast.LENGTH_LONG).show();
+                    } else {
+                        //팔로우 안하고 있을 때
+                        dataService.graph.isFollowing(recipientId, SenderId).enqueue(new Callback<Boolean>() {
+                            @Override
+                            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                                if (response.isSuccessful() && response.body()) {
+                                    // 맞팔하기 버튼 추가하기
 
-                else {
-                    //팔로우 안하고 있을 때
-                    dataService.graph.isFollowing(recipientId, SenderId).enqueue(new Callback<Boolean>() {
-                        @Override
-                        public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                            if(response.isSuccessful() && response.body()) {
-                                // 맞팔하기 버튼 추가하기
-
-
-                            } else {
-                                // 팔로우 버튼
-                                btnFollow.setVisibility(View.VISIBLE);
-                                btnUnfollow.setVisibility(View.GONE);
+                                    Toast.makeText(getContext(), "현재 팔로우ㄴ, 근데 쟤는 나 팔로우, 맞팔 버튼 추가", Toast.LENGTH_LONG).show();
+                                } else {
+                                    // 팔로우 버튼
+                                    btnFollow.setVisibility(View.VISIBLE);
+                                    btnUnfollow.setVisibility(View.GONE);
+                                    Toast.makeText(getContext(), "현재 팔로우ㄴㄴ, 팔로우버튼", Toast.LENGTH_LONG).show();
+                                }
                             }
-                        }
-                        @Override
-                        public void onFailure(Call<Boolean> call, Throwable t) {t.printStackTrace();}
-                    });
+
+                            @Override
+                            public void onFailure(Call<Boolean> call, Throwable t) {
+                                t.printStackTrace();
+                            }
+                        });
+                    }
+                } else {
+                    Toast.makeText(getContext(), "isFollowing error: " + response.code(), Toast.LENGTH_LONG).show();
                 }
             }
             @Override

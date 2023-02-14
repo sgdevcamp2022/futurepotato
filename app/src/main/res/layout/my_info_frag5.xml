@@ -27,8 +27,9 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_marginStart="8dp"
-            android:gravity="left"
+            android:gravity="center|left"
             android:text="user_id"
+            android:textAllCaps="true"
             android:textColor="#000000"
             android:textSize="22dp" />
 

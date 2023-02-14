@@ -1,9 +1,11 @@
 package com.example.smg_insta;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,12 +29,13 @@ import retrofit2.Response;
 public class Frag_follower extends Fragment {
 
     private RecyclerView mRecyclerView;
+    private TextView mTextView;
 
     Service dataService = new Service();
     String accountID;
     Bundle bundle;
 
-    ArrayList<FollowListResponse.Follow> followerData = new ArrayList<>();
+    List<FollowListResponse.Follow> followerData = new ArrayList<>();
 
     @Nullable
     @Override
@@ -46,7 +49,7 @@ public class Frag_follower extends Fragment {
             accountID = PreferenceManager.getString(getActivity(), "accountID");
         }
 
-
+        mTextView = view.findViewById(R.id.tv_noFollower);
         mRecyclerView = view.findViewById(R.id.rcv_followerList);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(layoutManager);
@@ -55,8 +58,6 @@ public class Frag_follower extends Fragment {
         //------test
         //followerData.add(new FollowListResponse.Follow(1, "test2", "nameTest2", "https://cdn.pixabay.com/photo/2020/09/02/18/03/girl-5539094_1280.jpg"));
         //followerData.add(new FollowListResponse.Follow(2, "test3", "nameTest3", "https://cdn.pixabay.com/photo/2020/09/02/18/03/girl-5539094_1280.jpg"));
-
-
         //---------
 
         //mRecyclerView.setAdapter(new FollowerListAdapter(followerData, getContext(), dataService));
@@ -69,18 +70,26 @@ public class Frag_follower extends Fragment {
                     followerData = response.body().getData();
                     mRecyclerView.setAdapter(new FollowerListAdapter(followerData, getContext(), dataService));
                     Toast.makeText(getContext(), "연결 성공.", Toast.LENGTH_LONG).show();
+                    if(followerData.size() > 0) {
+                        mRecyclerView.setVisibility(View.VISIBLE);
+                        mTextView.setVisibility(View.GONE);
+                    } else {
+                        mRecyclerView.setVisibility(View.GONE);
+                        mTextView.setVisibility(View.VISIBLE);
+                    }
                 }
                 else {
-                    Toast.makeText(getContext(), "followerList Error: " + response.code(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "followerList Error: " + response.code() + response.message(), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<FollowListResponse> call, Throwable t) {
                 t.printStackTrace();
-                Toast.makeText(getContext(), "연결 실패.", Toast.LENGTH_LONG).show();
+                Log.e("FollowerList Error: ", "연결 실패");
             }
         });
+
 
 
         return view;

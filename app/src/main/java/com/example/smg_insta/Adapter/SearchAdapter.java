@@ -1,7 +1,10 @@
 package com.example.smg_insta.Adapter;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +16,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smg_insta.API.Service;
+import com.example.smg_insta.CommentsActivity;
 import com.example.smg_insta.MainActivity;
 import com.example.smg_insta.R;
+import com.example.smg_insta.SearchActivity;
 
 import java.util.List;
 
@@ -48,11 +53,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         holder.searchItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // FragUserInfo 로..
-                MainActivity activity = (MainActivity) context;
-                Bundle bundle = new Bundle();
-                bundle.putString("userId", data.get(position));
-                activity.FragmentViewAddBundle(0, bundle);
+                Intent intent = new Intent(context, MainActivity.class);
+                intent.putExtra("searchId", data.get(position));
+                context.startActivity(intent.addFlags(FLAG_ACTIVITY_NEW_TASK));
             }
         });
         

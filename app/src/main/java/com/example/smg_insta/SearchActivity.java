@@ -1,6 +1,8 @@
 package com.example.smg_insta;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.widget.SearchView;
@@ -9,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -76,12 +79,14 @@ public class SearchActivity extends AppCompatActivity {
         dataService.search.searchUser(text).enqueue(new Callback<List<String>>() {
             @Override
             public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                Log.e("TAG", "response.body(): " + response.body());
                 if(response.isSuccessful()) {
                     if (response.body().size() > 0) {
                         mRecyclerView.setAdapter(new SearchAdapter(response.body(), getApplicationContext(), dataService));
                     }
                     else {
-                        // 검색 값이 없습니다. 띄우기..
+                        // 검색 값이 없습니다. 띄우기.. -> textView 추가하기!
+                        Toast.makeText(getApplicationContext(), "검색값이 없습니다.", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     Toast.makeText(getApplicationContext(), "ErrorCode: " + response.code(), Toast.LENGTH_LONG).show();

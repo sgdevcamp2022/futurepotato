@@ -65,6 +65,7 @@ public class Frag_blockList extends Fragment {
                         blockList = response.body().getData();
                         if(blockList.size() == 0) {
                             explain.setVisibility(View.VISIBLE);
+                            Toast.makeText(getContext(), "연결 성공: 차단된 계정 없음", Toast.LENGTH_LONG).show();
                         } else {
                             explain.setVisibility(View.GONE);
                             mRecyclerView.setAdapter(new BlockingListAdapter(blockList, getContext(), dataService));
@@ -94,6 +95,7 @@ public class Frag_blockList extends Fragment {
                         blockList = response.body().getData();
                         if(blockList.size() == 0) {
                             explain.setVisibility(View.VISIBLE);
+                            Toast.makeText(getContext(), "연결 성공: 차단한 계정 없음", Toast.LENGTH_LONG).show();
                         } else {
                             explain.setVisibility(View.GONE);
                             mRecyclerView.setAdapter(new BlockerListAdapter(blockList, getContext(), dataService));

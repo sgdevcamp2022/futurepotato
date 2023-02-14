@@ -24,10 +24,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FollowerListAdapter extends RecyclerView.Adapter<FollowerListAdapter.ViewHolder>{
     private Context context;
-    private ArrayList<FollowListResponse.Follow> data;
+    private List<FollowListResponse.Follow> data;
     private Service dataService;
 
-    public FollowerListAdapter(ArrayList<FollowListResponse.Follow> data, Context context, Service dataService) {
+    public FollowerListAdapter(List<FollowListResponse.Follow> data, Context context, Service dataService) {
         this.data = data;
         this.context = context;
         this.dataService = dataService;

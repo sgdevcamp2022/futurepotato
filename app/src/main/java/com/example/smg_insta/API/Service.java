@@ -19,6 +19,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
@@ -34,9 +35,9 @@ public class Service {
     //private String BASE_URL = "http://192.168.0.28:8000";
 
     OkHttpClient okHttpClient = new OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
+            .connectTimeout(15, TimeUnit.SECONDS)
+            .writeTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(15, TimeUnit.SECONDS)
             .build();
 
 
@@ -87,7 +88,7 @@ public class Service {
 
         @Multipart
         @POST("/feed/{accountId}/media")
-        Call<ResponseBody> insertOne(@Path("accountId") String accountId, @Part("content") String content, @Part ArrayList<MultipartBody.Part> files);
+        Call<ResponseBody> insertOne(@Path("accountId") String accountId, @Part("content") String content, @Part List<MultipartBody.Part> files);
 
         @FormUrlEncoded
         @PATCH("/feed/{accountId}/media/{postId}")

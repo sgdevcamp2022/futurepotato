@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -161,6 +162,8 @@ public class EditProfileFrag extends Fragment {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             // 성공
+                            Toast.makeText(getContext(), "이름 바꿈.", Toast.LENGTH_SHORT).show();
+
                         }
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {t.printStackTrace();}
@@ -188,9 +191,17 @@ public class EditProfileFrag extends Fragment {
                 }
 
 
-                // 프로필 화면으로 넘어가기
-                //MainActivity activity = (MainActivity)getActivity();// 프래그먼트에서 메인엑티비티 접근
-                //activity.FragmentView(2);
+                // 1초 후 프로필 화면으로 넘어가기
+                new Handler().postDelayed(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        //딜레이 후 시작할 코드 작성
+                        MainActivity activity = (MainActivity)getActivity();// 프래그먼트에서 메인엑티비티 접근
+                        activity.FragmentView(2);
+                    }
+                }, 1000);
             }
         });
 

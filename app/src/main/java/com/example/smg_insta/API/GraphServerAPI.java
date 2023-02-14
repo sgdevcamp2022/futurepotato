@@ -17,7 +17,7 @@ import retrofit2.http.Query;
 public interface GraphServerAPI {
 
     // 팔로워 목록 조회
-    @GET("/graph/{accountId}/followers")
+    @GET("/graph/{accountId}/follower")
     Call<FollowListResponse> readFollower(@Path("accountId") String accountId);
 
     // 팔로잉 목록 조회
@@ -25,9 +25,8 @@ public interface GraphServerAPI {
     Call<FollowListResponse> readFollowing(@Path("accountId") String accountId);
 
     // 팔로우 등록
-    @FormUrlEncoded
     @POST("/graph/follow")
-    Call<ResponseBody> follow(@Field("senderId") String senderId, @Field("recipientId") String recipientId);
+    Call<ResponseBody> follow(@Query("senderId") String senderId, @Query("recipientId") String recipientId);
 
     // 팔로우 취소
     @FormUrlEncoded

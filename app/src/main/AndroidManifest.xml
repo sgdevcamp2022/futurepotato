@@ -34,10 +34,10 @@
         <activity android:name=".FollowActivity"></activity>
         <activity android:name=".SearchActivity"></activity>
         <activity android:name=".StoryActivity"></activity>
+        <activity android:name=".ReplyActivity"></activity>
 
         <activity
             android:name=".LoginActivity">
-
         </activity>
     </application>
 

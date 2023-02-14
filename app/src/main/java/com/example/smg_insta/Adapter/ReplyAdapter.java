@@ -77,6 +77,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder>{
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                         // 성공
+                                        Log.e("댓글삭제 성공", response.code()+"");
                                         notifyDataSetChanged();
                                     }
                                     @Override

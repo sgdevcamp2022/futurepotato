@@ -97,13 +97,14 @@ public class FeedResponse {
 
     public static class Comment {
 
-        public Comment(String commentWriter, String image, String comment, int commentId, int likeCount, String createdDt, ArrayList<Reply> replyList) {
+        public Comment(String commentWriter, String image, String comment, int commentId, int likeCount, String createdDt, int replyCount, ArrayList<Reply> replyList) {
             this.commentWriter = commentWriter;
             this.image = image;
             this.comment = comment;
             this.commentId = commentId;
             this.likeCount = likeCount;
             this.createdDt = createdDt;
+            this.replyCount = replyCount;
             this.replyList = replyList;
         }
 
@@ -119,6 +120,8 @@ public class FeedResponse {
         private int likeCount;
         @SerializedName("createdDt")
         private String createdDt;
+        @SerializedName("replyCount")
+        private int replyCount;
         @SerializedName("replyList")
         private ArrayList<Reply> replyList;
 
@@ -166,6 +169,10 @@ public class FeedResponse {
         public void setCreatedDt(String createdDt) {
             this.createdDt = createdDt;
         }
+
+        public int getReplyCount() {return replyCount;}
+
+        public void setReplyCount(int replyCount) {this.replyCount = replyCount;}
 
         public ArrayList<Reply> getReplyList() {
             return replyList;

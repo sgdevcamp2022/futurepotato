@@ -58,6 +58,45 @@ public class Frag1 extends Fragment {
     String text;      // 검색 내용
 
     List<String> MyStories = new ArrayList<>(); // 내 스토리 담아둘 곳
+    final int OPEN_GALLERY = 1001;
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && requestCode == OPEN_GALLERY) {
+            storyImageUri = data.getData();
+            Log.e("single choice: ", storyImageUri.toString());
+
+            if(storyImageUri != null) {
+                // 스토리 생성
+                dataService.story.InsertStory(accountId, storyImageUri.toString()).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        // 스토리 생성 성공
+                        if(response.isSuccessful()) {
+                            Toast.makeText(getContext(), "스토리가 생성되었습니다.", Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            Toast.makeText(getContext(), "스토리 생성이 실패하였습니다.", Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {t.printStackTrace();}
+                });
+
+                storyImageUri = null;
+
+            } else {
+                Toast.makeText(getContext(), "스토리 이미지 null 값임..", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Toast.makeText(getContext(), "사진을 가져오지 못했습니다.", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
     
     @Nullable
     @Override
@@ -98,21 +137,8 @@ public class Frag1 extends Fragment {
         test_storyList.add(test_S2);
         test_storyList.add(test_S3);
 
-
-
         //---------------------
 
-
-
-
-
-        //----post--------
-//        id = view.findViewById(R.id.tv_post_profile);
-//        profile = view.findViewById(R.id.civ_profile);
-//        content = view.findViewById(R.id.img_post_content);
-//        like = view.findViewById(R.id.tv_like_count);
-//        explain = view.findViewById(R.id.tv_explain);
-//        comment_count = view.findViewById(R.id.tv_comment_count);
 
         mRV_post = view.findViewById(R.id.recyclerview_post);
         //mRecyclerView.setHasFixedSize(true);
@@ -189,25 +215,13 @@ public class Frag1 extends Fragment {
             public boolean onLongClick(View view) {
                 // 사진 선택
                 //갤러리 호출
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-                activityResultLauncher.launch(intent);
-
-                // 스토리 생성
-                dataService.story.InsertStory(accountId, storyImageUri.toString()).enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        // 스토리 생성 성공
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {t.printStackTrace();}
-                });
-
+                Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, OPEN_GALLERY);
 
                 return true;
             }
         });
+
 
 
         // 검색 기능!
@@ -233,6 +247,8 @@ public class Frag1 extends Fragment {
         feedResponse_list.setAdapter(new RVAdapter_story(stories, getContext(), dataService));
     }
 
+
+
     ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -247,6 +263,7 @@ public class Frag1 extends Fragment {
                         else{   // 이미지를 선택한 경우
                             Log.e("single choice: ", String.valueOf(data.getData()));
                             storyImageUri = data.getData();
+
                         }
                     }
                 }

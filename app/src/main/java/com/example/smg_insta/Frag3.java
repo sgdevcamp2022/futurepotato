@@ -27,6 +27,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.bumptech.glide.Glide;
 import com.example.smg_insta.API.Service;
 
+import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 
@@ -37,6 +38,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Url;
 
 public class Frag3 extends Fragment {
 
@@ -91,7 +93,7 @@ public class Frag3 extends Fragment {
                 // 파일 경로들을 가지고있는 `ArrayList<Uri> filePathList`가 있다고 칩시다...
                 for (int i = 0; i < filePathList.size(); ++i) {
                     // Uri 타입의 파일경로를 가지는 RequestBody 객체 생성
-                    RequestBody fileBody = RequestBody.create(MediaType.parse("image/jpeg"), String.valueOf(filePathList.get(i)));
+                    RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), filePathList.get(i).toString());
 
                     // 사진 파일 이름
                     String fileName = "photo" + i + ".jpg";

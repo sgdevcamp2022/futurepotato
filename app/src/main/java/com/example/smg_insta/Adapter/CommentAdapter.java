@@ -1,7 +1,10 @@
 package com.example.smg_insta.Adapter;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,10 +21,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.smg_insta.API.Service;
+import com.example.smg_insta.CommentsActivity;
 import com.example.smg_insta.DTO.FeedResponse;
 import com.example.smg_insta.MainActivity;
 import com.example.smg_insta.PreferenceManager;
 import com.example.smg_insta.R;
+import com.example.smg_insta.ReplyActivity;
 
 import java.util.ArrayList;
 
@@ -36,7 +41,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     private Context context;
     private ArrayList<FeedResponse.Comment> data;
     private Service dataService;
-    private OnCommentItemClickListener listener;
 
     String accountId;
 
@@ -75,16 +79,24 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         holder.btnReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String reply;
+                //String reply;
                 //EditText editText =(EditText) view.findViewById(R.id.et_insert_comment);
                 //editText.requestFocus();
 
                 //키보드 보이게 하는 부분
+                //InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                //imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
-                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-
+                Intent intent = new Intent(context, ReplyActivity.class);
+                // myAccountId 랑 postId 가져와야함!!
+                //intent.putExtra("accountId", );
+                intent.putExtra("commentId", data.get(position).getCommentId()+"");
+                intent.putExtra("commentWriter", data.get(position).getCommentWriter());
+                intent.putExtra("commentImage", data.get(position).getImage());
+                intent.putExtra("comment", data.get(position).getComment());
+                intent.putExtra("likeCount", data.get(position).getLikeCount()+"");
+                intent.putExtra("replyCount", data.get(position).getReplyCount()+"");
+                context.startActivity(intent.addFlags(FLAG_ACTIVITY_NEW_TASK));
 
                 
             }

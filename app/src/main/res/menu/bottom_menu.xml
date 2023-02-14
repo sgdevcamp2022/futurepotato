@@ -6,11 +6,11 @@
         android:icon="@drawable/free_icon_home"
         android:title="HOME"/>
 
-    <item
-        android:id="@+id/action_search"
-        android:enabled="true"
-        android:icon="@drawable/magnifier1"
-        android:title="SEARCH"/>
+<!--    <item-->
+<!--        android:id="@+id/action_search"-->
+<!--        android:enabled="true"-->
+<!--        android:icon="@drawable/magnifier1"-->
+<!--        android:title="SEARCH"/>-->
 
 
     <item
