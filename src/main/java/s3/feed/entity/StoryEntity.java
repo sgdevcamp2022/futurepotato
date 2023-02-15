@@ -7,15 +7,17 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
-@Node
+@Node(labels = {"Story"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StoryEntity {
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue
     private Long id;
 
     private String image;
@@ -25,6 +27,9 @@ public class StoryEntity {
     private String profileImage;
 
     private LocalDateTime createdDt;
+
+    @Relationship(type = "LIKES", direction = Relationship.Direction.INCOMING)
+    private List<UserEntity> usersWhoLikeThis = new ArrayList<>();
 
     @JsonBackReference
     private UserEntity userEntity;

@@ -32,7 +32,7 @@ public class PostDto {
         private boolean isLikesCheck;
         public List<String> imageList = new ArrayList<>();
 
-         public List<ReqCommentListDto> commentList = new ArrayList<>();
+        public List<ReqCommentListDto> commentList = new ArrayList<>();
     }
     @Data
     @AllArgsConstructor

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -13,12 +14,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Node
-@NoArgsConstructor
+@Getter @Setter
+@Node(labels = {"Comment"})
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentEntity {
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue
     private Long id;
 
     private String comment;
@@ -26,11 +26,13 @@ public class CommentEntity {
     private String accountId;
 
     private LocalDateTime createdDt;
-
     private int likeCount;
-
     private String profileImage;
-    @Relationship(type = "comment-reply")
+
+    @Relationship(type = "LIKES", direction = Relationship.Direction.INCOMING)
+    private List<UserEntity> usersWhoLikeThis = new ArrayList<>();
+
+    @Relationship(type = "REPLIED", direction = Relationship.Direction.INCOMING)
     private List<ReplyEntity> replyEntityList = new ArrayList<>();
 
     @JsonBackReference
@@ -48,6 +50,6 @@ public class CommentEntity {
         this.createdDt =createdDt;
         this.likeCount =likeCount;
         this.profileImage =profileImage;
-}
+    }
 
 }

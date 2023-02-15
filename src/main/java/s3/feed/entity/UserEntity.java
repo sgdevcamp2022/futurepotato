@@ -14,7 +14,7 @@ import java.util.List;
 
 
 @Getter
-@Node
+@Node(labels = {"Account"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserEntity {
     @Id
@@ -27,19 +27,16 @@ public class UserEntity {
 
     private String accountName;
 
-//    @JsonManagedReference
-    @Relationship(type = "user-post")
+    @Relationship(type = "UPLOADED")
     private List<PostEntity> posts = new ArrayList<>();
 
-
-//    @JsonManagedReference
-    @Relationship(type = "user-story")
+    @Relationship(type = "UPLOADED")
     private List<StoryEntity> storyList = new ArrayList<>();
 
-    @Relationship(type = "user-comment")
+    @Relationship(type = "WRITES", direction = Relationship.Direction.OUTGOING)
     private List<CommentEntity> commentList = new ArrayList<>();
 
-    @Relationship(type = "user-reply")
+    @Relationship(type = "WRITES", direction = Relationship.Direction.OUTGOING)
     private List<ReplyEntity> replyEntityList = new ArrayList<>();
     public UserEntity(String accountName,String accountId){
         this.accountName =accountName;

@@ -29,11 +29,21 @@ public class StoryController {
 
         return new ResponseEntity<>(storyService.uploadStory(multipartFile, accountId), HttpStatus.OK);
     }
-
     @Operation(summary = "스토리 삭제", description = "스토리 삭제 api")
     @DeleteMapping("/{accountId}/story/{storyId}")
-    public ResponseEntity deleteStory(@PathVariable("accountId") String accountId, @PathVariable("storyId") Long storyId) {
-        return new ResponseEntity<>(storyService.deleteStory(accountId, storyId), HttpStatus.OK);
+    public ResponseEntity deleteStory(@PathVariable("storyId")Long id, @PathVariable String accountId){
+
+        return new ResponseEntity<>(storyService.deleteStory(accountId, id), HttpStatus.OK);
+    }
+
+    @PostMapping("/{accountId}/storyLike/{storyId}")
+    public ResponseEntity likePost(@PathVariable("storyId") Long storyId, @PathVariable("accountId") String accountId) {
+        return new ResponseEntity<>(storyService.likeStory(storyId, accountId),HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{accountId}/storyLike/{storyId}")
+    public ResponseEntity deleteLikePost(@PathVariable("storyId") Long storyId, @PathVariable("accountId") String accountId) {
+        return new ResponseEntity<>(storyService.deleteLikeStory(storyId, accountId),HttpStatus.OK);
     }
 }
 

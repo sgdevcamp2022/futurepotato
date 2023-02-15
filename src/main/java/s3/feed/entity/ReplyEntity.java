@@ -4,14 +4,18 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-@Getter
-@Node
+@Getter @Setter
+@Node(labels = {"Reply"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReplyEntity {
     @Id
@@ -27,6 +31,9 @@ public class ReplyEntity {
     private int likeCount;
 
     private String profileImage;
+
+    @Relationship(type = "LIKES", direction = Relationship.Direction.INCOMING)
+    private List<UserEntity> usersWhoLikeThis = new ArrayList<>();
 
     @JsonBackReference
     private UserEntity userEntity;
