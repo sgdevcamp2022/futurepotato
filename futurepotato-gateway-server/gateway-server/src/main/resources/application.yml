@@ -55,6 +55,12 @@ spring:
           uri: http://localhost:8004
           filters:
             - RewritePath=/graph/(?<path>.*),/$\{path}
+        - id: alarm-server
+          predicates:
+            - Path=/alarm/**
+          uri: http://localhost:8005
+          filters:
+            - RewritePath=/alarm/(?<path>.*),/$\{path} 
 eureka:
   client:
     register-with-eureka: true
