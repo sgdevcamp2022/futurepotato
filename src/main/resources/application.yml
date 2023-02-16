@@ -1,0 +1,72 @@
+
+server:
+  port: 8002
+
+spring:
+  application:
+    name: feed-server
+  data:
+    neo4j:
+      database: neo4j
+  neo4j:
+    authentication:
+      password: '0000'
+      username: neo4j
+    uri: bolt://localhost:7687
+
+#  rabbitmq:
+#    host: localhost
+#    port: 5672
+#    username: guest
+#    password: guest
+
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true # 유레카 서비스에 (자신을) 등록 여부
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    registryFetchIntervalSeconds: 60 # eureka에게 서비스 정보를 가져오는 주기
+    disable-delta: true # eureka에게 서비스 정보를 가져올때 변경된 내용만 가져온다. (false로 하면 전체를 가져오기에 대역폭 낭비이다.
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+
+cloud:
+  aws:
+    credentials:
+      access-key: AKIAZXD2AXE5RPNKJNXO
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: sgfp
+    stack:
+      auto: false
+
+
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error
+
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        data:
+#          neo4j: DEBUG # 내부적으로 돌아가는 native cyperQuery를 로그로 찍어준다. 꼭 설정해주자
+
+#springdoc:
+#  api-docs:
+#    path: /feed/api-docs
+
