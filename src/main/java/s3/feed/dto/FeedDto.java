@@ -11,6 +11,7 @@ import java.util.List;
 @Builder
 public class FeedDto {
     public List<PostDto.ResImageListDto> postList;
+    public List<FeedDto.followingsWhoUploadedStoryDto> storyList;
 
     @Data
     @Builder

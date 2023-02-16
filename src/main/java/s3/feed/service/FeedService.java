@@ -131,21 +131,23 @@ public class FeedService {
     public FeedDto getPostList(String accountId){
         List<PostEntity> allPostList = postRepository.getPostList(accountId);
         List<PostDto.ResImageListDto> resPostList = new ArrayList<>();
+
         for(PostEntity p : allPostList){
             resPostList.add(postService.getImageList(p.getId()));
         }
         return FeedDto.builder().postList(resPostList).build();
     }
 
-    public List<FeedDto.followingsWhoUploadedStoryDto> getFollowingsWhoUploadedStory(String accountId){
+    public FeedDto getFollowingsWhoUploadedStory(String accountId){
         List<UserEntity> followingsWhoUploadedStory = userRepository.getFollowingsWhoUploadedStory(accountId);
-        List<FeedDto.followingsWhoUploadedStoryDto> response = new ArrayList<>();
+        List<FeedDto.followingsWhoUploadedStoryDto> resStoryList = new ArrayList<>();
+
         for(UserEntity f : followingsWhoUploadedStory){
-            response.add(FeedDto.followingsWhoUploadedStoryDto.builder()
+            resStoryList.add(FeedDto.followingsWhoUploadedStoryDto.builder()
                         .accountId(f.getAccountId())
                         .profileImage(f.getProfileImage())
                         .build());
         }
-        return response;
+        return FeedDto.builder().storyList(resStoryList).build();
     }
 }

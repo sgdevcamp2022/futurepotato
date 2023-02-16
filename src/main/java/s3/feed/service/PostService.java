@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
@@ -75,10 +77,10 @@ public class PostService {
 
     public PostDto.ResImageListDto getImageList(Long postId) {
         PostDto.ResImageListDto resImageListDto = new PostDto.ResImageListDto();
-
-
         PostEntity postEntity = postRepository.findById(postId).get();
-        UserEntity userEntity = postEntity.getUserEntity();
+        UserEntity userEntity = userRepository.findByAccountId(postEntity.getAccountId());
+        //UserEntity userEntity = postEntity.getUserEntity();
+        //log.info("postEntity.getUserEntity()={}", postEntity.getUserEntity());
         List<MediaEntity> mediaEntityList = postEntity.getMediaEntityList();
         for (MediaEntity mediaEntity : mediaEntityList) {
             String storedImageUrl = amazonS3Client.getUrl(bucket, mediaEntity.getImage()).toString();
@@ -97,8 +99,12 @@ public class PostService {
                     commentEntity.getId(), commentEntity.getLikeCount(), commentEntity.getCreatedDt(), replyCount, reqCommentListDto.replyList));
         }
 
-
-        return new PostDto.ResImageListDto(postEntity.getId(), postEntity.getContent(), userEntity.getAccountId(), userEntity.getProfileImage(), postEntity.getCreatedDt(), postEntity.getModifiedDt()
+        return new PostDto.ResImageListDto(postEntity.getId(),
+                postEntity.getContent(),
+                userEntity.getAccountId(),
+                userEntity.getProfileImage(),
+                postEntity.getCreatedDt(),
+                postEntity.getModifiedDt()
                 , postEntity.getLikeCount(), postEntity.getCommentEntityList().size(), postEntity.isMultyImage(), postEntity.isLikesCheck(), resImageListDto.getImageList(), resImageListDto.commentList);
     }
 
