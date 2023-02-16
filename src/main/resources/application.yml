@@ -5,7 +5,6 @@ server:
 spring:
   application:
     name: feed-server
-<<<<<<< HEAD
   data:
     neo4j:
       database: neo4j
@@ -14,25 +13,18 @@ spring:
       password: '0000'
       username: neo4j
     uri: bolt://localhost:7687
-
+#  neo4j:
+#    uri: neo4j://localhost:7687
+#    authentication:
+#      username: neo4j #디폴트 유저 네임이다. 따로 설정 안했으면 똑같이 적어줄것
+#      password: 1234 #neo4j 데스크톱 콘솔에서 설정할 수 있다.
+#      database: neo4jTest # neo4j 데스크톱에서 movies 데이터 베이스를 하나 만들어주자.
 #  rabbitmq:
 #    host: localhost
 #    port: 5672
 #    username: guest
 #    password: guest
-=======
-  neo4j:
-    uri: neo4j://localhost:7687
-    authentication:
-      username: neo4j #디폴트 유저 네임이다. 따로 설정 안했으면 똑같이 적어줄것
-      password: 1234 #neo4j 데스크톱 콘솔에서 설정할 수 있다.
-    #      database: neo4jTest # neo4j 데스크톱에서 movies 데이터 베이스를 하나 만들어주자.
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
->>>>>>> c1f51c49e256f7ca6d415eb53538924435be43b6
+
 
 
 eureka:
