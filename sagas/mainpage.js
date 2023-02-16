@@ -1,21 +1,23 @@
 import { all , fork, takeLatest, put, call} from "redux-saga/effects";
 import axios from "axios";
 
-function mainPageAPI() {
-    return axios.get('/');
+function mainPageAPI(data) {
+    return axios.get(`/feed/${data.accountId}/postList?lastSeenPostId=${data.lastSeenPostId}&pageSize=${data.pageSize}`);
 }
 
-function* mainPage(){
+function* mainPage(action){
     try{
-        //const result = yield call(mainPageAPI);
+        //const result = yield call(mainPageAPI, action.data);
+        //console.log(result);
         yield put({
             type:'MAIN_PAGE_SUCCESS',
-            //data:result.data,
+            //data:result,
         });
     } catch (err){
+        console.log(err);
         yield put({
             type:'MAIN_PAGE_FAILURE',
-            data: err.response.data,
+            data: err,
         })
     }
 }

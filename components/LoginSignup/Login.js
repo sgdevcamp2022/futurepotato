@@ -17,6 +17,10 @@ const Login = () => {
     const dispatch = useDispatch();
 
     const onSubmit = () => {
+        if(accountId.length == 0 || accountPw.length == 0){
+            window.alert('아이디와 비밀번호를 입력해주세요')
+            return;
+        }
         dispatch(loginRequestAction({accountId, accountPw}));
     };
 

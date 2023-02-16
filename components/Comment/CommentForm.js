@@ -10,7 +10,8 @@ const CommentForm = (props) => {
     const dispatch = useDispatch();
 
     const onSubmit = () => {
-        dispatch({type: 'ADD_COMMENT_REQUEST', data: comment, dataw:props.postId, datame:me})
+        dispatch({type: 'ADD_COMMENT_REQUEST', data: {content : comment, dataw:props.postId, datame:me}});
+        console.log("1111111");
     };
 
     return (

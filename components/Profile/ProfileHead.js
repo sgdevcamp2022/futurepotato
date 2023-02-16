@@ -23,12 +23,12 @@ const ProfileHead = (prop) => {
 
     const onClickfollowerOpen = () => {
         setFollowOpen(true);
-        dispatch({type:'GET_FOLLOWER_REQUEST'});
+        dispatch({type:'GET_FOLLOWER_REQUEST', data:'dlwogur'});
     }
 
     const onClickfolloingOpen = () => {
         setFollingOpen(true);
-        dispatch({type:'GET_FOLLOING_REQUEST'});
+        dispatch({type:'GET_FOLLOING_REQUEST', data:'dlwogur'});
     }
 
     const onClickProfileOrFollow = () => {
@@ -48,7 +48,7 @@ const ProfileHead = (prop) => {
                             <img src={profileData.profileImage} alt="" onClick={onClickProfileIamgeChange}/>
                     </div>
                     <div className="profile-user-settings">
-                        <h1 className="profile-user-name">{profileData.name}</h1>
+                        <h1 className="profile-user-name">{profileData.accountName}</h1>
                         <button className="btn profile-edit-btn" onClick={onClickProfileIamgeChange}>{isMe ? "프로필 편집" : isFollowing ? "팔로우" : "맞팔로우 하기"}</button>
                         <button className="btn profile-settings-btn" aria-label="profile settings"><img src="/setting.png" width="17px"/></button>
 					</div>
@@ -56,7 +56,7 @@ const ProfileHead = (prop) => {
 			        <div className="profile-stats">
                         <ul className='profile-stats-ul'>
 					        <li>게시글 <span className="profile-stat-count">{profileData.postCount}</span></li>
-					        <li>팔로워 <span className="profile-stat-count" onClick={onClickfollowerOpen}>{profileData.followerCount}</span></li>
+					        <li>팔로워 <span className="profile-stat-count" onClick={onClickfollowerOpen}>{profileData.followCount}</span></li>
 					        <li>팔로잉 <span className="profile-stat-count" onClick={onClickfolloingOpen}>{profileData.followingCount}</span></li>
 				        </ul>
                     </div>
@@ -72,7 +72,7 @@ const ProfileHead = (prop) => {
                         }}>
                         <FolloingModal />
                     </Modal>
-                    <Modal isOpen = {profileEdit} onRequestClose = {() => setProfileEdit(false)}  style={{content:{
+                    <Modal isOpen = {follingOpen} onRequestClose = {() => setProfileEdit(false)}  style={{content:{
                             position: "relative",
                             display: "inline-flex",
                             left: "50%",
@@ -116,7 +116,7 @@ const ProfileHead = (prop) => {
                     </Modal>
 
 			        <div className="profile-bio">
-                        <p><span className="profile-real-name">{profileData.name}</span> 컴퓨터공학과 재학중 📷✈️🏕️</p>
+                        <p><span className="profile-real-name">{profileData.accountName}</span> 컴퓨터공학과 재학중 📷✈️🏕️</p>
                     </div>
                 </div>
                 <div className="container-bottom">

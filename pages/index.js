@@ -4,8 +4,7 @@ import Mainpage from "../components/Mainpage";
 const index = () => {
     const {isLoggedIn} = useSelector((state) => state.user);
     const {postList} = useSelector((state)=>state.mainpage);
-    console.log(isLoggedIn);
-    console.log(postList);
+    
     return(
         <>
             {isLoggedIn ? <Mainpage /> : <Login /> }

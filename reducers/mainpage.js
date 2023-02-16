@@ -3,14 +3,19 @@ import produce from 'immer';
 export const initialMainState = {
     clearUpload : false,
     storyList:[],
-    postList:[],
+    storyListId:[],
+    content:[],
     limit:null,
     prePost:null,
     nextPost:null,
-    newImage:[],
+    newImage:null,
     isImage:false,
     detailPage:null,
     alarmData:[],
+    isStoryReady:false,
+    last:null,
+    pagingState:null,
+    currentReqPost:null,
 }
 
 const dummyData = {
@@ -24,14 +29,19 @@ const dummyData = {
     {"name" : "user1", "profileImage" : "/cover 3.png"},
     {"name" : "user1", "profileImage" : "/cover 3.png"},
     {"name" : "user1", "profileImage" : "/cover 3.png"}],
-    "postList" : [
-        {postId:1, accountId : "user1", "content": "게시글1","createdDt": "2023-01-01T12:11:00",
-                "modifiedDt": "2023-01-01T13:11:00",
-                likeCount: 12,
-                likesCheck: true,
-                "commentCount": 110,
-                "profileImage" : '/cover 1.png',
-                "commentList" : [{
+    
+    "content" : [
+        {'postId':1, 
+        'accountId' : "user1", 
+        "content": "게시글1",
+        "createdDt": "2023-01-01T12:11:00",   
+        "modifiedDt": "2023-01-01T13:11:00",
+        'likeCount': 12,
+        'likesCheck': true,
+        "commentCount": 110,
+        "profileImage" : '/cover 1.png',
+        "commentList" : [
+            {
                 "commentWriter": "user2",
                 "profileImage": "/cover 3.png",
                 "comment": "게시글 댓글1",
@@ -39,32 +49,97 @@ const dummyData = {
                 'commentId' : 1,
                 'replyCount' : 2,
                 'createdDt' : "2023-02-10T12:18:57.614259",
-                "replyList":[{
-                            'replyId':3,
-                            "replyWriter": "user1", "reply":"reply1",
-                            'profileImage': '/cover 8.png',
-                            "createdDt":""
-                        },
-                        {
-                            'replyId':1,
-                            "replyWriter": "user2", "reply":"reply2",
-                            "profileImage":'/cover 8.png',
-                            "createdDt":""
-                        },
-                    ]}
-                ],
-                "imageList":[
-                    {"image": "./cover 1.png"},
-                    {"image": "./cover 2.png"},
-                    {"image": "./cover 3.png"},
-                    {"image": "./cover 4.png"},
-                ],
-                "isMultyImage" : false,
+                "replyList":[
+                    {
+                        'replyId':3,
+                        "replyWriter": "user1", "reply":"reply1",
+                        'profileImage': '/cover 8.png',
+                        "createdDt":""
+                    },
+                    {
+                        'replyId':1,
+                        "replyWriter": "user2", "reply":"reply2",
+                        "profileImage":'/cover 8.png',
+                        "createdDt":""
+                    },
+                ]
             }
+        ],
+        "imageList":[
+                {"image": "./cover 1.png"},
+                {"image": "./cover 2.png"},
+                {"image": "./cover 3.png"},
+                {"image": "./cover 4.png"},
+            ],
+        "multyimage" : false,
+        }
     ],
-    "limit" : 10,
-    "prePost" : 0,
-    "nextPost" : true,
+
+    "last":false,
+    "pagingState" : "Page request [number: 0, size 2, sort: UNSORTED]",
+
+}
+
+const dummyPostRe = {
+    'postId':1, 
+        'accountId' : "user1", 
+        "content": "게시글1",
+        "createdDt": "2023-01-01T12:11:00",   
+        "modifiedDt": "2023-01-01T13:11:00",
+        'likeCount': 12,
+        'likesCheck': true,
+        "commentCount": 110,
+        "profileImage" : '/cover 1.png',
+        "commentList" : [
+            {
+                "commentWriter": "user2",
+                "profileImage": "/cover 3.png",
+                "comment": "게시글 댓글1",
+                "likeCount": 100,
+                'commentId' : 1,
+                'replyCount' : 2,
+                'createdDt' : "2023-02-10T12:18:57.614259",
+                "replyList":[
+                    {
+                        'replyId':3,
+                        "replyWriter": "user1", "reply":"reply1",
+                        'profileImage': '/cover 8.png',
+                        "createdDt":""
+                    },
+                    {
+                        'replyId':1,
+                        "replyWriter": "user2", "reply":"reply2",
+                        "profileImage":'/cover 8.png',
+                        "createdDt":""
+                    },
+                ]
+            }
+        ],
+        "imageList":[
+                {"image": "./cover 1.png"},
+                {"image": "./cover 2.png"},
+                {"image": "./cover 3.png"},
+                {"image": "./cover 4.png"},
+            ],
+        "multyimage" : false,
+        
+}
+
+const dummyStory = {
+    accountId:'유우우성',
+    "profileImage": "../public/cover 5.png",
+    "storyList": [
+        {
+            "storyId": 24,
+            "storedStoryImage": "../public/cover 6.png",
+            "createdDt": "2023-02-10T11:43:59.193341"
+        },
+        {
+            "storyId": 25,
+            "storedStoryImage": "../public/cover 7.png",
+            "createdDt": "2023-02-10T11:45:24.080901"
+        }
+    ]
 }
 
 const dummyAlarm = [
@@ -121,21 +196,19 @@ const reducer = (state = initialMainState, action) => produce(state, (draft) => 
             break;
         case 'MAIN_PAGE_SUCCESS' :
             draft.storyList = draft.storyList.concat(dummyData.storyList);
-            draft.postList = draft.postList.concat(dummyData.postList);//dummyData.postList;//draft.postList.concat(dummyData.postList);
+            draft.content = draft.content.concat(dummyData.content);//dummyData.postList;//draft.postList.concat(dummyData.postList);
             draft.limit = dummyData.limit;
-            draft.prePost = dummyData.prePost;
-            draft.nextPost = dummyData.nextPost;
+            draft.last = dummyData.last;
+            draft.pagingState = dummyData.pagingState;
             break;
         case 'MAIN_PAGE_FAIRLUE' :
             break;
 
         case 'POST_INFO_REQUEST':
-            draft.detailPage = {
-                
-            }
+            
             break;
         case 'POST_INFO_SUCCESS':
-            draft.postList = action.data;
+            draft.currentReqPost = dummyPostRe;
             break;
         case 'POST_INFO_FAILURE':
             break;
@@ -143,7 +216,24 @@ const reducer = (state = initialMainState, action) => produce(state, (draft) => 
         case 'ADD_POST_REQUEST':
             break;
         case 'ADD_POST_SUCCESS':{
-            draft.postList.unshift(dummyPost);
+            console.log("asdfasdfs");
+            draft.content.unshift({'postId':2, 
+            'accountId' : action.data.accountId, 
+            "content": action.data.content,
+            "createdDt": "방금전",
+            'likeCount': 0,
+            'likesCheck': false,
+            "commentCount": 0,
+            "profileImage" : '/cover 1.png',
+            "commentList" : [
+            ],
+            "imageList":[
+                    {"image": "./cover 11.png"},
+                    {"image": "./cover 4.png"},
+                    {"image": "./cover 5.png"},
+                ],
+            "multyimage" : true,
+            });
             draft.clearUpload = true;
             break;
         }
@@ -155,7 +245,7 @@ const reducer = (state = initialMainState, action) => produce(state, (draft) => 
         case 'MOD_POST_REQUEST':
             break;
         case 'MOD_POST_SUCCESS':{
-            draft.postList.find((v) => v.name == action.dataId ? v.content = action.data : v.content);
+            draft.content.find((v) => v.postId == action.dataId ? v.content = action.data : v.content);
             break;
         }
         case 'MOD_POST_FAILURE':
@@ -174,12 +264,20 @@ const reducer = (state = initialMainState, action) => produce(state, (draft) => 
             break;
 
         case 'ADD_COMMENT_REQUEST':
-            {
-                console.log(draft);
-                const post = draft.postList.find((v) => v.id === action.dataw);
-                console.log(post);
-                post.commentList.push({"commentWriter" : action.datame.username, "Image" : action.datame.profileimage, 
-                "comment" : action.data, "likeCount":0, "replyList" : [], commentId:0});
+            {   
+                console.log(action.data.datame.username,action.data.datame.profileimage);
+                draft.currentReqPost.commentList.push(
+                {
+                    "commentWriter":action.data.datame.username,
+                    "profileImage": action.data.datame.profileimage,
+                    "comment": action.data.content,
+                    "likeCount": 0,
+                    'commentId' : 2,
+                    'createdDt' : "2023-02-10T12:18:57.614259",
+                    "replyList":[
+                    ]
+                }
+                );
                 break;
             }
         case 'ADD_COMMENT_SUCCESS':
@@ -190,19 +288,14 @@ const reducer = (state = initialMainState, action) => produce(state, (draft) => 
         case 'DELETE_COMMENT_REQUEST':
             break;
         case 'DELETE_COMMENT_SUCCESS':{
-            const post = draft.postList.find((v) => v.id == action.data.postId);
-            const index = draft.postList.findIndex((v) => v.id == action.data.postId);
-            
-            post.commentList.filter((v) => v.commentId != action.data.commentId);
-            draft.postList[index] = post;
+            draft.currentReqPost.commentList.filter((v) => v.commentId != action.data.commentId);
             break;
         }
         case 'DELETE_COMMENT_FAILURE':
             break;
 
         case 'IMAGE_UPLOAD_REQUEST':{
-            draft.newImage.push(action.data);
-            
+            draft.newImage = action.data;
             draft.isImage = true;
             break;
         }
@@ -211,9 +304,9 @@ const reducer = (state = initialMainState, action) => produce(state, (draft) => 
             break;
         case 'ADD_REPLY_SUCCESS':{
             console.log("ssssssss");
-            const comment = draft.postList[0].commentList.findIndex((v) => v.commentId == action.data.commentId)
-            draft.postList[0].commentList[comment].replyList.push({"replyWriter": "user1", "reply":action.data.reply,
-            'image': '/cover 8.png',})
+            const comment = draft.currentReqPost.commentList.findIndex((v) => v.commentId == action.data.commentId)
+            draft.currentReqPost.commentList[comment].replyList.push({"replyWriter": action.data.nickname, "reply":action.data.reply,
+            'image': action.data.profileImage,})
             break;
         }
         case 'ADD_REPLY_FAILURE':
@@ -240,6 +333,44 @@ const reducer = (state = initialMainState, action) => produce(state, (draft) => 
             break;
         case 'ALARM_REQUEST_FAILURE':
             break;
+
+        case 'STORY_REQUEST':
+            break;
+        case 'STORY_REQUEST_SUCCESS':
+            draft.storyListId = dummyStory;
+            draft.isStoryReady = true;
+            break;
+        case 'STORY_REQUEST_FAILURE':
+            break;
+
+        case 'LIKE_POST_REQUEST':
+            break;
+        case 'LIKE_POST_SUCCESS':
+                break;
+        case 'LIKE_POST_FAILURE':
+            break;
+        
+        case 'LIKE_POST_CANCEL_REQUEST':
+            break;
+        case 'LIKE_POST_CANCEL_SUCCESS':
+            break;
+        case 'LIKE_POST_CANCEL_FAILURE':
+            break;
+        
+        case 'LIKE_COMMENT_REQUEST':
+            break;
+        case 'LIKE_COMMENT_SUCCESS':
+            break;
+        case 'LIKE_COMMENT_FAILURE':
+            break;
+
+        case 'LIKE_COMMENT_CANCEL_REQUEST':
+            break;
+        case 'LIKE_COMMENT_CANCEL_SUCCESS':
+            break;
+        case 'LIKE_COMMENT_CANCEL_FAILURE':
+            break;
+
         default:
             break;
 

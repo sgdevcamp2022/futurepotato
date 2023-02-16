@@ -33,16 +33,16 @@ const DetailItem = (prop) => {
                     </Slider>   
                 </div>
                 <div className="right-col-detail">
-                    <UserInfo postId = {postItem.id} postName = {postItem.name} postImage = {postItem.profileImage} isMain = {true}/>
+                    <UserInfo postId = {postItem.postId} postName = {postItem.accountId} postImage = {postItem.profileImage} isMain = {true}/>
                     <div className="comment-post" style={{}}>
                         <div>
                             <div style={{borderBottom:"1px solid lightgray"}} className="post-story">
-                                <p className="description"><span>{postItem.name}</span> {postItem.content}</p>
-                                <p className="post-time">{postItem.modifiedDate}</p>
+                                <p className="description"><span>{postItem.accountId}</span> {postItem.content}</p>
+                                <p className="post-time">{postItem.modifiedDt}</p>
                             </div>
                             {postItem.commentList.length != 0 ? <CommentList commentList = { postItem.commentList}/> : <></>}
                         </div>
-                        <CommentForm checkHeart = {postItem.likesCheck} postId = {postItem.id} heartCount = {postItem.likeCount}/>
+                        <CommentForm checkHeart = {postItem.likesCheck} postId = {postItem.postId} heartCount = {postItem.likeCount}/>
                     </div>  
                 </div>
             </div>

@@ -3,7 +3,7 @@ import produce from 'immer'
 
 export const initialState = {
     isLoggedIn:false,
-    me:{profileimage: '/cover 8.png', username:'이유성', accountId:'yusung'},
+    me:{profileimage: '/cover 8.png', username:'이유성', accountId:''},
     signUpData:{},
     loginData:{image: '/cover 1.png', username:'yusung'},
     loadProfileSuccess : false,
@@ -11,6 +11,7 @@ export const initialState = {
     folloingList:[],
     followerList:[],
     isFollowing:false,
+    isSignupSuccess: false,
 }
 const userdummyPage = {
     name:'user1',
@@ -78,10 +79,10 @@ export const logoutRequestAction = () => ({
 const reducer = (state = initialState, action) => produce(state, (draft) => {
         switch(action.type){
             case 'LOG_IN_REQUEST' :
+                draft.me.accountId = action.data.accountId;
                 draft.isLoggedIn = false;
                 break;
             case 'LOG_IN_SUCCESS' :
-                
                 localStorage.setItem('token', action.data.token);
                 tokenInsertHeader(action.data.token);
                 draft.isLoggedIn = true;
@@ -94,6 +95,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
             case 'SIGN_UP_REQUEST' :
                 break;
             case 'SIGN_UP_SUCCESS' :
+                draft.isSignupSuccess = true;
                 break;
             case 'SIGN_UP_FAILURE' :
                 break;
@@ -103,28 +105,30 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
             case 'PROFILE_LOAD_SUCCESS':
                 {
                     console.log(action);
-                    if(action.data == draft.me.accountId){
-                        draft.profileData = {
-                            "name": "yusung",
-                            "profileImage": "/cover 8.png",
-                            "followerCount": 100,
-                            "followingCount": 95,
-                            "postCount": 10,
-                            "imageList": [
-                                {"image": "/cover 3.png",
-                                "postId":12,
-                                "isMultyImage": true},
-                                {"image": "/cover 5.png",
-                                "postId":14,
-                                "isMultyImage" : false
-                                }
-                            ]
-                        }
-                        console.log("좋아여여여");
-                    }
-                    else{
-                        draft.profileData = userdummyPage;
-                    }
+                    draft.profileData = action.data;
+                    // if(action.data == draft.me.accountId){
+                    //     draft.profileData = {
+                    //         "name": "yusung",
+                    //         "profileImage": "/cover 8.png",
+                    //         "followerCount": 100,
+                    //         "followingCount": 95,
+                    //         "postCount": 10,
+                    //         "imageList": [
+                    //             {"image": "/cover 3.png",
+                    //             "postId":12,
+                    //             "isMultyImage": true},
+                    //             {"image": "/cover 5.png",
+                    //             "postId":14,
+                    //             "isMultyImage" : false
+                    //             }
+                    //         ]
+                    //     }
+                    //     console.log("좋아여여여");
+                    // }
+                    // else{
+                    //     draft.profileData = userdummyPage;
+                    // }
+                    
                     draft.loadProfileSuccess = true;
                     break;
                 }
@@ -180,6 +184,15 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
             case 'PROFILE_IMAGE_SUCCESS':
                 break;
             case 'PROFILE_IMAGE_FAILURE':
+                break;
+
+            case 'PROFILE_EDIT_REQUEST':
+                break;
+            case 'PROFILE_EDIT_SUCCESS':
+                draft.me.accountId = data.accountId;
+                draft.me.username = data.accountName;
+                break;
+            case 'PROFILE_EDIT_FAILURE':
                 break;
 
             case 'LOG_OUT' :

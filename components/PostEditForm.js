@@ -26,13 +26,9 @@ const PostEditForm = (props) => {
                 <div className ='modal_title_option_user_two'>
                     <div> 취소 </div>
                 </div>
-
-                <Modal isOpen={newPostOpen} onRequestClose={()=>setNewPost(false)}
-                        style={{content:{left:"20%", right:"20%", padding:0, borderRadius:13}}}
-                    >
+                <Modal isOpen={newPostOpen} onRequestClose={()=>setNewPost(false)} style={{content:{left:"20%", right:"20%", padding:0, borderRadius:13}}}>
                         <NewPostText isEdit = {true}/>
                 </Modal>
-
             </div>
         </div>
     );

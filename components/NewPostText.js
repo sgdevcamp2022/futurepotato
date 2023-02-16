@@ -10,18 +10,19 @@ const NewPostText = (props) => {
     const dispatch = useDispatch();
     const {me} = useSelector((state) => state.user);
     const {newImage} = useSelector((state) => state.mainpage);
-    console.log(newImage[0]);
-    
-    const imageSource = window.URL.createObjectURL(newImage[0].get('image'));
-    
+    const imageSource = window.URL.createObjectURL(newImage.get('imageList'));
     const [postText, setPostText] = useState('');
     const onChangePostText = useCallback((e) => {
         setPostText(e.target.value);
     }, []);
 
     const onSubmit = () =>{
-        props.isEdit ? dispatch({type:'MOD_POST_REQUEST', data:postText, dataId:me.accountId})
-        : dispatch({type:'ADD_POST_REQUEST', dataId:me.accountId, data:postText, dataImage:newImage});
+        if(!props.isEdit){
+            newImage.append('content', postText);
+            console.log(newImage.get('content'));
+        } 
+        props.isEdit ? dispatch({type:'MOD_POST_REQUEST', data:{content:postText, accountId:me.accountId}})
+        : dispatch({type:'ADD_POST_REQUEST', data:{accountId:me.accountId, content:newImage}});
     }
 
     return(
@@ -38,8 +39,13 @@ const NewPostText = (props) => {
                 <img src={imageSource} className="post-image" alt="" style={{objectFit:"contain", height:200, width:400}}/>     
             </div>
             <div className="right-col-detail" style={{padding:0, display:'flex', flexDirection:'column'}}>
-                <div>
-                    <UserInfo postImage = {me.profileimage} postId = {me.accountId} postName = {me.username} isMain = {false}/>
+                <div> 
+                    <div className="info">
+                        <div className="user">
+                            <div className="profile-pic"><img src={me.profileimage} alt="" /></div>
+                            <p className="username">{me.username}</p>
+                        </div>
+                    </div>
                     <textarea placeholder={props.isEdit ? '' : '내용 작성...'} style={{height:100, width:350}}
                     value={postText} onChange={onChangePostText}/>
                 </div>

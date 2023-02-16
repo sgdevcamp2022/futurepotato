@@ -9,7 +9,7 @@ const Profile = (prop) => {
     //const isMe = prop.id == me.accountId ? true : dispatch({type:'GET_FOLLOING_REQUEST', data:{senderId: me.accountId, recipientId:prop.id}});
     const isMe = prop.id == me.accountId ? true : false;
     useEffect(() => {
-        dispatch({type:'PROFILE_LOAD_REQUEST', data: isMe ? me.accountId : prop.id});
+        dispatch({type:'PROFILE_LOAD_REQUEST', data: prop.id});
     }, [])
     return (
         <>

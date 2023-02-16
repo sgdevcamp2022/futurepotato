@@ -43,7 +43,9 @@ function* signUp(action){
             data:result.data
         })
     }catch(err){
+        console.log(err);
         yield put({
+
             type:'SIGN_UP_FAILURE',
             data:err.response.data,
         })
@@ -60,11 +62,11 @@ function profileLoadAPI (data) {
 
 function* profileLoad(action){
     try{
-         //const result = yield call(profileLoadAPI, action.data);
+        const result = yield call(profileLoadAPI, action.data);
         console.log(action);
          yield put({
             type: 'PROFILE_LOAD_SUCCESS',
-            data:action.data,
+            data:result.data,
         })
     }catch(err){
         yield put({
@@ -79,15 +81,15 @@ function* watchProfileLoad() {
 }
 
 function folloingLoadAPI(data){
-    return axios.get(`/${data}/following`);
+    return axios.get(`/graph/${data}/following`);
 }
 
 function* folloingLoad(action){
     try{
-        //const result = yield call(folloingLoadAPI, action.accountId);
+        const result = yield call(folloingLoadAPI, action.data);
         yield put({
             type:'GET_FOLLOING_SUCCESS',
-            //data:result.data
+            data:result
         })
     } catch(err){
         yield put({
@@ -103,12 +105,13 @@ function* watchFolloingLoad() {
 
 
 function followerLoadAPI(data){
-    return axios.get(`/${data}/followers`);
+    console.log("asdf");
+    return axios.get(`/graph/${data}/follower`);
 }
 
 function* followerLoad(action){
     try{
-        //const result = yield call(followerLoadAPI, action.accountId);
+        const result = yield call(followerLoadAPI, action.data);
         yield put({
             type:'GET_FOLLOWER_SUCCESS',
             //data:result.data
@@ -213,7 +216,7 @@ function* editProfileImage(action){
         //const result = yield call(editProfileImageAPI, action.data);
         yield put({
             type:'PROFILE_IMAGE_SUCCESS',
-            //data:result.result,
+            data:action.data,
         })
     }catch(err){
         yield put({
@@ -227,6 +230,30 @@ function* watchProfileImage() {
     yield takeLatest('PROFILE_IMAGE_REQUEST', editProfileImage);
 }
 
+function profileEditAPI(data){
+    console.log(data);
+    return axios.patch(`/feed/mypage/${data.originalId}`, {accountId: data.accountID, accountName:data.accountName});
+}
+
+function* profileEdit(action){
+    try{
+        const result = yield call(profileEditAPI, action.data);
+        yield put({
+            type:'PROFILE_EDIT_SUCCESS',
+            data:action.data
+        })
+    }catch(err){
+        yield put({
+            type:'PROFILE_EDIT_FAILURE',
+            data:err.response.data,
+        })
+    }
+}
+
+function* watchProfileEdit(){
+    yield takeLatest('PROFILE_EDIT_REQUEST', profileEdit);
+}
+
 export default function* userSaga(){
     yield all([
         fork(watchLogIn),
@@ -238,5 +265,6 @@ export default function* userSaga(){
         fork(watchFollowCancel),
         fork(watchIsFolloing),
         fork(watchProfileImage),
+        fork(watchProfileEdit),
     ])
 }

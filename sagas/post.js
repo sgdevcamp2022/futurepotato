@@ -1,13 +1,13 @@
 import axios from "axios";
 import { all , fork, takeLatest, put, call, putResolve, take, } from "redux-saga/effects";
 
-function checkPostAPI(postId){
-    return axios.get(`feed/media/${postId}`);
+function checkPostAPI(data){
+    return axios.get(`/feed/media/${data.postId}`);
 }
 
 function* checkPost(action){
     try{
-        //const result = yield call(checkPostAPI, action.postList.postId);
+        //const result = yield call(checkPostAPI, action.data);
         yield put({
             type:'POST_INFO_SUCCESS',
             //data: result.data,
@@ -25,17 +25,21 @@ function* watchCheckPost(){
 }
 
 function addPostAPI(data){
-    return axios.post(`/${data.accountId}/media`,{
-        "content" : data.data,
-        "imageList" : data.dataImage,
-    })
+    console.log(data.content.get('content'));
+    return axios.post(`/feed/${data.accountId}/media`,
+        {
+            Header: {"Content-Type": "multipart/form-data"}
+        },
+        data.content,
+    )
 }
 
 function* addPost (action) {
     try{
-        //yield call(addPostAPI, action.data, action.dataImage, action.accountId);
+        yield call(addPostAPI, action.data);
         yield put({
             type:'ADD_POST_SUCCESS',
+            data:action.data
         })
     } catch (err){
         yield put({
@@ -125,17 +129,20 @@ function* watchAddReply(){
 
 
 function addCommentAPI(data){
-    //
+    console.log(data);
+    return axios.post(`/feed/${data.datame.accountId}/${data.dataw}/comment`, data.content)
 }
 
 function* addComment(action){
     try{
+        //console.log(action);
         //const result = yield call(addCommentAPI, action.data);
         yield put({
             type:'ADD_COMMENT_SUCCESS',
             //data:1
         })
     }catch(err){
+        console.log(err);
         yield put({
             type:"ADD_COMMENT_FAILURE",
             data:err.response.data
@@ -217,6 +224,102 @@ function* watchAlarmRequest(){
     yield takeLatest('ALARM_REQUEST', alarmRequest);
 }
 
+function storyRequestAPI(data){
+    return axios.get(`/feed/story/${data.accountId}`);
+}
+
+function* storyRequest(action){
+    try{
+        //const result = yield call(storyRequestAPI, action.data);
+        yield put({
+            type:'STORY_REQUEST_SUCCESS',
+            data:action.data
+        })
+    }catch(err){
+        yield put({type: 'STORY_REQUEST_FAILURE', data: err});
+    }
+}
+
+function* watchStoryRequest(){
+    yield takeLatest('STORY_REQUEST', storyRequest);
+}
+
+function postLikeRequestAPI(data){
+    return axios.post(`/feed/${data.accountId}/postLike/${data.postId}`)
+}
+
+function* postLikeRequest(action){
+    try{
+        //const result = yield call(postLikeRequestAPI, action.data);
+        yield put ({
+            type:'LIKE_POST_SUCCESS',
+        })
+    }catch(err){
+        yield put({type: 'LIKE_POST_FAILURE', data: err});
+    }
+}
+
+function* watchPostLikeRequest(){
+    yield takeLatest('LIKE_POST_REQUEST', postLikeRequest);
+}
+
+function postLikeCancelRequestAPI(data){
+    return axios.delete(`/feed/${data.accountId}/postLike/${data.postId}`)
+}
+
+function* postLikeCancelRequest(action){
+    try{
+        //const result = yield call(postLikeCancelRequestAPI, action.data);
+        yield put ({
+            type:'LIKE_POST_CANCEL_SUCCESS',
+        })
+    }catch(err){
+        yield put({type: 'LIKE_POST_CANCEL_FAILURE', data: err});
+    }
+}
+
+function* watchPostLikeCancelRequest(){
+    yield takeLatest('LIKE_POST_CANCEL_REQUEST', postLikeCancelRequest);
+}
+
+function commentLikeRequestAPI(data){
+    return axios.post(`/feed/${data.accountId}/commentLike/${data.commentId}`)
+}
+
+function* commentLikeRequest(action){
+    try{
+        //const result = yield call(commentLikeRequestAPI, action.data);
+        yield put ({
+            type:'LIKE_COMMENT_SUCCESS',
+        })
+    }catch(err){
+        yield put({type: 'LIKE_COMMENT_FAILURE', data: err});
+    }
+}
+
+function* watchCommentLikeRequest(){
+    yield takeLatest('LIKE_COMMENT_REQUEST', commentLikeRequest);
+}
+
+function commentLikeCancelRequestAPI(data){
+    return axios.delete(`/feed/${data.accountId}/commentLike/${data.commentId}`)
+}
+
+function* commentLikeCancelRequest(action){
+    try{
+        //const result = yield call(commentLikeCancelRequestAPI, action.data);
+        yield put ({
+            type:'LIKE_COMMENT_CANCEL_SUCCESS',
+        })
+    }catch(err){
+        yield put({type: 'LIKE_COMMENT_CANCEL_FAILURE', data: err});
+    }
+}
+
+function* watchCommentLikeCancelRequest(){
+    yield takeLatest('LIKE_COMMENT_CANCEL_REQUEST', commentLikeCancelRequest);
+}
+
 export default function* crudSaga(){
     yield all([
         fork(watchAddPost),
@@ -228,5 +331,10 @@ export default function* crudSaga(){
         fork(watchRemoveComment),
         fork(watchRemoveReply),
         fork(watchAlarmRequest),
+        fork(watchStoryRequest),
+        fork(watchPostLikeRequest),
+        fork(watchPostLikeCancelRequest),
+        fork(watchCommentLikeRequest),
+        fork(watchCommentLikeCancelRequest),
     ])
 }

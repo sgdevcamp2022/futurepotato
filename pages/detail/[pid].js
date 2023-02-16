@@ -1,12 +1,19 @@
 import DetailPage from "../../components/DetailPage";
 import { useRouter } from 'next/router'
+import { useEffect } from "react";
 import wrapper from "../../store/configureStore";
+import { useDispatch } from "react-redux";
 const detail = () => {
     const router = useRouter();
+    const dispatch = useDispatch();
     const {pid} = router.query;
+    useEffect(() => {
+        console.log("ASDFASDasdf");
+        dispatch({type:'POST_INFO_REQUEST', data: {postId:pid}});
+    }, [])
     return(
         <div className = "flex-center">
-            <DetailPage id={pid}/>
+            <DetailPage data = {pid}/>
         </div>
     );
 }

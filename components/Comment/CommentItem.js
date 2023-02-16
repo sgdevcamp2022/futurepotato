@@ -6,6 +6,7 @@ const CommentItem = (props) => {
     const [replyView, setReplyView] = useState(false);
     const [addReply, setAddReply] = useState(false);
     const {me} = useSelector((state) => state.user);
+    const {postId} = useSelector((state)=>state.mainpage.currentReqPost);
     const comment = props.commentItem;
     
     const [reply, setReply] = useState('');
@@ -14,7 +15,7 @@ const CommentItem = (props) => {
     }, []);
 
     const onClickDeleteComment = () => {
-        dispatch({type:"DELETE_COMMENT_REQUEST", data:{commentId : comment.commentId, accountId : me.accountId, postId : props.postId}});
+        dispatch({type:"DELETE_COMMENT_REQUEST", data:{commentId : comment.commentId, accountId : me.accountId, postId :postId}});
     }
 
     const onClickDeleteReply = (v) => {
@@ -22,8 +23,7 @@ const CommentItem = (props) => {
     }
 
     const onSubmitReply = () => {
-        console.log("asdfasdf");
-        dispatch({type:"ADD_REPLY_REQUEST", data:{commentId:  comment.commentId, accountId : me.accountId, reply: reply}})
+        dispatch({type:"ADD_REPLY_REQUEST", data:{ nickname:me.username,profileImage:me.profileimage,commentId:  comment.commentId, accountId : me.accountId, reply: reply}})
     }
 
 
@@ -44,7 +44,7 @@ const CommentItem = (props) => {
                         <div className = 'date-heart-reply' style = {{fontSize:11, color:'gray'}}>
                             <span>좋아요 {comment.likeCount}개&nbsp;&nbsp;&nbsp;&nbsp;</span>
                             <span style={{cursor:'pointer'}} onClick  ={() => setAddReply(!addReply)}>답글 달기&nbsp;&nbsp;&nbsp;</span>
-                            {comment.commentId == me.accountId && <span onClick={onClickDeleteComment} style={{cursor:'pointer'}}>삭제</span>} 
+                            {comment.commentWriter == me.username && <span onClick={onClickDeleteComment} style={{cursor:'pointer'}}>삭제</span>} 
                         </div>
                     </div>
                 </div>

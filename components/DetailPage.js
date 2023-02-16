@@ -1,6 +1,6 @@
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import NavBar from "./NavBar";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import CommentForm from "./Comment/CommentForm";
 import CommentList from "./Comment/CommentList";
 import UserInfo from "./UserInfo";
@@ -8,10 +8,18 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-const DetailPage = (props) => {
-    const {postList} = useSelector((state) => state.mainpage);
-    const item = postList.filter((v) => v.id == props.id ? v : null);
+const DetailPage = (data) => {
+    const {currentReqPost} = useSelector((state) => state.mainpage);
     const [currentSlide, setCurrentSlide] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
+    const dispatch = useDispatch();
+    
+    useEffect(() => {
+        console.log(data.data);
+        dispatch({type:'POST_INFO_REQUEST', data: {postId:data.data}});
+        setIsLoading(false);
+    }, []);
+    console.log(currentReqPost);
     const settings = {
         dote:true,
         infinite:true,
@@ -21,6 +29,8 @@ const DetailPage = (props) => {
     }
     return(
         <>
+        {isLoading ? <div>로딩중</div> :
+        <div>
         <NavBar />
         <div className = 'detail_window' style={{marginTop:70}}>
             <div className='wrapper-detail'>
@@ -28,26 +38,27 @@ const DetailPage = (props) => {
                     <Slider {...settings} 
                         afterChange={(slide) => setCurrentSlide(slide)}
                     >
-                        {item[0].imageList.map((i, index) => (
+                        {currentReqPost.imageList.map((i, index) => (
                             <img key={index} src={i.image} className="post-image" alt="" />
                         ))}
                     </Slider>   
                 </div>
                 <div className="right-col-detail">
-                    <UserInfo postId = {item[0].id} postName = {item[0].name} postImage = {item[0].profileImage} isMain = {true}/>
+                    <UserInfo postId = {currentReqPost.postId} postName = {currentReqPost.accountId} postImage = {currentReqPost.profileImage} isMain = {true}/>
                     <div className="comment-post" style={{}}>
                         <div style={{maxHeight: "80%"}}>
                             <div style={{borderBottom:"1px solid lightgray"}} className="post-story">
-                                <p className="description"><span>{item[0].name}</span> {item[0].content}</p>
-                                <p className="post-time">{item[0].modifiedDate}</p>
+                                <p className="description"><span>{currentReqPost.accountId}</span> {currentReqPost.content}</p>
+                                <p className="post-time">{currentReqPost.createdDt}</p>
                             </div>
-                            {item[0].commentList.length != 0 ? <CommentList commentList = { item[0].commentList} postId  = {item[0].id}/> : <></>}
+                            {currentReqPost.commentList.length != 0 ? <CommentList /> : <></>}
                         </div>
-                        <CommentForm checkHeart = {item[0].likesCheck} postId = {item[0].id} heartCount = {item[0].likeCount}/>
+                        <CommentForm checkHeart = {currentReqPost.likesCheck} postId = {currentReqPost.postId} heartCount = {currentReqPost.likeCount}/>
                     </div>  
                 </div>
             </div>
         </div>
+        </div>}
         </>
     );
 };

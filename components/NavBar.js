@@ -23,7 +23,7 @@ const NavBar = () => {
     }, [clearUpload])
     
     const onClickProfile = () => {
-        dispatch({type:'PROFILE_LOAD_REQUEST'});
+        dispatch({type:'PROFILE_LOAD_REQUEST', data: me.accountId});
     }
 
     const onClickAlarmPage = () => {
@@ -68,6 +68,7 @@ const NavBar = () => {
                             borderRadius: 13,
                             },
                         }}
+                        ariaHideApp={false}
                     >
                         <NewPost/>
                     </Modal>
@@ -83,6 +84,7 @@ const NavBar = () => {
                             borderRadius: 13,
                             },
                         }}
+                        ariaHideApp={false}
                     >
                         <AlarmForm/>
                     </Modal>

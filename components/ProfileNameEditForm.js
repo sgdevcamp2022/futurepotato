@@ -1,5 +1,6 @@
+
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 const ProfileNameEditForm = () => {
     const {me} = useSelector((state) => state.user);
     const dispatch = useDispatch();
@@ -15,13 +16,7 @@ const ProfileNameEditForm = () => {
     },[]);
 
     const onClickProfileEdit = () => {
-        if(accountName.length == 0 && accountId != 0){
-            dispatch();
-        }else if(accountName.length != 0 && accountId == 0){
-            dispatch();
-        }else if(accountName.length != 0 && accountId != 0){
-            dispatch();
-        }
+        dispatch({type : 'PROFILE_EDIT_REQUEST', data:{accountId, accountName, originalId: me.accountId}})
     }
     
     return(

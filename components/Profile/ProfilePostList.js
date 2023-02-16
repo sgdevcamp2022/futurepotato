@@ -6,9 +6,9 @@ const ProfilePostList = () => {
     console.log(profileData);
     return(
         <>
-        {profileData.imageList.map((v, index) => (
+        {profileData.mypagePostDtos.map((v, index) => (
             <div key={index}>
-                <ProfilePost image = {v.image} postId = {v.postId}/>
+                <ProfilePost image = {v.storedUrl} postId = {v.postId}/>
             </div>
         ))}
         </>

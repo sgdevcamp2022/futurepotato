@@ -1,12 +1,13 @@
+import { useSelector } from "react-redux";
 import CommentItem from "./CommentItem";
 
-const CommentList = (commentList) => {
-    const commentLists = commentList.commentList;
-    console.log(commentList.commentList);
+const CommentList = () => {
+    const {commentList} = useSelector((state)=>state.mainpage.currentReqPost);
+    console.log(commentList);
     return(
         <div className="comment-list">
-            {commentLists.length != 0 ? commentLists.map((v) => (
-                <CommentItem commentItem = {v} postId = {commentList.postId}/>
+            {commentList.length != 0 ? commentList.map((v, index) => (
+                <CommentItem key={index} commentItem = {v}/>
             )) : <div></div>}
         </div>
     );
