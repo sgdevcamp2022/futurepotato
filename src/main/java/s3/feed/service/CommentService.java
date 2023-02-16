@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import s3.feed.entity.*;
 import s3.feed.exception.ForbiddenException;
-import s3.feed.rabbitMq.CustomMessage;
-import s3.feed.rabbitMq.RabbitmqProducer;
+//import s3.feed.rabbitMq.CustomMessage;
+//import s3.feed.rabbitMq.RabbitmqProducer;
 import s3.feed.repository.CommentRepository;
 import s3.feed.repository.PostRepository;
 import s3.feed.repository.ReplyRepository;
@@ -27,8 +27,8 @@ public class CommentService {
     PostRepository postRepository;
     @Autowired
     ReplyRepository replyRepository;
-    @Autowired
-    RabbitmqProducer rabbitmqProducer;
+//    @Autowired
+//    RabbitmqProducer rabbitmqProducer;
 
     public ResponseEntity createComment(String accountId, Long postId, String comment) throws JsonProcessingException {
         UserEntity userEntity = userRepository.findByAccountId(accountId);
@@ -43,8 +43,8 @@ public class CommentService {
         postRepository.save(postEntity);
         /*rabbitMQ */
 
-        CustomMessage customMessage = new CustomMessage(accountId, postEntity.getAccountId(), postEntity.getContent(),"댓글을 달았습니다.");
-        rabbitmqProducer.sendMessage(customMessage);
+//        CustomMessage customMessage = new CustomMessage(accountId, postEntity.getAccountId(), postEntity.getContent(),"댓글을 달았습니다.");
+//        rabbitmqProducer.sendMessage(customMessage);
 
 
         return ResponseEntity.ok("commentId "+commentId+" ,댓글 등록");
@@ -71,8 +71,8 @@ public class CommentService {
         commentRepository.save(commentEntity);
         /*rabbitMQ */
 
-        CustomMessage customMessage = new CustomMessage(accountId, commentEntity.getAccountId(), commentEntity.getComment(),"대댓글을 달았습니다.");
-        rabbitmqProducer.sendMessage(customMessage);
+//        CustomMessage customMessage = new CustomMessage(accountId, commentEntity.getAccountId(), commentEntity.getComment(),"대댓글을 달았습니다.");
+//        rabbitmqProducer.sendMessage(customMessage);
 
         return ResponseEntity.ok("replyId: "+replyId+" ,대댓글 등록");
 
@@ -90,39 +90,31 @@ public class CommentService {
     }
 
     public ResponseEntity likeComment(Long commentId, String accountId) {
-        if(!commentRepository.isLike(accountId, commentId)) {
             CommentEntity commentEntity = commentRepository.findById(commentId).get();
             UserEntity userWhoLikeThis = userRepository.findByAccountId(accountId);
             commentEntity.setLikeCount(commentEntity.getLikeCount() + 1);
             commentEntity.getUsersWhoLikeThis().add(userWhoLikeThis);
             commentRepository.save(commentEntity);
             return ResponseEntity.ok("댓글 좋아요 성공");
-        }else {throw new RuntimeException("already like");}
     }
     public ResponseEntity deleteLikeComment(Long commentId, String accountId) {
-        if(commentRepository.isLike(accountId, commentId)) {
             CommentEntity commentEntity = commentRepository.findById(commentId).get();
             commentRepository.deleteLike(accountId, commentId);
             commentEntity.setLikeCount(commentEntity.getLikeCount() - 1);
             return ResponseEntity.ok("댓글 좋아요 취소 성공");
-        }else {throw new RuntimeException("already delete like");}
     }
     public ResponseEntity likeReply(Long replyId, String accountId) {
-        if(!replyRepository.isLike(accountId, replyId)) {
             ReplyEntity replyEntity = replyRepository.findById(replyId).get();
             UserEntity userWhoLikeThis = userRepository.findByAccountId(accountId);
             replyEntity.setLikeCount(replyEntity.getLikeCount() + 1);
             replyEntity.getUsersWhoLikeThis().add(userWhoLikeThis);
             replyRepository.save(replyEntity);
             return ResponseEntity.ok("대댓글 좋아요 성공");
-        } else {throw new RuntimeException("already like");}
     }
     public ResponseEntity deleteLikeReply(Long replyId, String accountId) {
-        if(replyRepository.isLike(accountId, replyId)) {
             ReplyEntity replyEntity = replyRepository.findById(replyId).get();
             replyRepository.deleteLike(accountId, replyId);
             replyEntity.setLikeCount(replyEntity.getLikeCount() - 1);
             return ResponseEntity.ok("대댓글 좋아요 취소 성공");
-        } else {throw new RuntimeException("already delete like");}
     }
 }

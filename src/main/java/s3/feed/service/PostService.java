@@ -146,22 +146,18 @@ public class PostService {
     }
 
     public ResponseEntity likePost(Long postId, String accountId) {
-        if(!postRepository.isLike(accountId, postId)) {
             PostEntity postEntity = postRepository.findById(postId).get();
             UserEntity userWhoLikeThis = userRepository.findByAccountId(accountId);
             postEntity.setLikeCount(postEntity.getLikeCount() + 1);
             postEntity.getUsersWhoLikeThis().add(userWhoLikeThis);
             postRepository.save(postEntity);
             return ResponseEntity.ok("게시물 좋아요 성공");
-        }else {throw new RuntimeException("already like");}
     }
     public ResponseEntity deleteLikePost(Long postId, String accountId) {
-        if(postRepository.isLike(accountId, postId)) {
             PostEntity postEntity = postRepository.findById(postId).get();
             postRepository.deleteLike(accountId, postId);
             postEntity.setLikeCount(postEntity.getLikeCount()-1);
             return ResponseEntity.ok("게시물 좋아요 취소 성공");
-        } else {throw new RuntimeException("already delete like");}
     }
 }
 //    public UserDto.ResPostListDto getUserPosts(String name){

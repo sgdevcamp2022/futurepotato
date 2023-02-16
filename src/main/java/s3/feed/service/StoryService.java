@@ -102,19 +102,15 @@ public class StoryService {
 
 
     public ResponseEntity likeStory(Long storyId, String accountId) {
-        if(!storyRepository.isLike(accountId, storyId)) {
             StoryEntity storyEntity = storyRepository.findById(storyId).get();
             UserEntity userWhoLikeThis = userRepository.findByAccountId(accountId);
             storyEntity.getUsersWhoLikeThis().add(userWhoLikeThis);
             storyRepository.save(storyEntity);
             return ResponseEntity.ok("스토리 좋아요 성공");
-        }else {throw new RuntimeException("already like");}
     }
     public ResponseEntity deleteLikeStory(Long storyId, String accountId) {
-        if(storyRepository.isLike(accountId, storyId)) {
             storyRepository.deleteLike(accountId, storyId);
             return ResponseEntity.ok("스토리 좋아요 취소 성공");
-        } else {throw new RuntimeException("already like");}
     }
 }
 
