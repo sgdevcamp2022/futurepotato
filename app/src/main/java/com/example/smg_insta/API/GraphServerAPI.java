@@ -2,10 +2,9 @@ package com.example.smg_insta.API;
 
 import com.example.smg_insta.DTO.FollowListResponse;
 
-import java.util.List;
-
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;

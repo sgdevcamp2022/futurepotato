@@ -188,7 +188,7 @@ public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHold
                 Intent intent = new Intent(context, CommentsActivity.class);
                 // myAccountId 랑 postId 가져와야함!!
                 //intent.putExtra("accountId", );
-                intent.putExtra("postId", data.get(position).getId());
+                intent.putExtra("postId", data.get(position).getId()+"");
                 context.startActivity(intent);
             }
         });

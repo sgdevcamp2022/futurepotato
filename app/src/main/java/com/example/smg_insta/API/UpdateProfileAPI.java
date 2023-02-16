@@ -14,8 +14,10 @@ import retrofit2.http.Path;
 
 // 프로필 편집
 public interface UpdateProfileAPI {
+    @FormUrlEncoded
     @PATCH("/feed/mypage/{accountId}")
-    Call<ResponseBody> UpdateProfile(@Path("accountId") String accountId, @Body UpdateProfileData updateProfile);
+    Call<ResponseBody> UpdateProfile(@Path("accountId") String accountId, @Field("accountId") String updateId, @Field("accountName") String accountName);
+    //Call<ResponseBody> UpdateProfile(@Path("accountId") String accountId, @Body UpdateProfileData updateProfile);
 
     @FormUrlEncoded
     @PATCH("/feed/mypage/{accountId}")

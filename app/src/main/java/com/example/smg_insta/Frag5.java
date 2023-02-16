@@ -24,6 +24,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.smg_insta.API.Service;
 import com.example.smg_insta.Adapter.RVAdapter_profile;
 import com.example.smg_insta.DTO.MypageResponse;
@@ -48,6 +49,8 @@ public class Frag5 extends Fragment {
     RVAdapter_profile adapter;
     MypageResponse feeds;
     Service dataService = new Service();
+
+    String name, profile;
 
 
     // 로그인시 받아와야 함!!
@@ -126,8 +129,13 @@ public class Frag5 extends Fragment {
                     adapter = new RVAdapter_profile(myImages, getContext(), dataService);
                     userId.setText(feeds.getAccountId());
                     userName.setText(feeds.getName());
+                    name = feeds.getName();
                     if (feeds.getProfileImage() != null) {
-                        userImage.setImageURI(Uri.parse(feeds.getProfileImage()));
+                        Glide.with(getActivity())
+                                .load(feeds.getProfileImage())
+                                .into(userImage);
+                        //userImage.setImageURI(Uri.parse(feeds.getProfileImage()));
+                        profile = feeds.getProfileImage();
                     }
 
                     post.setText(feeds.getPostCount()+"");
@@ -177,10 +185,10 @@ public class Frag5 extends Fragment {
 
                 Bundle bundle = new Bundle();
                 //이름은 회원가입할 때 작성하는 듯. 있을수도있고 없을수도있음.
-                //bundle.putString("name", name);
+                bundle.putString("name", name);
                 // 아니면 게시물 조회에 프로필 사진 추가 부탁
-                PreferenceManager.setString(getContext(), "profileImage", String.valueOf(userImage));
-
+                bundle.putString("profile", profile);
+                editProfileFrag.setArguments(bundle);
                 transaction.replace(R.id.main_frame, editProfileFrag).addToBackStack(null).commit();
 
             }

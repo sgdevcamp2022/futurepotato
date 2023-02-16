@@ -1,11 +1,20 @@
 package com.example.smg_insta;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
+import static android.content.Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
 
+import static androidx.core.content.ContextCompat.checkSelfPermission;
+
+import android.annotation.SuppressLint;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +32,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.loader.content.CursorLoader;
 
 import com.bumptech.glide.Glide;
 import com.example.smg_insta.API.Service;
@@ -30,6 +40,7 @@ import com.example.smg_insta.API.Service;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -49,7 +60,7 @@ public class Frag3 extends Fragment {
     private TextView upload;
 
     String content;
-    ArrayList<MultipartBody.Part> files;
+    List<MultipartBody.Part> files;
 
     String accountId;  //로그인할때 저장해야하나?
 
@@ -69,10 +80,12 @@ public class Frag3 extends Fragment {
             @Override
             public void onClick(View view) {
                 //갤러리 호출
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                //Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                //Intent intent = new Intent(Intent.ACTION_PICK);
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);  // 다중 이미지를 가져올 수 있도록 세팅
+
+
                 //intent.setAction(Intent.ACTION_PICK);
                 activityResultLauncher.launch(intent);
             }
@@ -92,14 +105,17 @@ public class Frag3 extends Fragment {
 
                 // 파일 경로들을 가지고있는 `ArrayList<Uri> filePathList`가 있다고 칩시다...
                 for (int i = 0; i < filePathList.size(); ++i) {
+
+                    //String realPath = getFullPathFromUri(getContext(),filePathList.get(i));
+
                     // Uri 타입의 파일경로를 가지는 RequestBody 객체 생성
-                    RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), filePathList.get(i).toString());
+                    RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), filePathList.get(i)+"");
 
                     // 사진 파일 이름
-                    String fileName = "photo" + i + ".jpg";
+                    String fileName = "image" + i + ".jpg";
                     // RequestBody로 Multipart.Part 객체 생성
                     MultipartBody.Part filePart = MultipartBody.Part.createFormData("image", fileName, fileBody);
-
+                    Log.e("filePart: " , filePart+"");
                     // 추가
                     files.add(filePart);
                 }
@@ -185,4 +201,77 @@ public class Frag3 extends Fragment {
             }
 
     );
+
+    //Uri -- > 절대경로로 바꿔서 리턴시켜주는 메소드
+    public String getRealPathFromURI(Uri contentUri) {
+
+        String[] proj = { MediaStore.Images.Media.DATA };
+
+        Cursor cursor = getContext().getContentResolver().query(contentUri, proj, null, null, null);
+        cursor.moveToNext();
+        @SuppressLint("Range")
+        String path = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
+        Uri uri = Uri.fromFile(new File(path));
+
+        cursor.close();
+        return path;
+    }
+
+
+
+    private String getRealPathFromURI2(Uri contentUri) {
+        if (contentUri.getPath().startsWith("/storage")) {
+            return contentUri.getPath();
+        }
+
+        String id = DocumentsContract.getDocumentId(contentUri).split(":")[1];
+        String[] columns = { MediaStore.Files.FileColumns.DATA };
+        String selection = MediaStore.Files.FileColumns._ID + " = " + id;
+        Cursor cursor = getContext().getContentResolver().query(MediaStore.Files.getContentUri("external"), columns, selection, null, null);
+        try {
+            int columnIndex = cursor.getColumnIndex(columns[0]);
+            if (cursor.moveToFirst()) {
+                return cursor.getString(columnIndex);
+            }
+        } finally {
+            cursor.close();
+        }
+        return null;
+    }
+
+    public static String getFullPathFromUri(Context ctx, Uri fileUri) {
+        String fullPath = null;
+        final String column = "_data";
+        Cursor cursor = ctx.getContentResolver().query(fileUri, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            String document_id = cursor.getString(0);
+            if (document_id == null) {
+                for (int i=0; i < cursor.getColumnCount(); i++) {
+                    if (column.equalsIgnoreCase(cursor.getColumnName(i))) {
+                        fullPath = cursor.getString(i);
+                        break;
+                    }
+                }
+            } else {
+                document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
+                cursor.close();
+
+                final String[] projection = {column};
+                try {
+                    cursor = ctx.getContentResolver().query(
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                            projection, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
+                    if (cursor != null) {
+                        cursor.moveToFirst();
+                        fullPath = cursor.getString(cursor.getColumnIndexOrThrow(column));
+                    }
+                } finally {
+                    if (cursor != null) cursor.close();
+                }
+            }
+        }
+        return fullPath;
+    }
 }
+

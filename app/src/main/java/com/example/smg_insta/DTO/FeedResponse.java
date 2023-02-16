@@ -44,8 +44,8 @@ public class FeedResponse {
     @SerializedName("imageList")
     private ArrayList<String> imageList;
 
-    @SerializedName("isMultyImage")
-    private boolean isMultyImage;
+    @SerializedName("multyImage")
+    private boolean multyImage;
 
     public int getPostId() {return postId;}
 
@@ -91,9 +91,9 @@ public class FeedResponse {
 
     public void setImageList(ArrayList<String> imageList) {this.imageList = imageList;}
 
-    public boolean isMultyImage() {return isMultyImage;}
+    public boolean isMultyImage() {return multyImage;}
 
-    public void setMultyImage(boolean multyImage) {isMultyImage = multyImage;}
+    public void setMultyImage(boolean multyImage) {multyImage = multyImage;}
 
     public static class Comment {
 

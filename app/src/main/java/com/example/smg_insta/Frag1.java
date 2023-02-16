@@ -114,7 +114,7 @@ public class Frag1 extends Fragment {
         List<String> test1 = new ArrayList<>();
         test1.add("https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg");
         test1.add("https://cdn.pixabay.com/photo/2020/11/04/15/29/coffee-beans-5712780_1280.jpg");
-        MainPageResponse.Post testPost1 = new MainPageResponse.Post(12, "user1", "게시물1", "2023-01-01T12:11:00", "2023-01-01T13:11:00", 12, true, 110, test1);
+        MainPageResponse.Post testPost1 = new MainPageResponse.Post(12, "user1","게시물1", null,"2023-01-01T12:11:00", 23, true, 5, test1);
         test_postList.add(testPost1);
 
         List<String> test2 = new ArrayList<>();
@@ -141,8 +141,7 @@ public class Frag1 extends Fragment {
 
 
         mRV_post = view.findViewById(R.id.recyclerview_post);
-        //mRecyclerView.setHasFixedSize(true);
-
+        mRV_post.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mRV_post.setLayoutManager(layoutManager);
 

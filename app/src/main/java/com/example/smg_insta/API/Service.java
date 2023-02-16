@@ -88,7 +88,7 @@ public class Service {
 
         @Multipart
         @POST("/feed/{accountId}/media")
-        Call<ResponseBody> insertOne(@Path("accountId") String accountId, @Part("content") String content, @Part List<MultipartBody.Part> files);
+        Call<ResponseBody> insertOne(@Path("accountId") String accountId, @Part("content") String content, @Part List<MultipartBody.Part> imageList);
 
         @FormUrlEncoded
         @PATCH("/feed/{accountId}/media/{postId}")
@@ -138,10 +138,17 @@ public class Service {
 
     //-----메인화면/마이페이지------
     // 메인화면 조회
+//    public interface SelectMainPageAPI {
+//        @GET("/feed/test/{accountId}/postList")
+//        Call<List<MainPageResponse.Post>> SelectMainPage(@Path("accountId") String accountId);
+//    }
+
     public interface SelectMainPageAPI {
         @GET("/feed/{accountId}")
         Call<MainPageResponse> SelectMainPage(@Path("accountId") String accountId);
     }
+
+
 
 
     public interface SearchAPI {

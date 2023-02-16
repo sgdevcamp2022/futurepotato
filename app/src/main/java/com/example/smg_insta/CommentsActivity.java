@@ -50,12 +50,13 @@ public class CommentsActivity extends AppCompatActivity {
         setContentView(R.layout.comments);
 
         Intent intent = getIntent();
+        // userId가 왜 필요하지?? -> 어디서 넘어오는지 확인!
         if(intent.getStringExtra("userId") != null) {
             accountId = intent.getStringExtra("userId");
             postId = Integer.parseInt(intent.getStringExtra("postId"));
         } else {
+            postId = Integer.parseInt(intent.getStringExtra("postId"));
             accountId = PreferenceManager.getString(getApplication(), "accountID");
-            //postId = Integer.parseInt(intent.getStringExtra("postId"));
         }
 
         mRV_comments = findViewById(R.id.recyclerView_comments);
@@ -63,7 +64,9 @@ public class CommentsActivity extends AppCompatActivity {
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         mRV_comments.setLayoutManager(layoutManager);
+        //davin baboo
 
+        readComment(postId);
 
 
         //------test
@@ -117,14 +120,18 @@ public class CommentsActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         // 댓글 쓰기 성공시
-                        Toast.makeText(getApplicationContext(), "성공", Toast.LENGTH_LONG).show();
-                        // 키보드 내리기
-                        InputMethodManager mInputMethodManager = (InputMethodManager)getApplication().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        mInputMethodManager.hideSoftInputFromWindow(et_comment.getWindowToken(), 0);
-                        // et_comment 내용 삭제
-                        et_comment.setText(null);
-
-                        readComment(postId);
+                        if(response.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(), "성공", Toast.LENGTH_LONG).show();
+                            // 키보드 내리기
+                            InputMethodManager mInputMethodManager = (InputMethodManager)getApplication().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            mInputMethodManager.hideSoftInputFromWindow(et_comment.getWindowToken(), 0);
+                            // et_comment 내용 삭제
+                            et_comment.setText(null);
+                            readComment(postId);
+                            Toast.makeText(getApplicationContext(), "댓글 성공", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "댓글 오류: " + response.code(), Toast.LENGTH_LONG).show();
+                        }
                     }
 
                     @Override
