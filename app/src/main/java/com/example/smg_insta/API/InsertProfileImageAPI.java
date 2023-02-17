@@ -11,7 +11,7 @@ import retrofit2.http.Path;
 // 프로필 사진 업로드
 public interface InsertProfileImageAPI {
     @Multipart
-    @POST("/feed/mypage/{accountId}")
+    @POST("feed/profileImage/{accountId}")
         // 타입 불확실..
     Call<ResponseBody> InsertProfileImage(@Path("accountId") String accountId, @Part MultipartBody.Part file);
 

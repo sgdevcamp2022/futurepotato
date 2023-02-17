@@ -70,6 +70,8 @@ public class ReplyActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if(response.isSuccessful()) {
+                            // 리싸이클러뷰 연결
+                            Log.e("Reply 성공: ", response.code()+"");
                             myReply.setText(null);
                             finish();
                         }
@@ -117,4 +119,7 @@ public class ReplyActivity extends AppCompatActivity {
 
 
     }
+
+
+
 }

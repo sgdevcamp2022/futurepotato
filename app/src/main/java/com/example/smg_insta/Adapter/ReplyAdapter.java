@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -47,6 +48,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder>{
         Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+        accountId = PreferenceManager.getString(context, "accountID");
+
         View view = inflater.inflate(R.layout.reply_item, parent, false);
         ReplyAdapter.ViewHolder vh = new ReplyAdapter.ViewHolder(view);
         return vh;
@@ -55,6 +58,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull ReplyAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.bindReply(replyList.get(position));
+        holder.checkReplyLike(replyList.get(position));
 
         // 길게 누르면 삭제 팝업
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -72,7 +76,6 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder>{
                         switch (menuItem.getItemId()){
                             case R.id.menu_delete:
                                 // 답글 삭제
-                                accountId = PreferenceManager.getString(context, "accountID");
                                 dataService.comment.DeleteReply(accountId, replyList.get(position).getReplyId()).enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -94,6 +97,58 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder>{
                 return true;
             }
         });
+
+        // 답글 좋아요
+        holder.btnNoLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dataService.feedLike.likeReply(accountId, replyList.get(position).getReplyId()).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.isSuccessful()) {
+                            holder.btnLike.setVisibility(View.VISIBLE);
+                            holder.btnNoLike.setVisibility(View.GONE);
+                            Log.e("likeReply", "답글 좋아요를 눌렀습니다.");
+
+                        } else {
+                            Log.e("likeReply", "답글 좋아요 오류: "+response.code());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        t.printStackTrace();
+                        Log.e("likeReply", "답글 좋아요 실패");
+                    }
+                });
+            }
+        });
+
+        // 답글 좋아요 취소
+        holder.btnLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dataService.feedLike.unlikeReply(accountId, replyList.get(position).getReplyId()).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.isSuccessful()) {
+                            holder.btnLike.setVisibility(View.GONE);
+                            holder.btnNoLike.setVisibility(View.VISIBLE);
+                            Log.e("unlikeReply", "답글 좋아요를 취소하였습니다..");
+
+                        } else {
+                            Log.e("unlikeReply", "답글 좋아요 취소 오류: "+response.code());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        t.printStackTrace();
+                        Log.e("unlikeReply", "답글 좋아요 취소 실패");
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -104,21 +159,56 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder>{
 
         CircleImageView profile_image;
         TextView userId, reply;
+        ImageView btnLike, btnNoLike;
 
         public ViewHolder(View itemView) {
             super(itemView);
             profile_image = itemView.findViewById(R.id.iv_reply_accountImage);
             userId = itemView.findViewById(R.id.tv_reply_accountId);
             reply = itemView.findViewById(R.id.tv_reply);
+            btnLike = itemView.findViewById(R.id.iv_reply_like);
+            btnNoLike = itemView.findViewById(R.id.iv_reply_noLike);
         }
 
         public void bindReply(FeedResponse.Reply item) {
-            Glide.with(context)
-                    .load(item.getImage())
-                    .into(profile_image);
-
+            if(item.getImage() != null) {
+                Glide.with(context)
+                        .load(item.getImage())
+                        .into(profile_image);
+            }
             userId.setText(item.getReplyWriter());
             reply.setText(item.getReply());
         }
+
+        void checkReplyLike(FeedResponse.Reply item) {
+            // 좋아요 초기화
+            dataService.feedLike.isLikeReply(accountId, item.getReplyId()).enqueue(new Callback<Boolean>() {
+                @Override
+                public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                    if(response.isSuccessful()) {
+                        Log.e("isLikeReply", "답글 좋아요 초기화 성공");
+
+                        if(response.body()) {
+                            btnLike.setVisibility(View.VISIBLE);
+                            btnNoLike.setVisibility(View.GONE);
+                        } else {
+                            btnLike.setVisibility(View.GONE);
+                            btnNoLike.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        Log.e("isLikeReply", "답글 좋아요 초기화 오류: " + response.code());
+                    }
+                }
+                @Override
+                public void onFailure(Call<Boolean> call, Throwable t) {
+                    t.printStackTrace();
+                    Log.e("isLikeReply", "답글 좋아요 초기화 실패");
+                }
+            });
+
+
+        }
+
+
     }
 }

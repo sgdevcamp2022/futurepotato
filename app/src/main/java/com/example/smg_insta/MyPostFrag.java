@@ -25,6 +25,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.example.smg_insta.API.Service;
+import com.example.smg_insta.Adapter.ImageSliderAdapter;
 import com.example.smg_insta.DTO.FeedResponse;
 
 import java.util.ArrayList;
@@ -53,6 +54,7 @@ public class MyPostFrag extends Fragment {
     String bundle_id;
     String bundle_profile;
     String bundle_content;
+
 
     @Nullable
     @Override
@@ -103,8 +105,10 @@ public class MyPostFrag extends Fragment {
             public void onResponse(Call<FeedResponse> call, Response<FeedResponse> response) {
                 // 성공시
                 if(response.isSuccessful()) {
+                    Log.e("TAG", "성공");
                     selectedFeed = response.body();
                     bundle_id = selectedFeed.getAccountId();
+                    checkLike(bundle_id, postId);   // 좋아요 초기화
                     userId.setText(bundle_id);
                     likeCount.setText("좋아요 " + selectedFeed.getLikeCount() + "개");
                     commentCount.setText("댓글 " + selectedFeed.getCommentCount() + "개");
@@ -112,12 +116,23 @@ public class MyPostFrag extends Fragment {
                     content.setText(selectedFeed.getAccountId() + "  " + bundle_content);
 
                     // 프로필 이미지
-                    Glide.with(getContext())
-                            .load(profile)
-                            .into(profileImage);
+                    if(profile != null) {
+                        Glide.with(getActivity())
+                                .load(profile)
+                                .into(profileImage);
+                    }
 
                     // 이미지들
                     images = selectedFeed.getImageList();
+                    for(String s: images){
+                        Log.e("images", s);
+                    }
+
+
+                    info_img_content.setOffscreenPageLimit(1);
+                    info_img_content.setAdapter(new ImageSliderAdapter(getActivity(), images));
+
+
                     info_img_content.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
                         @Override
                         public void onPageSelected(int position) {
@@ -127,22 +142,18 @@ public class MyPostFrag extends Fragment {
                     });
                     setupIndicators(images.size());
 
-                    // 좋아요 버튼 설정
-                    if(selectedFeed.isLikesCheck()) {
-                        btn_like.setVisibility(View.VISIBLE);
-                        btn_noLike.setVisibility(View.GONE);
-                    } else {
-                        btn_like.setVisibility(View.GONE);
-                        btn_noLike.setVisibility(View.VISIBLE);
-                    }
 
                 } else {
                     Log.e("TAG", "ErrorCode: " + response.code() + " / " + response.message());
                 }
             }
             @Override
-            public void onFailure(Call<FeedResponse> call, Throwable t) {t.printStackTrace();}
+            public void onFailure(Call<FeedResponse> call, Throwable t) {
+                t.printStackTrace();
+                Log.e("TAG", "실패");}
         });
+
+
 
 
         // 3. 좋아요 기능
@@ -151,10 +162,26 @@ public class MyPostFrag extends Fragment {
             public void onClick(View view) {
                 // 좋아요 API 연결
                 //
-                //
+                dataService.feedLike.likeFeed(bundle_id, postId).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.isSuccessful()) {
+                            btn_like.setVisibility(View.VISIBLE);
+                            btn_noLike.setVisibility(View.GONE);
+                            Toast.makeText(getContext(), "좋아요를 눌렀습니다.", Toast.LENGTH_SHORT).show();
 
-                btn_like.setVisibility(View.VISIBLE);
-                btn_noLike.setVisibility(View.GONE);
+                        } else {
+                            Toast.makeText(getContext(), "좋아요 오류: " + response.code(), Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        t.printStackTrace();
+                        Toast.makeText(getContext(), "좋아요 실패", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
@@ -163,10 +190,25 @@ public class MyPostFrag extends Fragment {
             public void onClick(View view) {
                 // 좋아요 취소 API 연결
                 //
-                //
+                dataService.feedLike.unlikeFeed(bundle_id, postId).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.isSuccessful()) {
+                            btn_like.setVisibility(View.GONE);
+                            btn_noLike.setVisibility(View.VISIBLE);
+                            Toast.makeText(getContext(), "좋아요를 취소하였습니다.", Toast.LENGTH_SHORT).show();
 
-                btn_like.setVisibility(View.GONE);
-                btn_noLike.setVisibility(View.VISIBLE);
+                        } else {
+                            Toast.makeText(getContext(), "좋아요취소 오류: " + response.code(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        t.printStackTrace();
+                        Toast.makeText(getContext(), "좋아요취소 실패", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
@@ -187,16 +229,21 @@ public class MyPostFrag extends Fragment {
                         switch (menuItem.getItemId()){
                             case R.id.menu_delete:
                                 // 게시물 삭제 시도
-                                dataService.feed.DeleteFeed(String.valueOf(userId), postId).enqueue(new Callback<ResponseBody>() {
+                                // if(bundle_id == accountId)
+                                dataService.feed.DeleteFeed(bundle_id, postId).enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                        Toast.makeText(getContext(), "삭제 되었습니다.", Toast.LENGTH_SHORT).show();
+                                        if(response.isSuccessful()) {
+                                            Toast.makeText(getContext(), "삭제 되었습니다.", Toast.LENGTH_SHORT).show();
 
-                                        // frag5로 가기
-                                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                                        Frag5 frag5 = new Frag5();
-                                        transaction.replace(R.id.main_frame, frag5).commit();
+                                            // frag5로 가기
+                                            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                            Frag5 frag5 = new Frag5();
+                                            transaction.replace(R.id.main_frame, frag5).commit();
 
+                                        } else {
+                                            Toast.makeText(getContext(), "삭제 오류: " + response.code(), Toast.LENGTH_SHORT).show();
+                                        }
                                     }
                                     @Override
                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
@@ -248,7 +295,7 @@ public class MyPostFrag extends Fragment {
                 Intent intent = new Intent(getActivity(), CommentsActivity.class);
                 // myAccountId 랑 postId 가져와야함!!
                 intent.putExtra("accountId", bundle_id);
-                intent.putExtra("postId", postId);
+                intent.putExtra("postId", postId+"");
                 startActivity(intent);
 
 
@@ -293,5 +340,34 @@ public class MyPostFrag extends Fragment {
                 ));
             }
         }
+    }
+
+    public void checkLike(String accountId, int postId) {
+        // 좋아요 초기화
+        dataService.feedLike.isLikePost(accountId, postId).enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                if(response.isSuccessful()) {
+                    Toast.makeText(getContext(), "좋아요 초기화 성공", Toast.LENGTH_SHORT).show();
+
+                    if(response.body()) {
+                        btn_like.setVisibility(View.VISIBLE);
+                        btn_noLike.setVisibility(View.GONE);
+                    } else {
+                        btn_like.setVisibility(View.GONE);
+                        btn_noLike.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    Toast.makeText(getContext(), "좋아요초기화 오류: " + response.code(), Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                t.printStackTrace();
+                Toast.makeText(getContext(), "좋아요초기화 실패", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

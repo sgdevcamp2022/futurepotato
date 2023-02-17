@@ -95,6 +95,7 @@ public class FeedResponse {
 
     public void setMultyImage(boolean multyImage) {multyImage = multyImage;}
 
+
     public static class Comment {
 
         public Comment(String commentWriter, String image, String comment, int commentId, int likeCount, String createdDt, int replyCount, ArrayList<Reply> replyList) {

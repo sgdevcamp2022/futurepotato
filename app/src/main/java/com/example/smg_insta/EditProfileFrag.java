@@ -2,9 +2,14 @@ package com.example.smg_insta;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -20,12 +25,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.example.smg_insta.API.Service;
 import com.example.smg_insta.DTO.UpdateProfileData;
 import com.example.smg_insta.DTO.UpdateProfileId;
 import com.example.smg_insta.DTO.UpdateProfileName;
+
+import java.io.File;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
@@ -53,6 +61,10 @@ public class EditProfileFrag extends Fragment {
 
     String updateName;
     String updateId;
+
+    String[] permission_list = {
+            android.Manifest.permission.WRITE_CONTACTS,
+            Manifest.permission.READ_EXTERNAL_STORAGE};
 
 
     @Nullable
@@ -89,8 +101,10 @@ public class EditProfileFrag extends Fragment {
         btn_updatePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkPermission();
+
                 // 갤러리 호출
-                Intent intent = new Intent(Intent.ACTION_PICK);
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent. setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
                 startActivityForResult(intent, REQUEST_CODE);
             }
@@ -119,10 +133,12 @@ public class EditProfileFrag extends Fragment {
 
                 // 프로필 변경
                 if(isChangedPhoto) {
+                    String realPath = getFullPathFromUri(getContext(),selectedImageUri);
+                    File realFile = new File(realPath);
                     // Uri 타입의 파일경로를 가지는 RequestBody 객체 생성
-                    RequestBody fileBody = RequestBody.create(MediaType.parse("image/jpeg"), String.valueOf(selectedImageUri));
+                    RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), realFile);
                     // RequestBody로 Multipart.Part 객체 생성
-                    MultipartBody.Part filePart = MultipartBody.Part.createFormData("photo", "photo.jpg", fileBody);
+                    MultipartBody.Part filePart = MultipartBody.Part.createFormData("multipartFile", "image.jpg", fileBody);
 
                     dataService.insertProfileImage.InsertProfileImage(accountId, filePart).enqueue(new Callback<ResponseBody>() {
                         @Override
@@ -144,18 +160,22 @@ public class EditProfileFrag extends Fragment {
                 }
 
                 // 이름, id 변경
-                if(updateName.length() > 0  && updateId.length() > 0 ) {
-                    // 둘 다 변경하기
+                if(updateName.length() >= 0  && updateId.length() > 0 ) {
+                    // 둘 다 변경하
                     UpdateProfileData data = new UpdateProfileData(updateId, updateName);
-                    dataService.updateProfile.UpdateProfile(accountId, updateId, updateName).enqueue(new Callback<ResponseBody>() {
+                    dataService.updateProfile.UpdateProfile(accountId, data).enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             if(response.isSuccessful()) {
                                 // 성공
                                 // 기존 아이디 삭제하고 새로운 아이디 저장
                                 PreferenceManager.removeKey(getContext(), "accountID");
-                                PreferenceManager.setString(getContext(), "accountID", updateName);
+                                PreferenceManager.setString(getContext(), "accountID", updateId);
+                                Toast.makeText(getContext(), "updateName: " + updateName, Toast.LENGTH_LONG).show();
 
+                                //딜레이 후 시작할 코드 작성
+                                MainActivity activity = (MainActivity)getActivity();// 프래그먼트에서 메인엑티비티 접근
+                                activity.FragmentView(2);
                                 // 기존 이름 삭제
                             } else {
                                 Toast.makeText(getContext(), "이름, id 변경 오류: " + response.code(), Toast.LENGTH_LONG).show();
@@ -170,18 +190,6 @@ public class EditProfileFrag extends Fragment {
                     });
                 }
 
-
-                // 1초 후 프로필 화면으로 넘어가기
-                new Handler().postDelayed(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        //딜레이 후 시작할 코드 작성
-                        MainActivity activity = (MainActivity)getActivity();// 프래그먼트에서 메인엑티비티 접근
-                        activity.FragmentView(2);
-                    }
-                }, 1000);
             }
         });
 
@@ -196,6 +204,77 @@ public class EditProfileFrag extends Fragment {
             selectedImageUri = data.getData();
             profileImage.setImageURI(selectedImageUri);
             isChangedPhoto = true;
+        }
+    }
+
+
+    public static String getFullPathFromUri(Context ctx, Uri fileUri) {
+        String fullPath = null;
+        final String column = "_data";
+        Cursor cursor = ctx.getContentResolver().query(fileUri, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            String document_id = cursor.getString(0);
+            if (document_id == null) {
+                for (int i=0; i < cursor.getColumnCount(); i++) {
+                    if (column.equalsIgnoreCase(cursor.getColumnName(i))) {
+                        fullPath = cursor.getString(i);
+                        break;
+                    }
+                }
+            } else {
+                document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
+                cursor.close();
+
+                final String[] projection = {column};
+                try {
+                    cursor = ctx.getContentResolver().query(
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                            projection, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
+                    if (cursor != null) {
+                        cursor.moveToFirst();
+                        fullPath = cursor.getString(cursor.getColumnIndexOrThrow(column));
+                    }
+                } finally {
+                    if (cursor != null) cursor.close();
+                }
+            }
+        }
+        return fullPath;
+    }
+
+
+    public void checkPermission(){
+        //현재 안드로이드 버전이 6.0미만이면 메서드를 종료한다.
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+            return;
+
+        for(String permission : permission_list){
+            //권한 허용 여부를 확인한다.
+            int chk = getContext().checkCallingOrSelfPermission(permission);
+
+            if(chk == PackageManager.PERMISSION_DENIED){
+                //권한 허용을여부를 확인하는 창을 띄운다
+                requestPermissions(permission_list,0);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode==0)
+        {
+            for(int i=0; i<grantResults.length; i++)
+            {
+                //허용됬다면
+                if(grantResults[i]==PackageManager.PERMISSION_GRANTED){
+                }
+                else {
+                    Toast.makeText(getContext(),"앱권한설정하세요",Toast.LENGTH_LONG).show();
+                    //finish();
+                }
+            }
         }
     }
 

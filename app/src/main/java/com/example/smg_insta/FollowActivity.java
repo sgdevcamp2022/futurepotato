@@ -4,9 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -49,6 +51,8 @@ public class FollowActivity  extends FragmentActivity {
         } else {
             accountID = PreferenceManager.getString(this, "accountID");
         }
+        Log.e("FollowListId", "Id: " + accountID);
+
 
         back = findViewById(R.id.iv_follow_back);
         tv_userId = findViewById(R.id.tv_follow_userId);

@@ -1,7 +1,9 @@
 package com.example.smg_insta.API;
 
+import com.example.smg_insta.DTO.CommentData;
 import com.example.smg_insta.DTO.FeedResponse;
 import com.example.smg_insta.DTO.MainPageResponse;
+import com.example.smg_insta.DTO.MainPage_test_Response;
 import com.example.smg_insta.DTO.NoticeResponse;
 import com.example.smg_insta.DTO.StoryResponse;
 
@@ -15,6 +17,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -51,6 +54,7 @@ public class Service {
 
     //1. feed
     public FeedApi feed = retrofitClient.create(FeedApi.class);
+    public FeedLikeAPI feedLike = retrofitClient.create(FeedLikeAPI.class);
 
     // 2. 스토리
     public StoryApi story = retrofitClient.create(StoryApi.class);
@@ -88,28 +92,34 @@ public class Service {
 
         @Multipart
         @POST("/feed/{accountId}/media")
-        Call<ResponseBody> insertOne(@Path("accountId") String accountId, @Part("content") String content, @Part List<MultipartBody.Part> imageList);
+        Call<ResponseBody> insertOne(@Path("accountId") String accountId, @Part List<MultipartBody.Part> multipartFile,  @Part("content") String content);
 
         @FormUrlEncoded
         @PATCH("/feed/{accountId}/media/{postId}")
         Call<ResponseBody> UpdateFeed(@Path("accountId") String accountId, @Path("postId") int postId, @Field("content") String content);
 
-        @POST("/feed/{accountId}/media/{postId}")
+        @DELETE("/feed/{accountId}/media/{postId}")
         Call<ResponseBody> DeleteFeed(@Path("accountId") String accountId, @Path("postId") int postId);
-    }
 
+
+        // 스토리 조회
+
+
+    }
 
 
 
     public interface CommentApi {
         // 댓글 작성
+//        @POST("/feed/{accountId}/{postId}/comment")
+//        Call<ResponseBody> InsertComment(@Path("accountId") String accountId, @Path("postId") int postId, @Body CommentData comment);
         @FormUrlEncoded
         @POST("/feed/{accountId}/{postId}/comment")
         Call<ResponseBody> InsertComment(@Path("accountId") String accountId, @Path("postId") int postId, @Field("comment") String comment);
 
 
         // 댓글 삭제
-        @POST("/feed/{accountId}/comment/{commentId}")
+        @DELETE("/feed/{accountId}/comment/{commentId}")
         Call<ResponseBody> DeleteComment(@Path("accountId") String accountId, @Path("commentId") int commentId);
 
         // 대댓글 작성
@@ -118,7 +128,7 @@ public class Service {
         Call<ResponseBody> InsertReply(@Path("accountId") String accountId, @Path("commentId") int commentId, @Field("reply") String reply);
 
         // 대댓글 삭제
-        @POST("/feed/{accountId}/reply/{replyId}")
+        @DELETE("/feed/{accountId}/reply/{replyId}")
         Call<ResponseBody> DeleteReply(@Path("accountId") String accountId, @Path("replyId") int replyId);
 
     }
@@ -138,15 +148,18 @@ public class Service {
 
     //-----메인화면/마이페이지------
     // 메인화면 조회
-//    public interface SelectMainPageAPI {
-//        @GET("/feed/test/{accountId}/postList")
-//        Call<List<MainPageResponse.Post>> SelectMainPage(@Path("accountId") String accountId);
-//    }
-
     public interface SelectMainPageAPI {
-        @GET("/feed/{accountId}")
-        Call<MainPageResponse> SelectMainPage(@Path("accountId") String accountId);
+        @GET("/feed/test/{accountId}/postList")
+        Call<MainPage_test_Response> GetMainPost(@Path("accountId") String accountId);
+
+        @GET("/feed/test/{accountId}/storyList")
+        Call<List<MainPageResponse.Post>> GetMainStory(@Path("accountId") String accountId);
     }
+
+//    public interface SelectMainPageAPI {
+//        @GET("/feed/{accountId}")
+//        Call<MainPageResponse> SelectMainPage(@Path("accountId") String accountId);
+//    }
 
 
 

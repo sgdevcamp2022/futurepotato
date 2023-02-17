@@ -56,6 +56,7 @@ public class UpdateFeedFrag extends Fragment {
     int postId;
 
     Service dataService = new Service();
+    String updateContent;
 
     @Nullable
     @Override
@@ -124,8 +125,8 @@ public class UpdateFeedFrag extends Fragment {
                 immhide.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
 
                 // 수정...
-                et_modifiedContent.getContext().toString();
-                dataService.feed.UpdateFeed(userId, postId, String.valueOf(et_modifiedContent)).enqueue(new Callback<ResponseBody>() {
+                updateContent = et_modifiedContent.getText().toString();
+                dataService.feed.UpdateFeed(userId, postId, updateContent).enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         Toast.makeText(getActivity(), "수정 되었습니다.", Toast.LENGTH_SHORT).show();

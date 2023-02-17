@@ -1,14 +1,18 @@
 package com.example.smg_insta.API;
 
+import com.example.smg_insta.DTO.FollowData;
 import com.example.smg_insta.DTO.FollowListResponse;
+import com.example.smg_insta.DTO.isFollowingResponse;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -25,17 +29,15 @@ public interface GraphServerAPI {
 
     // 팔로우 등록
     @POST("/graph/follow")
-    Call<ResponseBody> follow(@Query("senderId") String senderId, @Query("recipientId") String recipientId);
+    Call<ResponseBody> follow(@Body FollowData followData);
 
     // 팔로우 취소
-    @FormUrlEncoded
     @DELETE("/graph/follow")
-    Call<ResponseBody> unfollow(@Field("senderId") String senderId, @Field("recipientId") String recipientId);
+    Call<ResponseBody> unfollow(@Body FollowData followData);
 
     // 차단
-    @FormUrlEncoded
     @POST("/graph/block")
-    Call<ResponseBody> block(@Field("senderId") String senderId, @Field("recipientId") String recipientId);
+    Call<ResponseBody> block(@Body FollowData followData);
 
     // 차단 해제
     @FormUrlEncoded
@@ -52,11 +54,13 @@ public interface GraphServerAPI {
     Call<FollowListResponse> getBlockingList(@Path("accountId") String accountId);
 
     // 팔로우 여부 조회
-    @GET("/graph/isFollowing")
-    Call<Boolean> isFollowing(@Query("senderId") String senderId, @Query("recipientId") String recipientId);
+    @GET("/feed/{accountId1}/isFollowing/{accountId2}")
+    Call<Boolean> isFollowing(@Path("accountId1") String senderId, @Path("accountId2") String recipientId);
+
 
     // 차단여부 조회
     @GET("/graph/isBlocking")
-    Call<Boolean> isBlocking(@Query("senderId") String senderId, @Query("recipientId") String recipientId);
+    Call<isFollowingResponse> isBlocking(@Query("senderId") String senderId, @Query("recipientId") String recipientId);
 
 }
+

@@ -5,7 +5,9 @@ import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
 import static android.content.Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
 
 import static androidx.core.content.ContextCompat.checkSelfPermission;
+import static androidx.core.content.PermissionChecker.checkCallingOrSelfPermission;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.Context;
@@ -13,6 +15,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
@@ -29,6 +32,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -67,10 +71,15 @@ public class Frag3 extends Fragment {
     Service dataService = new Service();
     ArrayList<Uri> filePathList = new ArrayList<>();
 
+    String[] permission_list = {
+            Manifest.permission.WRITE_CONTACTS,
+            Manifest.permission.READ_EXTERNAL_STORAGE};
+
     @Nullable
     @Override
     public View onCreateView(@Nullable LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.upload, container, false);
+        checkPermission();
 
         accountId = PreferenceManager.getString(getActivity(),"accountID");
 
@@ -79,9 +88,12 @@ public class Frag3 extends Fragment {
         selectPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                checkPermission();
+
+
                 //갤러리 호출
-                //Intent intent = new Intent(Intent.ACTION_PICK);
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                //Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);  // 다중 이미지를 가져올 수 있도록 세팅
 
@@ -106,26 +118,29 @@ public class Frag3 extends Fragment {
                 // 파일 경로들을 가지고있는 `ArrayList<Uri> filePathList`가 있다고 칩시다...
                 for (int i = 0; i < filePathList.size(); ++i) {
 
-                    //String realPath = getFullPathFromUri(getContext(),filePathList.get(i));
+                    String realPath = getFullPathFromUri(getContext(),filePathList.get(i));
+                    File realPathFile = new File(realPath);
 
                     // Uri 타입의 파일경로를 가지는 RequestBody 객체 생성
-                    RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), filePathList.get(i)+"");
+                    RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), realPathFile);
+                    Log.e("realPath: " , realPath);
 
                     // 사진 파일 이름
                     String fileName = "image" + i + ".jpg";
                     // RequestBody로 Multipart.Part 객체 생성
-                    MultipartBody.Part filePart = MultipartBody.Part.createFormData("image", fileName, fileBody);
-                    Log.e("filePart: " , filePart+"");
+                    MultipartBody.Part filePart = MultipartBody.Part.createFormData("multipartFile", fileName, fileBody);
+                    Log.e("filePart: " , filePart.body().toString());
                     // 추가
                     files.add(filePart);
                 }
                 if(!files.isEmpty()) {
-                    dataService.feed.insertOne(accountId, content, files).enqueue(new Callback<ResponseBody>() {
+                    dataService.feed.insertOne(accountId, files, content).enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             if(response.isSuccessful()) {
                                 // 로딩화면 만들기
-                                Toast.makeText(getContext(), "게시물 업로드 완료", Toast.LENGTH_SHORT).show();
+                                //
+                                //Toast.makeText(getActivity(), "게시물 업로드 완료", Toast.LENGTH_SHORT).show();
                                 // 메인화면으로 이동하기!!
                                 explain.setText(null);
                                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -272,6 +287,41 @@ public class Frag3 extends Fragment {
             }
         }
         return fullPath;
+    }
+
+
+    public void checkPermission(){
+        //현재 안드로이드 버전이 6.0미만이면 메서드를 종료한다.
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+            return;
+
+        for(String permission : permission_list){
+            //권한 허용 여부를 확인한다.
+            int chk = getContext().checkCallingOrSelfPermission(permission);
+
+            if(chk == PackageManager.PERMISSION_DENIED){
+                //권한 허용을여부를 확인하는 창을 띄운다
+                requestPermissions(permission_list,0);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode==0)
+        {
+            for(int i=0; i<grantResults.length; i++)
+            {
+                //허용됬다면
+                if(grantResults[i]==PackageManager.PERMISSION_GRANTED){
+                }
+                else {
+                    Toast.makeText(getContext(),"앱권한설정하세요",Toast.LENGTH_LONG).show();
+                    //finish();
+                }
+            }
+        }
     }
 }
 

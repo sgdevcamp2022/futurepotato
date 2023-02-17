@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +33,7 @@ import com.example.smg_insta.DTO.MypageResponse;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,7 +41,8 @@ import retrofit2.Response;
 public class Frag5 extends Fragment {
 
     private View view;
-    private ImageView btn_addContent, btn_setup, userImage;
+    private ImageView btn_addContent, btn_setup;
+    private CircleImageView userImage;
     private TextView userId, userName, post, following, follower;
     private RecyclerView account_recyclerview;
     private Button btn_edit_profile;
@@ -70,22 +73,22 @@ public class Frag5 extends Fragment {
         Toast.makeText(getContext(), "accountId값 : " + accountId, Toast.LENGTH_LONG).show();
 
         //--------마이페이지 테스트 더미데이터-----------------
-        MypageResponse testData = new MypageResponse();
-        testData.setAccountId("_id_Test1");
-        testData.setName("_user1_test_");
-        testData.setProfileImage("https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg");
-        testData.setFollowerCount(101);
-        testData.setFollowingCount(95);
-        testData.setPostCount(10);
-
-        List<MypageResponse.MyImage> images = new ArrayList<>();
-        images.add(new MypageResponse.MyImage("https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg", 12, true));
-        images.add(new MypageResponse.MyImage("https://cdn.pixabay.com/photo/2020/11/04/15/29/coffee-beans-5712780_1280.jpg", 14, false));
-        images.add(new MypageResponse.MyImage("https://cdn.pixabay.com/photo/2020/03/08/21/41/landscape-4913841_1280.jpg", 20, true));
-        images.add(new MypageResponse.MyImage("https://cdn.pixabay.com/photo/2020/09/02/18/03/girl-5539094_1280.jpg", 21, false));
-        images.add(new MypageResponse.MyImage("https://cdn.pixabay.com/photo/2014/03/03/16/15/mosque-279015_1280.jpg", 30, false));
-
-        testData.setImageList(images);
+//        MypageResponse testData = new MypageResponse();
+//        testData.setAccountId("_id_Test1");
+//        testData.setName("_user1_test_");
+//        testData.setProfileImage("https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg");
+//        testData.setFollowerCount(101);
+//        testData.setFollowingCount(95);
+//        testData.setPostCount(10);
+//
+//        List<MypageResponse.MyImage> images = new ArrayList<>();
+//        images.add(new MypageResponse.MyImage("https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg", 12, true));
+//        images.add(new MypageResponse.MyImage("https://cdn.pixabay.com/photo/2020/11/04/15/29/coffee-beans-5712780_1280.jpg", 14, false));
+//        images.add(new MypageResponse.MyImage("https://cdn.pixabay.com/photo/2020/03/08/21/41/landscape-4913841_1280.jpg", 20, true));
+//        images.add(new MypageResponse.MyImage("https://cdn.pixabay.com/photo/2020/09/02/18/03/girl-5539094_1280.jpg", 21, false));
+//        images.add(new MypageResponse.MyImage("https://cdn.pixabay.com/photo/2014/03/03/16/15/mosque-279015_1280.jpg", 30, false));
+//
+//        testData.setImageList(images);
 
 
         //----------------------------------
@@ -112,9 +115,9 @@ public class Frag5 extends Fragment {
         //account_recyclerview.setAdapter(adapter);
 
         //-----test----
-        adapter = new RVAdapter_profile(images, getContext(), dataService);
+        //adapter = new RVAdapter_profile(images, getContext(), dataService);
         //-------
-        account_recyclerview.setAdapter(adapter);
+        //account_recyclerview.setAdapter(adapter);
 
 
         // 1. mypage 정보 보여주기
@@ -127,6 +130,8 @@ public class Frag5 extends Fragment {
                 if(feeds != null) {
                     List<MypageResponse.MyImage> myImages = feeds.getImageList();
                     adapter = new RVAdapter_profile(myImages, getContext(), dataService);
+                    account_recyclerview.setAdapter(adapter);
+
                     userId.setText(feeds.getAccountId());
                     userName.setText(feeds.getName());
                     name = feeds.getName();
@@ -191,6 +196,7 @@ public class Frag5 extends Fragment {
                 editProfileFrag.setArguments(bundle);
                 transaction.replace(R.id.main_frame, editProfileFrag).addToBackStack(null).commit();
 
+                onStop();
             }
         });
 

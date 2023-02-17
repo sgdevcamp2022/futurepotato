@@ -2,6 +2,7 @@ package com.example.smg_insta;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +24,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.smg_insta.API.Service;
 import com.example.smg_insta.Adapter.RVAdapter_profile;
+import com.example.smg_insta.DTO.FollowData;
 import com.example.smg_insta.DTO.MypageResponse;
+import com.example.smg_insta.DTO.isFollowingResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,83 +88,88 @@ public class FragUserInfo extends Fragment {
                 // popup띄우기 -> 차단 / 차단 해제 ...
                 // 내가 이 user를 차단하고 있는지 확인
                 myId = PreferenceManager.getString(getContext(), "accountID");
-                dataService.graph.isBlocking(myId, id).enqueue(new Callback<Boolean>() {
+                dataService.graph.isBlocking(myId, id).enqueue(new Callback<isFollowingResponse>() {
                     @Override
-                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                        if(response.isSuccessful() && response.body()) {
-                            // 차단 해제
-                            //PopupMenu 객체 생성
-                            PopupMenu popup= new PopupMenu(getActivity(), btn_menu); //두 번째 파라미터가 팝업메뉴가 붙을 뷰
-                            popup.getMenuInflater().inflate(R.menu.unblock_popup, popup.getMenu());
+                    public void onResponse(Call<isFollowingResponse> call, Response<isFollowingResponse> response) {
+                        if(response.isSuccessful()) {
+                            if(response.body().isResult()) {
+                                // 차단 해제
+                                //PopupMenu 객체 생성
+                                PopupMenu popup= new PopupMenu(getActivity(), btn_menu); //두 번째 파라미터가 팝업메뉴가 붙을 뷰
+                                popup.getMenuInflater().inflate(R.menu.unblock_popup, popup.getMenu());
 
-                            //팝업메뉴의 메뉴아이템을 선택하는 것을 듣는 리스너 객체 생성 및 설정
-                            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                                @Override
-                                public boolean onMenuItemClick(MenuItem menuItem) {
+                                //팝업메뉴의 메뉴아이템을 선택하는 것을 듣는 리스너 객체 생성 및 설정
+                                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                                    @Override
+                                    public boolean onMenuItemClick(MenuItem menuItem) {
 
-                                    switch (menuItem.getItemId()){
-                                        case R.id.menu_unblock:
-                                            // block 해제 하기
-                                            dataService.graph.unblock(myId, id).enqueue(new Callback<ResponseBody>() {
-                                                @Override
-                                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                    if(response.isSuccessful()) {
-                                                        Toast.makeText(getContext(), "차단을 해제하였습니다.", Toast.LENGTH_SHORT).show();
-                                                    } else {
-                                                        Toast.makeText(getContext(), "errorCode: " + response.code(), Toast.LENGTH_SHORT).show();
+                                        switch (menuItem.getItemId()){
+                                            case R.id.menu_unblock:
+                                                // block 해제 하기
+                                                dataService.graph.unblock(myId, id).enqueue(new Callback<ResponseBody>() {
+                                                    @Override
+                                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                        if(response.isSuccessful()) {
+                                                            Toast.makeText(getContext(), "차단을 해제하였습니다.", Toast.LENGTH_SHORT).show();
+                                                        } else {
+                                                            Toast.makeText(getContext(), "errorCode: " + response.code(), Toast.LENGTH_SHORT).show();
+                                                        }
                                                     }
-                                                }
 
-                                                @Override
-                                                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                    t.printStackTrace();
-                                                }
-                                            });
-                                            break;
-                                    }
-                                    return false;
-                                }
-                            });
-                            popup.show();
-                            
-                        } else {    // !response.isSuccessful() 해도 일단 차단하기 뜸ㅋㅋㅋㅋ
-                            // 차단하기
-                            //PopupMenu 객체 생성
-                            PopupMenu popup= new PopupMenu(getActivity(), btn_menu); //두 번째 파라미터가 팝업메뉴가 붙을 뷰
-                            popup.getMenuInflater().inflate(R.menu.block_popup, popup.getMenu());
-
-                            //팝업메뉴의 메뉴아이템을 선택하는 것을 듣는 리스너 객체 생성 및 설정
-                            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                                @Override
-                                public boolean onMenuItemClick(MenuItem menuItem) {
-
-                                    switch (menuItem.getItemId()){
-                                        case R.id.menu_block:
-                                            // block 해제 하기
-                                            dataService.graph.block(myId, id).enqueue(new Callback<ResponseBody>() {
-                                                @Override
-                                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                    if(response.isSuccessful()) {
-                                                        Toast.makeText(getContext(), id + "님을 차단을 차단 하였습니다.", Toast.LENGTH_SHORT).show();
-                                                    } else {
-                                                        Toast.makeText(getContext(), "errorCode: " + response.code(), Toast.LENGTH_SHORT).show();
+                                                    @Override
+                                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                        t.printStackTrace();
                                                     }
-                                                }
-                                                @Override
-                                                public void onFailure(Call<ResponseBody> call, Throwable t) {t.printStackTrace(); }
-                                            });
-                                            break;
+                                                });
+                                                break;
+                                        }
+                                        return false;
                                     }
-                                    return false;
-                                }
-                            });
-                            popup.show();
+                                });
+                                popup.show();
 
+                            } else {    // !response.isSuccessful() 해도 일단 차단하기 뜸ㅋㅋㅋㅋ
+                                // 차단하기
+                                //PopupMenu 객체 생성
+                                PopupMenu popup= new PopupMenu(getActivity(), btn_menu); //두 번째 파라미터가 팝업메뉴가 붙을 뷰
+                                popup.getMenuInflater().inflate(R.menu.block_popup, popup.getMenu());
+
+                                //팝업메뉴의 메뉴아이템을 선택하는 것을 듣는 리스너 객체 생성 및 설정
+                                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                                    @Override
+                                    public boolean onMenuItemClick(MenuItem menuItem) {
+
+                                        switch (menuItem.getItemId()){
+                                            case R.id.menu_block:
+                                                // block 해제 하기
+                                                dataService.graph.block(new FollowData(myId, id)).enqueue(new Callback<ResponseBody>() {
+                                                    @Override
+                                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                        if(response.isSuccessful()) {
+                                                            Toast.makeText(getContext(), id + "님을 차단을 차단 하였습니다.", Toast.LENGTH_SHORT).show();
+                                                        } else {
+                                                            Toast.makeText(getContext(), "errorCode: " + response.code(), Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                    @Override
+                                                    public void onFailure(Call<ResponseBody> call, Throwable t) {t.printStackTrace(); }
+                                                });
+                                                break;
+                                        }
+                                        return false;
+                                    }
+                                });
+                                popup.show();
+
+                            }
+                        } else {
+                            // isBlock 실패
+                            Toast.makeText(getContext(), "isBlock 확인 실패" + response.code(), Toast.LENGTH_LONG).show();
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<Boolean> call, Throwable t) {t.printStackTrace();}
+                    public void onFailure(Call<isFollowingResponse> call, Throwable t) {t.printStackTrace();}
                 });
 
             }
@@ -215,6 +223,7 @@ public class FragUserInfo extends Fragment {
                     postCount.setText(data.getPostCount()+"");
                     follower.setText(data.getFollowerCount()+"");
                     following.setText(data.getFollowingCount()+"");
+                    Log.e("Count: ", "follower: " + data.getFollowerCount()+" following: "+ data.getFollowingCount());
 
                     // feed들
                     mRecyclerView.setAdapter(new RVAdapter_profile(data.getImageList(), getContext(), dataService));
@@ -238,11 +247,12 @@ public class FragUserInfo extends Fragment {
         btnUnfollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dataService.graph.unfollow(myId, id).enqueue(new Callback<ResponseBody>() {
+                dataService.graph.unfollow(new FollowData(myId, id)).enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if(response.isSuccessful()) {
                             checkFollow(myId, id);
+                            checkUserInfo(myId);
                             Toast.makeText(getContext(), "언팔 ㅅ성공", Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(getContext(), "ErrorCode: "+response.code(), Toast.LENGTH_SHORT).show();
@@ -259,11 +269,12 @@ public class FragUserInfo extends Fragment {
         btnFollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dataService.graph.follow(myId, id).enqueue(new Callback<ResponseBody>() {
+                dataService.graph.follow(new FollowData(myId, id)).enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if(response.isSuccessful()) {
                             checkFollow(myId, id);
+                            checkUserInfo(myId);
                             Toast.makeText(getContext(), "팔로우 성공", Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(getContext(), "ErrorCode: "+response.code(), Toast.LENGTH_SHORT).show();
@@ -318,6 +329,7 @@ public class FragUserInfo extends Fragment {
                         Toast.makeText(getContext(), "현재 팔로우하고 있음, 팔로잉 버튼", Toast.LENGTH_LONG).show();
                     } else {
                         //팔로우 안하고 있을 때
+                        Toast.makeText(getContext(), "현재 팔로우ㄴㄴ", Toast.LENGTH_LONG).show();
                         dataService.graph.isFollowing(recipientId, SenderId).enqueue(new Callback<Boolean>() {
                             @Override
                             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
@@ -349,4 +361,41 @@ public class FragUserInfo extends Fragment {
 
 
     }
+
+
+    public void checkUserInfo(String id) {
+        dataService.selectMyPage.SelectMyPage(id).enqueue(new Callback<MypageResponse>() {
+            @Override
+            public void onResponse(Call<MypageResponse> call, Response<MypageResponse> response) {
+                if(response.body() != null) {
+                    MypageResponse data = response.body();
+                    // 프로필 이미지 설정
+                    if(data.getProfileImage() != null) {
+                        Glide.with(getActivity())
+                                .load(data.getProfileImage())
+                                .into(profileImage);
+                    }
+
+                    // 유저 아이디/이름
+                    userId.setText(data.getAccountId());
+                    userName.setText(data.getName());
+
+                    // count
+                    postCount.setText(data.getPostCount()+"");
+                    follower.setText(data.getFollowerCount()+"");
+                    following.setText(data.getFollowingCount()+"");
+
+                    // feed들
+                    mRecyclerView.setAdapter(new RVAdapter_profile(data.getImageList(), getContext(), dataService));
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<MypageResponse> call, Throwable t) {t.printStackTrace();}
+        });
+
+
+    }
+
 }

@@ -15,6 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -61,6 +62,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+        accountId = PreferenceManager.getString(context, "accountID");
+        
         View view = inflater.inflate(R.layout.comment_item, parent, false);
         CommentAdapter.ViewHolder vh = new CommentAdapter.ViewHolder(view);
         return vh;
@@ -71,6 +74,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull CommentAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.onBind(data.get(position));
+        holder.checkCommentLike(data.get(position));    // 댓글 좋아요 초기화
 
         //답글들 가져오기
         holder.getReply(data.get(position));
@@ -119,11 +123,16 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                         switch (menuItem.getItemId()){
                             case R.id.menu_delete:
                                 // 댓글 삭제
-                                accountId = PreferenceManager.getString(context, "accountID");
                                 dataService.comment.DeleteComment(accountId, data.get(position).getCommentId()).enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                        //
+
+                                        if(response.isSuccessful()) {
+                                            Log.e("댓글삭제 성공", response.code()+"");
+                                        } else {
+                                            Log.e("댓글삭제 오류", response.code()+"");
+                                        }
+
                                         notifyDataSetChanged();
                                     }
                                     @Override
@@ -150,6 +159,59 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                 Bundle bundle = new Bundle();
                 bundle.putString("userId", data.get(position).getCommentWriter());
                 activity.FragmentViewAddBundle(0, bundle);
+            }
+        });
+
+        // 좋아요 기능
+        holder.btnNoLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dataService.feedLike.likeComment(accountId, data.get(position).getCommentId()).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.isSuccessful()) {
+                            holder.btnLike.setVisibility(View.VISIBLE);
+                            holder.btnNoLike.setVisibility(View.GONE);
+                            Log.e("likeComment", "좋아요를 눌렀습니다.");
+
+                        } else {
+                            Log.e("likeComment", "댓글 좋아요 오류: "+response.code());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        t.printStackTrace();
+                        Log.e("likeComment", "댓글 좋아요 실패");
+                    }
+                });
+            }
+        });
+
+
+        // 좋아요 취소
+        holder.btnLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dataService.feedLike.unlikeComment(accountId, data.get(position).getCommentId()).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.isSuccessful()) {
+                            holder.btnLike.setVisibility(View.GONE);
+                            holder.btnNoLike.setVisibility(View.VISIBLE);
+                            Log.e("likeComment", "좋아요를 취소하였습니다.");
+
+                        } else {
+                            Log.e("likeComment", "댓글 좋아요 취소 오류: "+response.code());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        t.printStackTrace();
+                        Log.e("likeComment", "댓글 좋아요 취소 실패");
+                    }
+                });
             }
         });
     }
@@ -185,9 +247,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         }
 
         void onBind(FeedResponse.Comment item){
-            Glide.with(context)
-                    .load(item.getImage())
-                    .into(profile);
+            if(item.getImage() != null) {
+                Glide.with(context)
+                        .load(item.getImage())
+                        .into(profile);
+            }
 
             commentWriter.setText(item.getCommentWriter());
             comment.setText(item.getComment());
@@ -203,8 +267,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             } else {
                 replyCount.setText(null);
             }
-
-            // isLike 추가되면 좋아요 여부 받아서 하트 받기
 
         }
 
@@ -225,6 +287,35 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                 }
             });
         }
+
+        void checkCommentLike(FeedResponse.Comment item) {
+            // 좋아요 초기화
+            dataService.feedLike.isLikeComment(accountId, item.getCommentId()).enqueue(new Callback<Boolean>() {
+                @Override
+                public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                    if(response.isSuccessful()) {
+                        Log.e("isLikeComment", "좋아요 초기화 성공");
+
+                        if(response.body()) {
+                            btnLike.setVisibility(View.VISIBLE);
+                            btnNoLike.setVisibility(View.GONE);
+                        } else {
+                            btnLike.setVisibility(View.GONE);
+                            btnNoLike.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        Log.e("isLikeComment", "좋아요초기화 오류: " + response.code());
+                    }
+                }
+                @Override
+                public void onFailure(Call<Boolean> call, Throwable t) {
+                    t.printStackTrace();
+                    Log.e("isLikeComment", "좋아요초기화 실패");
+                }
+            });
+        }
+
+
     }
 
     public FeedResponse.Comment getItem(int position){

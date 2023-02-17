@@ -57,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         // 자동 로그인..?
         String accountID = PreferenceManager.getString(getApplicationContext(), "accountID");
         String accountPW = PreferenceManager.getString(getApplicationContext(), "accountPW");
+        Log.e("PreferenceManager", accountID + " / " + accountPW);
         if (!accountID.isEmpty() && !accountPW.isEmpty()) {
             LoginData data = new LoginData(accountID, accountPW);
             service.login.userLogin(data).enqueue(new Callback<LoginResponse>() {

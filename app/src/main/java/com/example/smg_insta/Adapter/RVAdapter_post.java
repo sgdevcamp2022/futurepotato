@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,8 +27,10 @@ import com.bumptech.glide.Glide;
 import com.example.smg_insta.API.Service;
 import com.example.smg_insta.CommentsActivity;
 import com.example.smg_insta.DTO.MainPageResponse;
+import com.example.smg_insta.DTO.MainPage_test_Response;
 import com.example.smg_insta.Frag5;
 import com.example.smg_insta.MainActivity;
+import com.example.smg_insta.PreferenceManager;
 import com.example.smg_insta.R;
 
 import java.util.List;
@@ -40,10 +43,12 @@ import retrofit2.Response;
 
 public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHolder>{
     private Context context;
-    private List<MainPageResponse.Post> data;
+    private List<MainPage_test_Response.Post_test> data;
     private Service dataService;
 
-    public RVAdapter_post(List<MainPageResponse.Post> data, Context context, Service dataService) {
+    private String accountId;
+
+    public RVAdapter_post(List<MainPage_test_Response.Post_test> data, Context context, Service dataService) {
         this.data = data;
         this.context = context;
         this.dataService = dataService;
@@ -57,6 +62,9 @@ public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHold
 
         View view = inflater.inflate(R.layout.post_item, parent, false);
         RVAdapter_post.ViewHolder vh = new RVAdapter_post.ViewHolder(view);
+
+        accountId = PreferenceManager.getString(context, "accountID");
+
         return vh;
     }
 
@@ -71,8 +79,8 @@ public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHold
 //        Glide.with(context)
 //                .load(data.get(position).get...)     // 해당 유저 프로필 사진 정보가 없음.
 //                .into(holder.info_img_profile);
-        holder.info_tv_userId.setText(data.get(position).getName());
-        holder.info_explain_content.setText(data.get(position).getName() + " " + data.get(position).getContent());
+        holder.info_tv_userId.setText(data.get(position).getAccountId());
+        holder.info_explain_content.setText(data.get(position).getAccountId() + " " + data.get(position).getContent());
         holder.info_likes.setText("좋아요 " + data.get(position).getLikeCount() + "개");
         holder.info_comment_count.setText("댓글 " + data.get(position).getCommentCount() + "개");
 
@@ -93,7 +101,7 @@ public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHold
         // 2. 좋아요 기능
 
         // 좋아요 기본 설정
-        if(data.get(position).isLikesCheck()) {
+        if(isLikePostCheck(accountId, data.get(position).getPostId())) {
             holder.btn_like.setVisibility(View.VISIBLE);
             holder.btn_noLike.setVisibility(View.GONE);
         } else {
@@ -107,11 +115,29 @@ public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHold
             public void onClick(View view) {
                 // 좋아요 API 연결
                 //
+                dataService.feedLike.likeFeed(accountId, data.get(position).getPostId()).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.isSuccessful()) {
+                            holder.btn_like.setVisibility(View.VISIBLE);
+                            holder.btn_noLike.setVisibility(View.GONE);
+                        }
+                        else {
+                            Log.e("LikeFeed", "게시글 좋아요 오류: "+ response.code() + " " + response.message());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        t.printStackTrace();
+                        Log.e("LikeFeed", "게시글 좋아요 실패");
+                    }
+                });
                 //
 
                 // 이 부분 필요한지 모르겠음.. 위에 설정한 부분이랑 중복 되는건가?아ㅣㄴ가?
-                holder.btn_like.setVisibility(View.VISIBLE);
-                holder.btn_noLike.setVisibility(View.GONE);
+                //holder.btn_like.setVisibility(View.VISIBLE);
+                //holder.btn_noLike.setVisibility(View.GONE);
             }
         });
 
@@ -120,11 +146,27 @@ public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHold
             @Override
             public void onClick(View view) {
                 //
-                //
-                //
+                dataService.feedLike.unlikeFeed(accountId,data.get(position).getPostId()).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.isSuccessful()) {
+                            holder.btn_like.setVisibility(View.GONE);
+                            holder.btn_noLike.setVisibility(View.VISIBLE);
+                        }
+                        else {
+                            Log.e("UnLikeFeed", "게시글 좋아요 취소 오류: "+ response.code() + " " + response.message());
+                        }
+                    }
 
-                holder.btn_like.setVisibility(View.GONE);
-                holder.btn_noLike.setVisibility(View.VISIBLE);
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        t.printStackTrace();
+                        Log.e("LikeFeed", "게시글 좋아요 취소 실패");
+                    }
+                });
+                //
+                //holder.btn_like.setVisibility(View.GONE);
+                //holder.btn_noLike.setVisibility(View.VISIBLE);
             }
         });
 
@@ -147,7 +189,7 @@ public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHold
                         switch (menuItem.getItemId()){
                             case R.id.menu_delete:
                                 // 게시물 삭제 시도
-                                dataService.feed.DeleteFeed(data.get(position).getName(), data.get(position).getId()).enqueue(new Callback<ResponseBody>() {
+                                dataService.feed.DeleteFeed(data.get(position).getAccountId(), data.get(position).getPostId()).enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                         Toast.makeText(context.getApplicationContext(), "삭제 되었습니다.", Toast.LENGTH_SHORT).show();
@@ -188,7 +230,7 @@ public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHold
                 Intent intent = new Intent(context, CommentsActivity.class);
                 // myAccountId 랑 postId 가져와야함!!
                 //intent.putExtra("accountId", );
-                intent.putExtra("postId", data.get(position).getId()+"");
+                intent.putExtra("postId", data.get(position).getPostId()+"");
                 context.startActivity(intent);
             }
         });
@@ -199,7 +241,7 @@ public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHold
             public void onClick(View view) {
                 MainActivity activity = (MainActivity) context;
                 Bundle bundle = new Bundle();
-                bundle.putString("userId", data.get(position).getName());
+                bundle.putString("userId", data.get(position).getAccountId());
                 activity.FragmentViewAddBundle(0, bundle);
             }
         });
@@ -276,6 +318,29 @@ public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHold
         }
 
     }
+
+    public Boolean isLikePostCheck(String accountId, long postId) {
+        final Boolean[] result = new Boolean[1];
+        dataService.feedLike.isLikePost(accountId, postId).enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                if(response.isSuccessful()) {
+                    result[0] = response.body();
+                    Log.e("IsLikePostCheck", "게시글 좋아요 여부 확인 성공");
+                } else {
+                    Log.e("IsLikePostCheck", "게시글 좋아요 여부 확인 오류");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                t.printStackTrace();
+                Log.e("IsLikePostCheck", "게시글 좋아요 여부 확인 실패");
+            }
+        });
+        return result[0];
+    }
+
 
 
 

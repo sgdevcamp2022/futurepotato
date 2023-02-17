@@ -1,8 +1,12 @@
 package com.example.smg_insta.Adapter;
 
 import android.annotation.SuppressLint;
+import android.content.ContentUris;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,4 +89,6 @@ public class RVAdapter_profile extends RecyclerView.Adapter<RVAdapter_profile.Vi
                     .into(info_private_image);
         }
     }
+
+
 }

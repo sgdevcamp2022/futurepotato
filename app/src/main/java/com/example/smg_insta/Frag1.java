@@ -27,6 +27,7 @@ import com.example.smg_insta.API.Service;
 import com.example.smg_insta.Adapter.RVAdapter_post;
 import com.example.smg_insta.Adapter.RVAdapter_story;
 import com.example.smg_insta.DTO.MainPageResponse;
+import com.example.smg_insta.DTO.MainPage_test_Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,9 +51,9 @@ public class Frag1 extends Fragment {
     private RVAdapter_story mRVAdapter_story;
 
     Service dataService = new Service();
-    MainPageResponse feeds;
+    MainPage_test_Response feeds;
     String accountId;
-    List<MainPageResponse.Post> posts;
+    List<MainPage_test_Response.Post_test> posts;
     List<MainPageResponse.Story> stories;
     Uri storyImageUri;   // 스토리
     String text;      // 검색 내용
@@ -109,34 +110,34 @@ public class Frag1 extends Fragment {
 
         //---테스트 더미데이터----
 
-        List<MainPageResponse.Post> test_postList = new ArrayList<>();
-
-        List<String> test1 = new ArrayList<>();
-        test1.add("https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg");
-        test1.add("https://cdn.pixabay.com/photo/2020/11/04/15/29/coffee-beans-5712780_1280.jpg");
-        MainPageResponse.Post testPost1 = new MainPageResponse.Post(12, "user1","게시물1", null,"2023-01-01T12:11:00", 23, true, 5, test1);
-        test_postList.add(testPost1);
-
-        List<String> test2 = new ArrayList<>();
-        test2.add("https://cdn.pixabay.com/photo/2020/03/08/21/41/landscape-4913841_1280.jpg");
-        test2.add("https://cdn.pixabay.com/photo/2020/09/02/18/03/girl-5539094_1280.jpg");
-        test2.add("https://cdn.pixabay.com/photo/2014/03/03/16/15/mosque-279015_1280.jpg");
-        MainPageResponse.Post testPost2 = new MainPageResponse.Post(123, "user2","게시물2","2023-01-01T12:11:00","2023-01-01T13:11:00",102, false,10,test2);
-        test_postList.add(testPost2);
-
-
-        List<MainPageResponse.Story> test_storyList = new ArrayList<>();
-        MainPageResponse.Story test_S1 = new MainPageResponse.Story("user1", "https://cdn.pixabay.com/photo/2020/03/08/21/41/landscape-4913841_1280.jpg","storyImage");
-        MainPageResponse.Story test_S2 = new MainPageResponse.Story("user2", "https://cdn.pixabay.com/photo/2020/09/02/18/03/girl-5539094_1280.jpg", "storyImage");
-        MainPageResponse.Story test_S3 = new MainPageResponse.Story("user3", "https://cdn.pixabay.com/photo/2020/11/04/15/29/coffee-beans-5712780_1280.jpg", "storyImage");
-
-        test_storyList.add(test_S1);
-        test_storyList.add(test_S2);
-        test_storyList.add(test_S3);
-        test_storyList.add(test_S1);
-        test_storyList.add(test_S2);
-        test_storyList.add(test_S3);
-
+//        List<MainPageResponse.Post> test_postList = new ArrayList<>();
+//
+//        List<String> test1 = new ArrayList<>();
+//        test1.add("https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg");
+//        test1.add("https://cdn.pixabay.com/photo/2020/11/04/15/29/coffee-beans-5712780_1280.jpg");
+//        MainPageResponse.Post testPost1 = new MainPageResponse.Post(12, "user1","게시물1", null,"2023-01-01T12:11:00", 23, true, 5, test1);
+//        test_postList.add(testPost1);
+//
+//        List<String> test2 = new ArrayList<>();
+//        test2.add("https://cdn.pixabay.com/photo/2020/03/08/21/41/landscape-4913841_1280.jpg");
+//        test2.add("https://cdn.pixabay.com/photo/2020/09/02/18/03/girl-5539094_1280.jpg");
+//        test2.add("https://cdn.pixabay.com/photo/2014/03/03/16/15/mosque-279015_1280.jpg");
+//        MainPageResponse.Post testPost2 = new MainPageResponse.Post(123, "user2","게시물2","2023-01-01T12:11:00","2023-01-01T13:11:00",102, false,10,test2);
+//        test_postList.add(testPost2);
+//
+//
+//        List<MainPageResponse.Story> test_storyList = new ArrayList<>();
+//        MainPageResponse.Story test_S1 = new MainPageResponse.Story("user1", "https://cdn.pixabay.com/photo/2020/03/08/21/41/landscape-4913841_1280.jpg","storyImage");
+//        MainPageResponse.Story test_S2 = new MainPageResponse.Story("user2", "https://cdn.pixabay.com/photo/2020/09/02/18/03/girl-5539094_1280.jpg", "storyImage");
+//        MainPageResponse.Story test_S3 = new MainPageResponse.Story("user3", "https://cdn.pixabay.com/photo/2020/11/04/15/29/coffee-beans-5712780_1280.jpg", "storyImage");
+//
+//        test_storyList.add(test_S1);
+//        test_storyList.add(test_S2);
+//        test_storyList.add(test_S3);
+//        test_storyList.add(test_S1);
+//        test_storyList.add(test_S2);
+//        test_storyList.add(test_S3);
+//
         //---------------------
 
 
@@ -150,35 +151,61 @@ public class Frag1 extends Fragment {
         myStory = view.findViewById(R.id.civ_myStory);
         mRV_story = view.findViewById(R.id.recyclerview_story);
         // 가로 리싸이클러뷰
-        mRV_story.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false));
+        //mRV_story.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false));
 
 
         //-----test-----------------
-        mRV_post.setAdapter(new RVAdapter_post(test_postList, getContext(), dataService));
-        mRV_story.setAdapter(new RVAdapter_story(test_storyList, getContext(), dataService));
+        //mRV_post.setAdapter(new RVAdapter_post(test_postList, getContext(), dataService));
+        //mRV_story.setAdapter(new RVAdapter_story(test_storyList, getContext(), dataService));
         //-----------------------
 
-        dataService.selectMainPage.SelectMainPage(accountId).enqueue(new Callback<MainPageResponse>() {
+        dataService.selectMainPage.GetMainPost(accountId).enqueue(new Callback<MainPage_test_Response>() {
             @Override
-            public void onResponse(Call<MainPageResponse> call, Response<MainPageResponse> response) {
-                feeds = response.body();
-                Log.e("Feed", response.body()+"");
+            public void onResponse(Call<MainPage_test_Response> call, Response<MainPage_test_Response> response) {
+                if(response.isSuccessful()) {
+                    feeds = (MainPage_test_Response) response.body();
+                    Log.e("Feed", response.body()+"");
 
-                if(feeds != null) {
-                    posts = feeds.getPostList();
-                    stories = feeds.getStoryList();
+                    if(feeds != null) {
+                        posts = feeds.getPostList();
+                        //stories = feeds.getStoryList();
 
-                    setPostAdapter(mRV_post);
-                    setStoryAdapter(mRV_story);
+                        setPostAdapter(mRV_post);
+                        //setStoryAdapter(mRV_story);
+                    }
+
                 }
-
             }
 
             @Override
-            public void onFailure(Call<MainPageResponse> call, Throwable t) {
+            public void onFailure(Call<MainPage_test_Response> call, Throwable t) {
                 t.printStackTrace();
             }
         });
+
+
+
+//        .enqueue(new Callback<MainPageResponse>() {
+//            @Override
+//            public void onResponse(Call<MainPageResponse> call, Response<MainPageResponse> response) {
+//                feeds = response.body();
+//                Log.e("Feed", response.body()+"");
+//
+//                if(feeds != null) {
+//                    posts = feeds.getPostList();
+//                    stories = feeds.getStoryList();
+//
+//                    setPostAdapter(mRV_post);
+//                    setStoryAdapter(mRV_story);
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<MainPageResponse> call, Throwable t) {
+//                t.printStackTrace();
+//            }
+//        });
 
         // 짧게 눌렀을 때, 스토리 확인
         myStory.setOnClickListener(new View.OnClickListener() {
