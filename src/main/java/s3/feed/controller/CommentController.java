@@ -18,8 +18,8 @@ public class CommentController {
 
     @Operation(summary = "댓글 생성", description = "댓글 생성 api")
     @PostMapping("/{accountId}/{postId}/comment")
-    public ResponseEntity createComments(@PathVariable("accountId")String accountId, @PathVariable("postId")Long postId, @RequestBody CommentDto.ReqCommentDto reqCommentDto) throws JsonProcessingException {
-        return new ResponseEntity<>(commentService.createComment(accountId, postId, reqCommentDto.getComment()),HttpStatus.OK);
+    public ResponseEntity createComments(@PathVariable("accountId")String accountId, @PathVariable("postId")Long postId, @RequestParam String comment) throws JsonProcessingException {
+        return new ResponseEntity<>(commentService.createComment(accountId, postId, comment),HttpStatus.OK);
 
     }
     @Operation(summary = "댓글 삭제", description = "댓글 삭제 api")
@@ -30,8 +30,8 @@ public class CommentController {
     }
     @Operation(summary = "대댓글 생성", description = "대댓글 생성 api")
     @PostMapping("/{accountId}/{commentId}/reply")
-    public ResponseEntity createReplies(@PathVariable("accountId")String accountId, @PathVariable("commentId")Long commentId, @RequestBody CommentDto.ReqReplyDto reqReplyDto) throws JsonProcessingException {
-        return new ResponseEntity<>(commentService.createReplies(accountId, commentId, reqReplyDto.getReply()),HttpStatus.OK);
+    public ResponseEntity createReplies(@PathVariable("accountId")String accountId, @PathVariable("commentId")Long commentId, @RequestParam String reply) throws JsonProcessingException {
+        return new ResponseEntity<>(commentService.createReplies(accountId, commentId, reply),HttpStatus.OK);
     }
     @Operation(summary = "대댓글 삭제", description = "대댓글 삭제 api")
     @DeleteMapping("/{accountId}/reply/{replyId}")
