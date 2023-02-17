@@ -29,7 +29,6 @@ public class PostDto {
         private int likeCount;
         private int commentCount;
         private boolean isMultyImage;
-        private boolean isLikesCheck;
         public List<String> imageList = new ArrayList<>();
 
         public List<ReqCommentListDto> commentList = new ArrayList<>();

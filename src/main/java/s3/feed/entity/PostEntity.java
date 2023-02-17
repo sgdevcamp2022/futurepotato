@@ -31,8 +31,6 @@ public class PostEntity {
     private int commentCount;
     private boolean isMultyImage;
 
-    private boolean isLikesCheck;
-
     @Relationship(type = "INCLUDES")
     private List<MediaEntity> mediaEntityList = new ArrayList<>();
 

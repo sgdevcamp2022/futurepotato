@@ -107,7 +107,7 @@ public class PostService {
                 userEntity.getProfileImage(),
                 postEntity.getCreatedDt(),
                 postEntity.getModifiedDt()
-                , postEntity.getLikeCount(), postEntity.getCommentEntityList().size(), postEntity.isMultyImage(), postEntity.isLikesCheck(), resImageListDto.getImageList(), resImageListDto.commentList);
+                , postEntity.getLikeCount(), postEntity.getCommentEntityList().size(), postEntity.isMultyImage(), resImageListDto.getImageList(), resImageListDto.commentList);
     }
 
     public ResponseEntity deletePost(Long postId, String accountId) {
