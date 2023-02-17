@@ -1,3 +1,4 @@
+/*
 package s3.feed.rabbitMq;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -33,3 +34,4 @@ public class RabbitmqProducer {
     }
 
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package s3.feed.config;
 
 import org.springframework.amqp.core.Binding;
@@ -44,3 +45,4 @@ public class RabbitmqConfig {
     }
 
 }
+*/

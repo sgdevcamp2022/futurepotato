@@ -1,3 +1,4 @@
+/*
 package s3.feed.rabbitMq;
 
 import lombok.*;
@@ -13,3 +14,4 @@ public class CustomMessage {
     private String place;
     private String action;
 }
+*/

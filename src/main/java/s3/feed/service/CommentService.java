@@ -9,8 +9,8 @@ import s3.feed.entity.*;
 import s3.feed.exception.ForbiddenException;
 //import s3.feed.rabbitMq.CustomMessage;
 //import s3.feed.rabbitMq.RabbitmqProducer;
-import s3.feed.rabbitMq.CustomMessage;
-import s3.feed.rabbitMq.RabbitmqProducer;
+//import s3.feed.rabbitMq.CustomMessage;
+//import s3.feed.rabbitMq.RabbitmqProducer;
 import s3.feed.repository.CommentRepository;
 import s3.feed.repository.PostRepository;
 import s3.feed.repository.ReplyRepository;
@@ -29,8 +29,8 @@ public class CommentService {
     PostRepository postRepository;
     @Autowired
     ReplyRepository replyRepository;
-    @Autowired
-    RabbitmqProducer rabbitmqProducer;
+//    @Autowired
+//    RabbitmqProducer rabbitmqProducer;
 
 
 
@@ -47,8 +47,8 @@ public class CommentService {
         postRepository.save(postEntity);
         /*rabbitMQ */
 
-        CustomMessage customMessage = new CustomMessage(accountId, postEntity.getAccountId(), postEntity.getContent(),"댓글을 달았습니다.");
-        rabbitmqProducer.sendMessage(customMessage);
+//        CustomMessage customMessage = new CustomMessage(accountId, postEntity.getAccountId(), postEntity.getContent(),"댓글을 달았습니다.");
+//        rabbitmqProducer.sendMessage(customMessage);
 
 
         return ResponseEntity.ok("commentId "+commentId+" ,댓글 등록");
@@ -75,8 +75,8 @@ public class CommentService {
         commentRepository.save(commentEntity);
         /*rabbitMQ */
 
-        CustomMessage customMessage = new CustomMessage(accountId, commentEntity.getAccountId(), commentEntity.getComment(),"대댓글을 달았습니다.");
-        rabbitmqProducer.sendMessage(customMessage);
+//        CustomMessage customMessage = new CustomMessage(accountId, commentEntity.getAccountId(), commentEntity.getComment(),"대댓글을 달았습니다.");
+//        rabbitmqProducer.sendMessage(customMessage);
 
         return ResponseEntity.ok("replyId: "+replyId+" ,대댓글 등록");
 
