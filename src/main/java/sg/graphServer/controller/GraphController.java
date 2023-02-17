@@ -52,7 +52,7 @@ public class GraphController {
         try{
             List<Account> RequestingList = graphService.findRequest(request, accountId);
             ResponseDTO response = ResponseDTO.<Account>builder().data(RequestingList).build();
-            return ResponseEntity.ok().body(response);
+            return ResponseEntity.ok().body( response);
         } catch (Exception e){
             ResponseDTO response = ResponseDTO.builder().error(e.getMessage()).build();
             return ResponseEntity.badRequest().body(response);
@@ -60,10 +60,10 @@ public class GraphController {
     }
 
     //4. 해당 relation 을 맺고 있는지 확인 : isFollowing, isBlocking
-    @GetMapping("/is{request}ing")
-    public ResponseEntity<?> isRequesting(@PathVariable String request, @RequestBody RequestDTO dto){
+    @GetMapping("{accountId1}/is{request}ing/{accountId2}")
+    public ResponseEntity<?> isRequesting(@PathVariable String accountId1, @PathVariable String request, @PathVariable String accountId2){
         try {
-            boolean result = graphService.isRequesting(request, dto.getSenderId(), dto.getRecipientId());
+            boolean result = graphService.isRequesting(request, accountId1, accountId2);
             return ResponseEntity.ok().body(result);
         }catch(Exception e){
             ResponseDTO response = ResponseDTO.builder().error(e.getMessage()).build();
