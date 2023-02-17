@@ -81,12 +81,14 @@ public class PostService {
         PostDto.ResImageListDto resImageListDto = new PostDto.ResImageListDto();
         PostEntity postEntity = postRepository.findById(postId).get();
         UserEntity userEntity = postEntity.getUserEntity();
+//      UserEntity userEntity = userRepository.findByAccountId(postEntity.getAccountId());
+
         //UserEntity userEntity = postEntity.getUserEntity();
         //log.info("postEntity.getUserEntity()={}", postEntity.getUserEntity());
         List<MediaEntity> mediaEntityList = postEntity.getMediaEntityList();
         for (MediaEntity mediaEntity : mediaEntityList) {
             String storedImageUrl = mediaEntity.getImage();
-//            String storedImageUrl = amazonS3Client.getUrl(bucket, mediaEntity.getImage()).toString();
+//          String storedImageUrl = amazonS3Client.getUrl(bucket, mediaEntity.getImage()).toString();
             resImageListDto.getImageList().add(storedImageUrl);
         }
         List<CommentEntity> commentEntityList = postEntity.getCommentEntityList();
