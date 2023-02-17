@@ -103,6 +103,11 @@ public class CommentService {
             commentEntity.setLikeCount(commentEntity.getLikeCount() - 1);
             return ResponseEntity.ok("댓글 좋아요 취소 성공");
     }
+
+    public boolean isLikeComment(Long commentId, String accountId) {
+        return commentRepository.isLike(accountId, commentId);
+    }
+
     public ResponseEntity likeReply(Long replyId, String accountId) {
             ReplyEntity replyEntity = replyRepository.findById(replyId).get();
             UserEntity userWhoLikeThis = userRepository.findByAccountId(accountId);
@@ -116,5 +121,9 @@ public class CommentService {
             replyRepository.deleteLike(accountId, replyId);
             replyEntity.setLikeCount(replyEntity.getLikeCount() - 1);
             return ResponseEntity.ok("대댓글 좋아요 취소 성공");
+    }
+
+    public boolean isLikeReply(Long replyId, String accountId) {
+        return replyRepository.isLike(accountId, replyId);
     }
 }

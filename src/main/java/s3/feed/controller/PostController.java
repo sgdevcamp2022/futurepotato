@@ -49,15 +49,21 @@ public class PostController {
         return new ResponseEntity<>(postService.deletePost(id, accountId), HttpStatus.OK);
     }
 
-    @PostMapping("/{accountId}/postLike/{postId}")
+    @PostMapping("/{accountId}/likePost/{postId}")
     public ResponseEntity likePost(@PathVariable("postId") Long postId, @PathVariable("accountId") String accountId) {
         return new ResponseEntity<>(postService.likePost(postId, accountId),HttpStatus.OK);
     }
 
-    @DeleteMapping("/{accountId}/postLike/{postId}")
+    @DeleteMapping("/{accountId}/likePost/{postId}")
     public ResponseEntity deleteLikePost(@PathVariable("postId") Long postId, @PathVariable("accountId") String accountId) {
         return new ResponseEntity<>(postService.deleteLikePost(postId, accountId),HttpStatus.OK);
     }
+
+    @GetMapping("/{accountId}/isLikePost/{postId}")
+    public ResponseEntity isLikePost(@PathVariable("postId") Long postId, @PathVariable("accountId") String accountId) {
+        return new ResponseEntity<>(postService.isLikePost(postId, accountId),HttpStatus.OK);
+    }
+
 }
 //한명의 유저가 올린 모든 게시물 조회
 //    @GetMapping("/media")

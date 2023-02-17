@@ -40,23 +40,33 @@ public class CommentController {
         return new ResponseEntity<>(commentService.deleteReply(accountId, replyId), HttpStatus.OK);
     }
 
-    @PostMapping("/{accountId}/commentLike/{commentId}")
+    @PostMapping("/{accountId}/likeComment/{commentId}")
     public ResponseEntity likeComment(@PathVariable("commentId") Long commentId, @PathVariable("accountId") String accountId) {
         return new ResponseEntity<>(commentService.likeComment(commentId, accountId),HttpStatus.OK);
     }
 
-    @DeleteMapping("/{accountId}/commentLike/{commentId}")
+    @DeleteMapping("/{accountId}/likeComment/{commentId}")
     public ResponseEntity deleteLikeComment(@PathVariable("commentId") Long commentId, @PathVariable("accountId") String accountId) {
         return new ResponseEntity<>(commentService.deleteLikeComment(commentId, accountId),HttpStatus.OK);
     }
 
-    @PostMapping("/{accountId}/replyLike/{replyId}")
+    @GetMapping("/{accountId}/isLikeComment/{commentId}")
+    public ResponseEntity isLikeComment(@PathVariable("commentId") Long commentId, @PathVariable("accountId") String accountId) {
+        return new ResponseEntity<>(commentService.isLikeComment(commentId, accountId),HttpStatus.OK);
+    }
+
+    @PostMapping("/{accountId}/likeReply/{replyId}")
     public ResponseEntity likeReply(@PathVariable("replyId") Long replyId, @PathVariable("accountId") String accountId) {
         return new ResponseEntity<>(commentService.likeReply(replyId, accountId),HttpStatus.OK);
     }
 
-    @DeleteMapping("/{accountId}/replyLike/{replyId}")
+    @DeleteMapping("/{accountId}/likeReply/{replyId}")
     public ResponseEntity deleteLikeReply(@PathVariable("replyId") Long replyId, @PathVariable("accountId") String accountId) {
         return new ResponseEntity<>(commentService.deleteLikeReply(replyId, accountId),HttpStatus.OK);
+    }
+
+    @GetMapping("/{accountId}/isLikeReply/{storyId}")
+    public ResponseEntity isLikeReply(@PathVariable("replyId") Long replyId, @PathVariable("accountId") String accountId) {
+        return new ResponseEntity<>(commentService.isLikeReply(replyId, accountId),HttpStatus.OK);
     }
 }

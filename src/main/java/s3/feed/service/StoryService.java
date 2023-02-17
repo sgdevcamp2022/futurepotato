@@ -112,6 +112,10 @@ public class StoryService {
             storyRepository.deleteLike(accountId, storyId);
             return ResponseEntity.ok("스토리 좋아요 취소 성공");
     }
+
+    public boolean isLikeStory(Long storyId, String accountId) {
+        return storyRepository.isLike(accountId, storyId);
+    }
 }
 
 

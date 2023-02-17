@@ -165,6 +165,10 @@ public class PostService {
             postEntity.setLikeCount(postEntity.getLikeCount()-1);
             return ResponseEntity.ok("게시물 좋아요 취소 성공");
     }
+
+    public boolean isLikePost(Long postId, String accountId) {
+        return postRepository.isLike(accountId, postId);
+    }
 }
 //    public UserDto.ResPostListDto getUserPosts(String name){
 //        UserEntity userEntity = userRepository.findByName(name);
