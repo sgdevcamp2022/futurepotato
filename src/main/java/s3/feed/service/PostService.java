@@ -50,7 +50,7 @@ public class PostService {
         multipartFile.forEach(file -> {
 
             String fileName = createUuidFileName(file.getOriginalFilename());
-            MediaEntity mediaEntity = new MediaEntity(fileName);
+
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentLength(file.getSize());
             objectMetadata.setContentType(file.getContentType());
@@ -61,7 +61,9 @@ public class PostService {
             } catch (IOException e) {
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
             }
-
+            String storedImageUrl = "https://sgfp.s3.ap-northeast-2.amazonaws.com/"+fileName;
+            MediaEntity mediaEntity = new MediaEntity(storedImageUrl);
+            System.out.println("imageUrl: "+ storedImageUrl);
             post.getMediaEntityList().add(mediaEntity);
 
         });
@@ -78,12 +80,13 @@ public class PostService {
     public PostDto.ResImageListDto getImageList(Long postId) {
         PostDto.ResImageListDto resImageListDto = new PostDto.ResImageListDto();
         PostEntity postEntity = postRepository.findById(postId).get();
-        UserEntity userEntity = userRepository.findByAccountId(postEntity.getAccountId());
+        UserEntity userEntity = postEntity.getUserEntity();
         //UserEntity userEntity = postEntity.getUserEntity();
         //log.info("postEntity.getUserEntity()={}", postEntity.getUserEntity());
         List<MediaEntity> mediaEntityList = postEntity.getMediaEntityList();
         for (MediaEntity mediaEntity : mediaEntityList) {
-            String storedImageUrl = amazonS3Client.getUrl(bucket, mediaEntity.getImage()).toString();
+            String storedImageUrl = mediaEntity.getImage();
+//            String storedImageUrl = amazonS3Client.getUrl(bucket, mediaEntity.getImage()).toString();
             resImageListDto.getImageList().add(storedImageUrl);
         }
         List<CommentEntity> commentEntityList = postEntity.getCommentEntityList();
@@ -98,7 +101,6 @@ public class PostService {
             resImageListDto.commentList.add(new PostDto.ReqCommentListDto(commentEntity.getUserEntity().getAccountId(), commentEntity.getUserEntity().getProfileImage(), commentEntity.getComment(),
                     commentEntity.getId(), commentEntity.getLikeCount(), commentEntity.getCreatedDt(), replyCount, reqCommentListDto.replyList));
         }
-
         return new PostDto.ResImageListDto(postEntity.getId(),
                 postEntity.getContent(),
                 userEntity.getAccountId(),

@@ -45,7 +45,8 @@ public class StoryService {
 
         List<StoryEntity> storyList = userEntity.getStoryList();
         for (StoryEntity storyEntity : storyList) {
-            String storedImageUrl = amazonS3Client.getUrl(bucket, storyEntity.getImage()).toString();
+            String storedImageUrl = storyEntity.getImage();
+//            String storedImageUrl = amazonS3Client.getUrl(bucket, storyEntity.getImage()).toString();
             resStoryListDto.getStoryList().add(new StoryDto.ReqStoryListDto(storyEntity.getId(), storedImageUrl, storyEntity.getCreatedDt()));
         }
         return new StoryDto.ResStoryListDto(accountId, userEntity.getProfileImage(), resStoryListDto.getStoryList());
@@ -67,8 +68,10 @@ public class StoryService {
         UserEntity userEntity = userRepository.findByAccountId(accountId);
 
         String fileName = postService.createUuidFileName(multipartFile.getOriginalFilename());
+        String storedImageUrl = "https://sgfp.s3.ap-northeast-2.amazonaws.com/"+fileName;
+
         String profileImage = userEntity.getProfileImage();
-        StoryEntity storyEntity = new StoryEntity(fileName, accountId, profileImage, LocalDateTime.now());
+        StoryEntity storyEntity = new StoryEntity(storedImageUrl, accountId, profileImage, LocalDateTime.now());
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(multipartFile.getSize());
         objectMetadata.setContentType(multipartFile.getContentType());
@@ -82,6 +85,7 @@ public class StoryService {
 
         userEntity.getStoryList().add(storyEntity);
         userRepository.save(userEntity);
+
         StoryEntity saveStoryEntity = storyRepository.save(storyEntity);
         Long storyId = saveStoryEntity.getId();
         dayThread();

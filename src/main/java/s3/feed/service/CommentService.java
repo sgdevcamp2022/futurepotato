@@ -30,9 +30,11 @@ public class CommentService {
 //    @Autowired
 //    RabbitmqProducer rabbitmqProducer;
 
+
+
+
     public ResponseEntity createComment(String accountId, Long postId, String comment) throws JsonProcessingException {
         UserEntity userEntity = userRepository.findByAccountId(accountId);
-
         CommentEntity commentEntity = new CommentEntity(comment, userEntity.getAccountId(), LocalDateTime.now(), 0, userEntity.getProfileImage());
         commentEntity.addUser(userEntity);
         PostEntity postEntity = postRepository.findById(postId).get();
