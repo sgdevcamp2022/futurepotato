@@ -15,7 +15,7 @@ public interface UserRepository extends Neo4jRepository<UserEntity, Long> {
 
 
     /*피드를 위한 인터페이스*/
-    @Query("MATCH (a:Account {accountId:$accountId})-[:IS_FOLLOWING]-(f:Account)-[:UPLOADED]->(fs:Story)\n" +
+    @Query("MATCH (a:Account {accountId:$accountId})-[:IS_FOLLOWING]->(f:Account)-[:UPLOADED]->(fs:Story)\n" +
             "with f, max(fs.createdDt) as m\n" +
             "WHERE datetime({ year: toInteger(substring(toString(m), 0, 4)),\n" +
             "                 month: toInteger(substring(toString(m), 5, 2)),\n" +
