@@ -54,14 +54,6 @@ public class Frag_follower extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(layoutManager);
 
-
-        //------test
-        //followerData.add(new FollowListResponse.Follow(1, "test2", "nameTest2", "https://cdn.pixabay.com/photo/2020/09/02/18/03/girl-5539094_1280.jpg"));
-        //followerData.add(new FollowListResponse.Follow(2, "test3", "nameTest3", "https://cdn.pixabay.com/photo/2020/09/02/18/03/girl-5539094_1280.jpg"));
-        //---------
-
-        //mRecyclerView.setAdapter(new FollowerListAdapter(followerData, getContext(), dataService));
-
         // 리싸이클러뷰 어뎁터 만들어서 연결하기!
         dataService.graph.readFollower(accountID).enqueue(new Callback<FollowListResponse>() {
             @Override
@@ -70,7 +62,7 @@ public class Frag_follower extends Fragment {
                     followerData = response.body().getData();
                     mRecyclerView.setAdapter(new FollowerListAdapter(followerData, getContext(), dataService));
                     Toast.makeText(getContext(), "연결 성공.", Toast.LENGTH_LONG).show();
-                    if(followerData.size() > 0) {
+                    if(followerData != null) {
                         mRecyclerView.setVisibility(View.VISIBLE);
                         mTextView.setVisibility(View.GONE);
                     } else {
@@ -79,7 +71,7 @@ public class Frag_follower extends Fragment {
                     }
                 }
                 else {
-                    Toast.makeText(getContext(), "followerList Error: " + response.code() + response.message(), Toast.LENGTH_LONG).show();
+                    Log.e("followerList Error: ",response.code()+"");
                 }
             }
 

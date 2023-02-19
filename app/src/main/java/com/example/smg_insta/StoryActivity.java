@@ -18,6 +18,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
@@ -47,8 +48,6 @@ public class StoryActivity extends AppCompatActivity {
     ArrayList<StoryResponse.StoryList> storyLists = new ArrayList<>();   // 스토리 조회해서 저장할 스토리 리스트
     StoryResponse storyResponse;
 
-    StoryResponse testStoryResponse;
-
     String story_userId;
     String storyId;
 
@@ -69,24 +68,7 @@ public class StoryActivity extends AppCompatActivity {
         btn_add = findViewById(R.id.iv_story_add);
         mLinearLayout = findViewById(R.id.lL_story);
 
-        //-----------test---
-        StoryResponse.StoryList test1 = new StoryResponse.StoryList(12, "https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg", "2023-01-01T12:11:00");
-        StoryResponse.StoryList test2 = new StoryResponse.StoryList(13, "https://cdn.pixabay.com/photo/2020/11/04/15/29/coffee-beans-5712780_1280.jpg", "2023-01-01T12:11:00");
-        StoryResponse.StoryList test3 = new StoryResponse.StoryList(14, "https://cdn.pixabay.com/photo/2020/11/10/01/34/pet-5728249_1280.jpg", "2023-01-01T12:11:00");
-        StoryResponse.StoryList test4 = new StoryResponse.StoryList(15, "https://cdn.pixabay.com/photo/2020/12/21/19/05/window-5850628_1280.png", "2023-01-01T12:11:00");
-        StoryResponse.StoryList test5 = new StoryResponse.StoryList(16, "https://cdn.pixabay.com/photo/2014/03/03/16/15/mosque-279015_1280.jpg", "2023-01-01T12:11:00");
-        StoryResponse.StoryList test6 = new StoryResponse.StoryList(17, "https://cdn.pixabay.com/photo/2019/10/15/13/33/red-deer-4551678_1280.jpg", "2023-01-01T12:11:00");
 
-        storyLists.add(test1);
-        storyLists.add(test2);
-        storyLists.add(test3);
-        storyLists.add(test4);
-        storyLists.add(test5);
-        storyLists.add(test6);
-
-        testStoryResponse = new StoryResponse("user123", "https://cdn.pixabay.com/photo/2019/10/15/13/33/red-deer-4551678_1280.jpg", storyLists);
-
-        //------------
         Intent intent = getIntent();
         if(intent.getStringExtra("userId") != null) {
             story_userId = intent.getStringExtra("userId");
@@ -96,10 +78,22 @@ public class StoryActivity extends AppCompatActivity {
             btn_add.setVisibility(View.VISIBLE);
         }
 
-        viewFlipper.setAdapter(new StorySliderAdapter(this, testStoryResponse));
-        viewFlipper.startFlipping();
+        // 스토리 추가(나만 가능)
+        btn_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                StoryPostFrag storyPostFrag = new StoryPostFrag();
+                Bundle bundle = new Bundle();
+                transaction.replace(R.id.main_frame, storyPostFrag).addToBackStack(null).commit();
 
-        // 내 스토리 조회하기
+            }
+        });
+
+        //viewFlipper.setAdapter(new StorySliderAdapter(this, testStoryResponse));
+        //viewFlipper.startFlipping();
+
+        // 스토리 조회하기
         dataService.story.SelectStory(story_userId).enqueue(new Callback<StoryResponse>() {
             @Override
             public void onResponse(Call<StoryResponse> call, Response<StoryResponse> response) {
@@ -107,17 +101,20 @@ public class StoryActivity extends AppCompatActivity {
                     storyResponse = response.body();
 
                     // 프로필 이미지 설정
-                    Glide.with(getApplication())
-                            .load(storyResponse.getProfileImage())
-                            .into(profileImage);
+                    if(storyResponse.getProfileImage() != null) {
+                        Glide.with(getApplication())
+                                .load(storyResponse.getProfileImage())
+                                .into(profileImage);
+                    }
                     // 유저 아이디 설정
                     userId.setText(storyResponse.getAccountId());
 
                     // 일단 스토리 하나만 올린다고 가정했을때....
                     //storyLists = storyResponse.getStoryImage();
-                    viewFlipper.setAdapter(new StorySliderAdapter(getApplication(), storyResponse));
-
-                    viewFlipper.startFlipping();
+                    if(storyResponse.getStoryImage() != null) {
+                        viewFlipper.setAdapter(new StorySliderAdapter(getApplication(), storyResponse));
+                        viewFlipper.startFlipping();
+                    }
                 }
             }
             @Override

@@ -42,16 +42,18 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     private Context context;
     private ArrayList<FeedResponse.Comment> data;
     private Service dataService;
+    private int postId;
 
     String accountId;
 
     ArrayList<FeedResponse.Reply> replies = new ArrayList<>();
 
 
-    public CommentAdapter(ArrayList<FeedResponse.Comment> data, Context context, Service dataService) {
+    public CommentAdapter(ArrayList<FeedResponse.Comment> data, Context context, Service dataService, int postId) {
         this.data = data;
         this.context = context;
         this.dataService = dataService;
+        this.postId = postId;
     }
 
 
@@ -102,7 +104,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                 intent.putExtra("replyCount", data.get(position).getReplyCount()+"");
                 context.startActivity(intent.addFlags(FLAG_ACTIVITY_NEW_TASK));
 
-                
             }
         });
 
@@ -129,6 +130,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
                                         if(response.isSuccessful()) {
                                             Log.e("댓글삭제 성공", response.code()+"");
+
                                         } else {
                                             Log.e("댓글삭제 오류", response.code()+"");
                                         }
@@ -173,7 +175,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                             holder.btnLike.setVisibility(View.VISIBLE);
                             holder.btnNoLike.setVisibility(View.GONE);
                             Log.e("likeComment", "좋아요를 눌렀습니다.");
-
                         } else {
                             Log.e("likeComment", "댓글 좋아요 오류: "+response.code());
                         }
@@ -200,7 +201,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                             holder.btnLike.setVisibility(View.GONE);
                             holder.btnNoLike.setVisibility(View.VISIBLE);
                             Log.e("likeComment", "좋아요를 취소하였습니다.");
-
                         } else {
                             Log.e("likeComment", "댓글 좋아요 취소 오류: "+response.code());
                         }

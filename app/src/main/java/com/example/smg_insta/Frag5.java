@@ -282,8 +282,13 @@ public class Frag5 extends Fragment {
                             MainActivity activity = (MainActivity) getActivity(); // 프래그먼트에서 메인엑티비티 접근
                             activity.setFrag(2);
 
-                        } else if (position == 1) {
-                            // ... 눌렀을 때
+                        } else if (position == 1) { // 스토리
+                            //
+                            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                            StoryPostFrag storyPostFrag = new StoryPostFrag();
+                            Bundle bundle = new Bundle();
+                            transaction.replace(R.id.main_frame, storyPostFrag).addToBackStack(null).commit();
+
                         }
                     }
                 });

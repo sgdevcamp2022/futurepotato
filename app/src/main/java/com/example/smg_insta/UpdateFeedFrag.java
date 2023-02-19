@@ -27,6 +27,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.example.smg_insta.API.Service;
+import com.example.smg_insta.Adapter.ImageSliderAdapter;
 
 import java.util.ArrayList;
 
@@ -77,12 +78,17 @@ public class UpdateFeedFrag extends Fragment {
 
         // 프로필 이미지
         civ_profileImage = view.findViewById(R.id.civ_profile);
-        Glide.with(getActivity())
-                .load(profileImage)
-                .into(civ_profileImage);
+        if(profileImage != null) {
+            Glide.with(getActivity())
+                    .load(profileImage)
+                    .into(civ_profileImage);
+        }
 
         // feed 이미지
         img_content = view.findViewById(R.id.sliderViewPager_profile);
+        img_content.setOffscreenPageLimit(1);
+        img_content.setAdapter(new ImageSliderAdapter(getActivity(), images));
+
         layoutIndicator = view.findViewById(R.id.layoutIndicators_profile);
         img_content.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -133,8 +139,8 @@ public class UpdateFeedFrag extends Fragment {
 
                         // 화면이동
                         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                        MyPostFrag myPostFrag = new MyPostFrag();
-                        transaction.replace(R.id.main_frame, myPostFrag).commit();
+                        Frag5 frag5 = new Frag5();
+                        transaction.replace(R.id.main_frame, frag5).commit();
 
                     }
 

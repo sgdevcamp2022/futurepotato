@@ -2,6 +2,8 @@ package com.example.smg_insta;
 
 import static android.app.Activity.RESULT_OK;
 
+import static com.example.smg_insta.Frag3.getFullPathFromUri;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,10 +31,14 @@ import com.example.smg_insta.Adapter.RVAdapter_story;
 import com.example.smg_insta.DTO.MainPageResponse;
 import com.example.smg_insta.DTO.MainPage_test_Response;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -54,49 +60,12 @@ public class Frag1 extends Fragment {
     MainPage_test_Response feeds;
     String accountId;
     List<MainPage_test_Response.Post_test> posts;
-    List<MainPageResponse.Story> stories;
+    List<MainPage_test_Response.Story_test> stories;
     Uri storyImageUri;   // 스토리
     String text;      // 검색 내용
 
     List<String> MyStories = new ArrayList<>(); // 내 스토리 담아둘 곳
     final int OPEN_GALLERY = 1001;
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == RESULT_OK && requestCode == OPEN_GALLERY) {
-            storyImageUri = data.getData();
-            Log.e("single choice: ", storyImageUri.toString());
-
-            if(storyImageUri != null) {
-                // 스토리 생성
-                dataService.story.InsertStory(accountId, storyImageUri.toString()).enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        // 스토리 생성 성공
-                        if(response.isSuccessful()) {
-                            Toast.makeText(getContext(), "스토리가 생성되었습니다.", Toast.LENGTH_LONG).show();
-                        }
-                        else {
-                            Toast.makeText(getContext(), "스토리 생성이 실패하였습니다.", Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {t.printStackTrace();}
-                });
-
-                storyImageUri = null;
-
-            } else {
-                Toast.makeText(getContext(), "스토리 이미지 null 값임..", Toast.LENGTH_LONG).show();
-            }
-        } else {
-            Toast.makeText(getContext(), "사진을 가져오지 못했습니다.", Toast.LENGTH_LONG).show();
-        }
-
-    }
 
     
     @Nullable
@@ -108,39 +77,6 @@ public class Frag1 extends Fragment {
 
         searchBox = view.findViewById(R.id.lL_searchBox);
 
-        //---테스트 더미데이터----
-
-//        List<MainPageResponse.Post> test_postList = new ArrayList<>();
-//
-//        List<String> test1 = new ArrayList<>();
-//        test1.add("https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg");
-//        test1.add("https://cdn.pixabay.com/photo/2020/11/04/15/29/coffee-beans-5712780_1280.jpg");
-//        MainPageResponse.Post testPost1 = new MainPageResponse.Post(12, "user1","게시물1", null,"2023-01-01T12:11:00", 23, true, 5, test1);
-//        test_postList.add(testPost1);
-//
-//        List<String> test2 = new ArrayList<>();
-//        test2.add("https://cdn.pixabay.com/photo/2020/03/08/21/41/landscape-4913841_1280.jpg");
-//        test2.add("https://cdn.pixabay.com/photo/2020/09/02/18/03/girl-5539094_1280.jpg");
-//        test2.add("https://cdn.pixabay.com/photo/2014/03/03/16/15/mosque-279015_1280.jpg");
-//        MainPageResponse.Post testPost2 = new MainPageResponse.Post(123, "user2","게시물2","2023-01-01T12:11:00","2023-01-01T13:11:00",102, false,10,test2);
-//        test_postList.add(testPost2);
-//
-//
-//        List<MainPageResponse.Story> test_storyList = new ArrayList<>();
-//        MainPageResponse.Story test_S1 = new MainPageResponse.Story("user1", "https://cdn.pixabay.com/photo/2020/03/08/21/41/landscape-4913841_1280.jpg","storyImage");
-//        MainPageResponse.Story test_S2 = new MainPageResponse.Story("user2", "https://cdn.pixabay.com/photo/2020/09/02/18/03/girl-5539094_1280.jpg", "storyImage");
-//        MainPageResponse.Story test_S3 = new MainPageResponse.Story("user3", "https://cdn.pixabay.com/photo/2020/11/04/15/29/coffee-beans-5712780_1280.jpg", "storyImage");
-//
-//        test_storyList.add(test_S1);
-//        test_storyList.add(test_S2);
-//        test_storyList.add(test_S3);
-//        test_storyList.add(test_S1);
-//        test_storyList.add(test_S2);
-//        test_storyList.add(test_S3);
-//
-        //---------------------
-
-
         mRV_post = view.findViewById(R.id.recyclerview_post);
         mRV_post.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -151,27 +87,42 @@ public class Frag1 extends Fragment {
         myStory = view.findViewById(R.id.civ_myStory);
         mRV_story = view.findViewById(R.id.recyclerview_story);
         // 가로 리싸이클러뷰
-        //mRV_story.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false));
+        mRV_story.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false));
 
-
-        //-----test-----------------
-        //mRV_post.setAdapter(new RVAdapter_post(test_postList, getContext(), dataService));
-        //mRV_story.setAdapter(new RVAdapter_story(test_storyList, getContext(), dataService));
-        //-----------------------
 
         dataService.selectMainPage.GetMainPost(accountId).enqueue(new Callback<MainPage_test_Response>() {
             @Override
             public void onResponse(Call<MainPage_test_Response> call, Response<MainPage_test_Response> response) {
                 if(response.isSuccessful()) {
-                    feeds = (MainPage_test_Response) response.body();
-                    Log.e("Feed", response.body()+"");
-
-                    if(feeds != null) {
-                        posts = feeds.getPostList();
-                        //stories = feeds.getStoryList();
-
+                    Log.e("Feed-post", "post 성공");
+                    posts = response.body().getPostList();
+                    for(int i = 0; i < posts.size(); i++) {
+                        Log.e("Feed-post", "content"+i+": "+posts.get(i).getContent());
+                    }
+                    if(posts != null) {
                         setPostAdapter(mRV_post);
-                        //setStoryAdapter(mRV_story);
+                    }
+
+                }
+            }
+            @Override
+            public void onFailure(Call<MainPage_test_Response> call, Throwable t) {
+                t.printStackTrace();
+                Log.e("Feed-post", "실패");
+            }
+        });
+
+
+        // 스토리 목록 가져오기
+        dataService.selectMainPage.GetMainStory(accountId).enqueue(new Callback<MainPage_test_Response>() {
+            @Override
+            public void onResponse(Call<MainPage_test_Response> call, Response<MainPage_test_Response> response) {
+                if(response.isSuccessful()) {
+                    Log.e("Feed-Story", "Story 성공");
+
+                    stories = response.body().getStoryList();
+                    if(stories != null) {
+                        setStoryAdapter(mRV_story);
                     }
 
                 }
@@ -180,32 +131,12 @@ public class Frag1 extends Fragment {
             @Override
             public void onFailure(Call<MainPage_test_Response> call, Throwable t) {
                 t.printStackTrace();
+                Log.e("Feed-Story", "실패");
             }
         });
 
 
 
-//        .enqueue(new Callback<MainPageResponse>() {
-//            @Override
-//            public void onResponse(Call<MainPageResponse> call, Response<MainPageResponse> response) {
-//                feeds = response.body();
-//                Log.e("Feed", response.body()+"");
-//
-//                if(feeds != null) {
-//                    posts = feeds.getPostList();
-//                    stories = feeds.getStoryList();
-//
-//                    setPostAdapter(mRV_post);
-//                    setStoryAdapter(mRV_story);
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<MainPageResponse> call, Throwable t) {
-//                t.printStackTrace();
-//            }
-//        });
 
         // 짧게 눌렀을 때, 스토리 확인
         myStory.setOnClickListener(new View.OnClickListener() {
@@ -223,7 +154,7 @@ public class Frag1 extends Fragment {
                 MyStories.add("mystory");   //test용
                 
                 // 내 스토리가 있으면
-                if (MyStories.size() > 0) {
+                if (MyStories != null) {
                     Intent intent = new Intent(getActivity(), StoryActivity.class);
                     startActivity(intent);
 
@@ -239,10 +170,10 @@ public class Frag1 extends Fragment {
         myStory.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                // 사진 선택
-                //갤러리 호출
-                Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, OPEN_GALLERY);
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                StoryPostFrag storyPostFrag = new StoryPostFrag();
+                Bundle bundle = new Bundle();
+                transaction.replace(R.id.main_frame, storyPostFrag).addToBackStack(null).commit();
 
                 return true;
             }
@@ -259,8 +190,6 @@ public class Frag1 extends Fragment {
             }
         });
 
-
-
         return view;
     }
 
@@ -272,27 +201,4 @@ public class Frag1 extends Fragment {
     void setStoryAdapter(RecyclerView feedResponse_list) {
         feedResponse_list.setAdapter(new RVAdapter_story(stories, getContext(), dataService));
     }
-
-
-
-    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-
-                    if(result.getResultCode() == RESULT_OK){
-                        Intent data = result.getData();
-                        if(data == null){   // 어떤 이미지도 선택하지 않은 경우
-                            Toast.makeText(getContext(), "이미지를 선택하지 않았습니다.", Toast.LENGTH_LONG).show();
-                        }
-                        else{   // 이미지를 선택한 경우
-                            Log.e("single choice: ", String.valueOf(data.getData()));
-                            storyImageUri = data.getData();
-
-                        }
-                    }
-                }
-            }
-    );
 }

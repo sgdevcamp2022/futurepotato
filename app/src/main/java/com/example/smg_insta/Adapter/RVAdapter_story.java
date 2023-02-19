@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.smg_insta.API.Service;
 import com.example.smg_insta.DTO.MainPageResponse;
+import com.example.smg_insta.DTO.MainPage_test_Response;
 import com.example.smg_insta.Frag1;
 import com.example.smg_insta.R;
 import com.example.smg_insta.StoryActivity;
@@ -26,12 +27,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RVAdapter_story extends RecyclerView.Adapter<RVAdapter_story.ViewHolder> {
     Context context;
-    private List<MainPageResponse.Story> data;
+    private List<MainPage_test_Response.Story_test> data;
     private Service dataService;
 
     String bundleImage;
 
-    public RVAdapter_story(List<MainPageResponse.Story> data, Context context, Service dataService) {
+    public RVAdapter_story(List<MainPage_test_Response.Story_test> data, Context context, Service dataService) {
         this.data = data;
         this.context = context;
         this.dataService = dataService;
@@ -54,9 +55,8 @@ public class RVAdapter_story extends RecyclerView.Adapter<RVAdapter_story.ViewHo
             public void onClick(View view) {
                 // 스토리 어떻게 띄울지...
                 Intent intent = new Intent(context, StoryActivity.class);
-                intent.putExtra("userId", data.get(position).getName());
+                intent.putExtra("userId", data.get(position).getAccountId());
                 context.startActivity(intent);
-
 
             }
         });
@@ -80,12 +80,14 @@ public class RVAdapter_story extends RecyclerView.Adapter<RVAdapter_story.ViewHo
 
         }
 
-        void onBind(MainPageResponse.Story item){
-            Glide.with(context)
-                    .load(item.getProfileImage())
-                    .into(storyImage);
+        void onBind(MainPage_test_Response.Story_test item){
+            if(item.getProfileImage() != null) {
+                Glide.with(context)
+                        .load(item.getProfileImage())
+                        .into(storyImage);
+            }
 
-            storyId.setText(item.getName());
+            storyId.setText(item.getAccountId());
         }
     }
 }

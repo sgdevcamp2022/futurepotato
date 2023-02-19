@@ -88,11 +88,11 @@ public class FragUserInfo extends Fragment {
                 // popup띄우기 -> 차단 / 차단 해제 ...
                 // 내가 이 user를 차단하고 있는지 확인
                 myId = PreferenceManager.getString(getContext(), "accountID");
-                dataService.graph.isBlocking(myId, id).enqueue(new Callback<isFollowingResponse>() {
+                dataService.graph.isBlocking(myId, id).enqueue(new Callback<Boolean>() {
                     @Override
-                    public void onResponse(Call<isFollowingResponse> call, Response<isFollowingResponse> response) {
+                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                         if(response.isSuccessful()) {
-                            if(response.body().isResult()) {
+                            if(response.body()) {
                                 // 차단 해제
                                 //PopupMenu 객체 생성
                                 PopupMenu popup= new PopupMenu(getActivity(), btn_menu); //두 번째 파라미터가 팝업메뉴가 붙을 뷰
@@ -142,7 +142,7 @@ public class FragUserInfo extends Fragment {
                                         switch (menuItem.getItemId()){
                                             case R.id.menu_block:
                                                 // block 해제 하기
-                                                dataService.graph.block(new FollowData(myId, id)).enqueue(new Callback<ResponseBody>() {
+                                                dataService.graph.block(myId, id).enqueue(new Callback<ResponseBody>() {
                                                     @Override
                                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                                         if(response.isSuccessful()) {
@@ -169,7 +169,7 @@ public class FragUserInfo extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(Call<isFollowingResponse> call, Throwable t) {t.printStackTrace();}
+                    public void onFailure(Call<Boolean> call, Throwable t) {t.printStackTrace();}
                 });
 
             }
@@ -247,7 +247,7 @@ public class FragUserInfo extends Fragment {
         btnUnfollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dataService.graph.unfollow(new FollowData(myId, id)).enqueue(new Callback<ResponseBody>() {
+                dataService.graph.unfollow(myId, id).enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if(response.isSuccessful()) {
@@ -269,7 +269,7 @@ public class FragUserInfo extends Fragment {
         btnFollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dataService.graph.follow(new FollowData(myId, id)).enqueue(new Callback<ResponseBody>() {
+                dataService.graph.follow(myId, id).enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if(response.isSuccessful()) {

@@ -49,16 +49,16 @@
 
         <ImageView
             android:id="@+id/iv_reply_noLike"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:layout_margin="20dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_margin="15dp"
             android:background="@drawable/heart" />
 
         <ImageView
             android:id="@+id/iv_reply_like"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:layout_margin="20dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_margin="15dp"
             android:background="@drawable/hearts"
             android:visibility="gone" />
 
@@ -73,7 +73,7 @@
         app:layout_constraintTop_toBottomOf="@+id/LinearLayout_reply">
 
         <TextView
-            android:id="@+id/tv_commentLikeCount"
+            android:id="@+id/tv_replyLikeCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="65dp"

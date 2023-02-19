@@ -109,6 +109,7 @@ public class MyPostFrag extends Fragment {
                     selectedFeed = response.body();
                     bundle_id = selectedFeed.getAccountId();
                     checkLike(bundle_id, postId);   // 좋아요 초기화
+                    USER_ID.setText(bundle_id.toUpperCase());
                     userId.setText(bundle_id);
                     likeCount.setText("좋아요 " + selectedFeed.getLikeCount() + "개");
                     commentCount.setText("댓글 " + selectedFeed.getCommentCount() + "개");
@@ -127,7 +128,6 @@ public class MyPostFrag extends Fragment {
                     for(String s: images){
                         Log.e("images", s);
                     }
-
 
                     info_img_content.setOffscreenPageLimit(1);
                     info_img_content.setAdapter(new ImageSliderAdapter(getActivity(), images));

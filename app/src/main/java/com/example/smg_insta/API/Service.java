@@ -17,6 +17,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
@@ -38,9 +39,9 @@ public class Service {
     //private String BASE_URL = "http://192.168.0.28:8000";
 
     OkHttpClient okHttpClient = new OkHttpClient.Builder()
-            .connectTimeout(15, TimeUnit.SECONDS)
-            .writeTimeout(15, TimeUnit.SECONDS)
-            .readTimeout(15, TimeUnit.SECONDS)
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
             .build();
 
 
@@ -48,6 +49,7 @@ public class Service {
             new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .client(okHttpClient)
+                    .addConverterFactory(ScalarsConverterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
@@ -140,7 +142,7 @@ public class Service {
 
         @Multipart
         @POST("/feed/{accountId}/story")
-        Call<ResponseBody> InsertStory(@Path("accountId") String accountId, @Part("image") String image);
+        Call<ResponseBody> InsertStory(@Path("accountId") String accountId, @Part MultipartBody.Part image);
 
         @DELETE("/feed/{accountId}/story/{storyId}")
         Call<ResponseBody> DeleteStory(@Path("accountId") String accountId, @Path("storyId") int storyId);
@@ -153,7 +155,7 @@ public class Service {
         Call<MainPage_test_Response> GetMainPost(@Path("accountId") String accountId);
 
         @GET("/feed/test/{accountId}/storyList")
-        Call<List<MainPageResponse.Post>> GetMainStory(@Path("accountId") String accountId);
+        Call<MainPage_test_Response> GetMainStory(@Path("accountId") String accountId);
     }
 
 //    public interface SelectMainPageAPI {

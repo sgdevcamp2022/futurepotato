@@ -98,9 +98,9 @@ public class FeedResponse {
 
     public static class Comment {
 
-        public Comment(String commentWriter, String image, String comment, int commentId, int likeCount, String createdDt, int replyCount, ArrayList<Reply> replyList) {
+        public Comment(String commentWriter, String profileImage, String comment, int commentId, int likeCount, String createdDt, int replyCount, ArrayList<Reply> replyList) {
             this.commentWriter = commentWriter;
-            this.image = image;
+            this.profileImage = profileImage;
             this.comment = comment;
             this.commentId = commentId;
             this.likeCount = likeCount;
@@ -111,8 +111,8 @@ public class FeedResponse {
 
         @SerializedName("commentWriter")
         private String commentWriter;
-        @SerializedName("Image")
-        private String image;
+        @SerializedName("profileImage")
+        private String profileImage;
         @SerializedName("comment")
         private String comment;
         @SerializedName("commentId")
@@ -136,7 +136,7 @@ public class FeedResponse {
         }
 
         public String getImage() {
-            return image;
+            return profileImage;
         }
 
         public void setImage(String image) {
@@ -186,10 +186,11 @@ public class FeedResponse {
 
     public static class Reply {
 
-        public Reply(int replyId, String replyWriter, String reply, String profileImage, String createdDt) {
+        public Reply(int replyId, String replyWriter, String reply, int likeCount, String profileImage, String createdDt) {
             this.replyId = replyId;
             this.replyWriter = replyWriter;
             this.reply = reply;
+            this.likeCount = likeCount;
             this.profileImage = profileImage;
             this.createdDt = createdDt;
         }
@@ -200,6 +201,8 @@ public class FeedResponse {
         private String replyWriter;
         @SerializedName("reply")
         private String reply;
+        @SerializedName("likeCount")
+        private int likeCount;
         @SerializedName("profileImage")
         private String profileImage;
         @SerializedName("createdDt")
@@ -225,6 +228,10 @@ public class FeedResponse {
         public void setReply(String reply) {
             this.reply = reply;
         }
+
+        public int getLikeCount() {return likeCount;}
+
+        public void setLikeCount(int likeCount) {this.likeCount = likeCount;}
 
         public String getProfileImage() {return profileImage;}
 

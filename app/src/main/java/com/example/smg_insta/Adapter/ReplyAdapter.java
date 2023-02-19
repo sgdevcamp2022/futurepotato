@@ -128,7 +128,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder>{
         holder.btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dataService.feedLike.unlikeReply(accountId, replyList.get(position).getReplyId()).enqueue(new Callback<ResponseBody>() {
+                dataService.feedLike.unlikeReply(accountId, (long)replyList.get(position).getReplyId()).enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if(response.isSuccessful()) {
@@ -158,7 +158,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder>{
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         CircleImageView profile_image;
-        TextView userId, reply;
+        TextView userId, reply, likeCount;
         ImageView btnLike, btnNoLike;
 
         public ViewHolder(View itemView) {
@@ -168,6 +168,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder>{
             reply = itemView.findViewById(R.id.tv_reply);
             btnLike = itemView.findViewById(R.id.iv_reply_like);
             btnNoLike = itemView.findViewById(R.id.iv_reply_noLike);
+            // 답글 좋아요 갯수 확인 불가
+            likeCount = itemView.findViewById(R.id.tv_replyLikeCount);
         }
 
         public void bindReply(FeedResponse.Reply item) {
@@ -178,6 +180,11 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder>{
             }
             userId.setText(item.getReplyWriter());
             reply.setText(item.getReply());
+            if(item.getLikeCount() > 0) {
+                likeCount.setText("좋아요 " + item.getLikeCount() + "개");
+            } else {
+                likeCount.setVisibility(View.GONE);
+            }
         }
 
         void checkReplyLike(FeedResponse.Reply item) {

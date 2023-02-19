@@ -1,6 +1,7 @@
 package com.example.smg_insta.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 import com.example.smg_insta.API.Service;
 import com.example.smg_insta.DTO.StoryResponse;
+import com.example.smg_insta.PreferenceManager;
 import com.example.smg_insta.R;
 
 import java.util.List;
@@ -34,6 +36,7 @@ public class StorySliderAdapter extends BaseAdapter {
     private Context mContext;
     private List<StoryResponse.StoryList> sliderItems;
     private String userId;
+    private String accountId;   // myid
 
     private int setting = 0;
 
@@ -69,6 +72,8 @@ public class StorySliderAdapter extends BaseAdapter {
 
         layoutIndicator = view.findViewById(R.id.layoutIndicators_story);
         ImageView btn_more = view.findViewById(R.id.iv_btnMore);
+        ImageView btn_like = view.findViewById(R.id.iv_story_like);
+        ImageView btn_unLike = view.findViewById(R.id.iv_story_unlike);
         ImageView mImageView = view.findViewById(R.id.iv_storyImage);
         Glide.with(mContext)
                 .load(sliderItems.get(i).getImage())
@@ -77,6 +82,81 @@ public class StorySliderAdapter extends BaseAdapter {
         setCurrentIndicator(i);
         setupIndicators(sliderItems.size(), i);
 
+        accountId = PreferenceManager.getString(mContext,"accountID");
+
+        // 좋아요 초기화하기
+        dataService.feedLike.isLikeStory(accountId, sliderItems.get(i).getStoryId()).enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                if(response.isSuccessful()) {
+                    Log.e("isLikeStory", "좋아요 초기화 성공");
+                    if(response.body()) {
+                        btn_like.setVisibility(View.VISIBLE);
+                        btn_unLike.setVisibility(View.GONE);
+                    } else {
+                        btn_like.setVisibility(View.GONE);
+                        btn_unLike.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    Log.e("isLikeStory", "좋아요 초기화 오류: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                t.printStackTrace();
+                Log.e("isLikeStory", "좋아요 초기화 실패");
+            }
+        });
+
+        
+        // 스토리 좋아요 하기
+        btn_unLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dataService.feedLike.likeStory(accountId, sliderItems.get(i).getStoryId()).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.isSuccessful()) {
+                            btn_unLike.setVisibility(View.GONE);
+                            btn_like.setVisibility(View.VISIBLE);
+                            Log.e("storyLike", "스토리 좋아요 성공");
+                        } else {
+                            Log.e("storyLike", "스토리 좋아요 오류" + response.code());
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        t.printStackTrace();
+                        Log.e("storyLike", "스토리 좋아요 실패");
+                    }
+                });
+            }
+        });
+        // 스토리 좋아요 취소하기
+        btn_like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dataService.feedLike.unlikeStory(accountId, sliderItems.get(i).getStoryId()).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.isSuccessful()) {
+                            btn_unLike.setVisibility(View.VISIBLE);
+                            btn_like.setVisibility(View.GONE);
+                            Log.e("storyLike", "스토리 좋아요 취소 성공");
+                        } else {
+                            Log.e("storyLike", "스토리 좋아요 취소 오류" + response.code());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        t.printStackTrace();
+                        Log.e("storyLike", "스토리 좋아요 취소 실패");
+                    }
+                });
+            }
+        });
 
 
         btn_more.setOnClickListener(new View.OnClickListener() {
@@ -101,12 +181,15 @@ public class StorySliderAdapter extends BaseAdapter {
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                         if(response.isSuccessful()) {
                                             Toast.makeText(mContext, "삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(mContext, "삭제 오류: " + response.code(), Toast.LENGTH_SHORT).show();
                                         }
                                     }
 
                                     @Override
                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                                         t.printStackTrace();
+                                        Toast.makeText(mContext, "삭제 실패", Toast.LENGTH_SHORT).show();
                                     }
                                 });
 

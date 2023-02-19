@@ -15,8 +15,8 @@ public class MypageResponse {
     private String accountId;
     @SerializedName("profileImage")
     private String profileImage;
-    @SerializedName("followCount")
-    private int followCount;
+    @SerializedName("followerCount")
+    private int followerCount;
     @SerializedName("followingCount")
     private int followingCount;
     @SerializedName("postCount")
@@ -46,11 +46,11 @@ public class MypageResponse {
     public void setProfileImage(String profileImage) {this.profileImage = profileImage;}
 
     public int getFollowerCount() {
-        return followCount;
+        return followerCount;
     }
 
-    public void setFollowerCount(int followCount) {
-        this.followCount = followCount;
+    public void setFollowerCount(int followerCount) {
+        this.followerCount = followerCount;
     }
 
     public int getFollowingCount() {

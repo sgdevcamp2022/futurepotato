@@ -71,14 +71,6 @@ public class Frag_following extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(layoutManager);
 
-        //------test
-        followingData.add(new FollowListResponse.Follow("1", "test2", "nameTest2", "https://cdn.pixabay.com/photo/2020/09/02/18/03/girl-5539094_1280.jpg"));
-        followingData.add(new FollowListResponse.Follow("2", "test3", "nameTest3", "https://cdn.pixabay.com/photo/2020/11/04/15/29/coffee-beans-5712780_1280.jpg"));
-        followingData.add(new FollowListResponse.Follow("3", "test4", "nameTest4", "https://cdn.pixabay.com/photo/2020/11/04/15/29/coffee-beans-5712780_1280.jpg"));
-
-        mRecyclerView.setAdapter(new FollowingListAdapter(followingData, getContext(), dataService));
-
-        //---------
 
         dataService.graph.readFollowing(accountID).enqueue(new Callback<FollowListResponse>() {
             @Override

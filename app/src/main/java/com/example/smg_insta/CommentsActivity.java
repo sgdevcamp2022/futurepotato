@@ -121,7 +121,7 @@ public class CommentsActivity extends AppCompatActivity {
             public void onResponse(Call<FeedResponse> call, Response<FeedResponse> response) {
                 feed = response.body();
                 commentList = feed.getCommentList();
-                mRV_comments.setAdapter(new CommentAdapter(commentList, getApplication(), dataService));
+                mRV_comments.setAdapter(new CommentAdapter(commentList, getApplication(), dataService, postId));
 
             }
 

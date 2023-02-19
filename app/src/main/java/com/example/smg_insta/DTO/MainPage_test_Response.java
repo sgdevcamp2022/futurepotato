@@ -16,8 +16,8 @@ public class MainPage_test_Response {
 
     public List<Story_test> getStoryList() {return storyList;}
 
-    public class Post_test {
 
+    public class Post_test {
 
         @SerializedName("postId")
         private int postId;
@@ -38,11 +38,11 @@ public class MainPage_test_Response {
         @SerializedName("imageList")
         private List<String> imageList;
         @SerializedName("commentList")
-        private List<String> commentList;
+        private List<Object> commentList;
         @SerializedName("multyImage")
         private Boolean multyImage;
-        @SerializedName("likesCheck")
-        private Boolean likesCheck;
+        //@SerializedName("likesCheck")
+        //private Boolean likesCheck;
 
         public int getPostId() {return postId;}
 
@@ -62,7 +62,7 @@ public class MainPage_test_Response {
 
         public List<String> getImageList() {return imageList;}
 
-        public List<String> getCommentList() {
+        public List<Object> getCommentList() {
             return commentList;
         }
 
@@ -70,17 +70,25 @@ public class MainPage_test_Response {
             return multyImage;
         }
 
-        public Boolean getLikesCheck() {
-            return likesCheck;
-        }
+        //public Boolean getLikesCheck() {return likesCheck;}
     }
 
 
 
 
-    private class Story_test {
+    public class Story_test {
 
+        @SerializedName("accountId")
+        private String accountId;
+        @SerializedName("profileImage")
+        private String profileImage;
 
+        public String getAccountId() {
+            return accountId;
+        }
 
+        public String getProfileImage() {
+            return profileImage;
+        }
     }
 }

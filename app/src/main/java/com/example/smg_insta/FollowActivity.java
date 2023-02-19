@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -30,7 +31,9 @@ public class FollowActivity  extends FragmentActivity {
     private FragmentStateAdapter pagerAdapter;
 
     private ImageView back;
-    private TextView tv_userId;
+    private TextView tv_userId, btn_followerList, btn_followingList;
+    private FragmentManager fm;
+    private FragmentTransaction ft;
 
     private Bundle bundle;
     private String accountID;
@@ -61,6 +64,15 @@ public class FollowActivity  extends FragmentActivity {
         pagerAdapter = new FollowAdapter(this, page);
         pager.setAdapter(pagerAdapter);
         pager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+
+        btn_followerList = findViewById(R.id.tv_btnFollower);
+        btn_followingList = findViewById(R.id.tv_btnFollowing);
+
+        btn_followerList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });
 
 
         back.setOnClickListener(new View.OnClickListener() {

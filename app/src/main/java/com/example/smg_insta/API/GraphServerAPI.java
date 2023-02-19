@@ -28,21 +28,20 @@ public interface GraphServerAPI {
     Call<FollowListResponse> readFollowing(@Path("accountId") String accountId);
 
     // 팔로우 등록
-    @POST("/graph/follow")
-    Call<ResponseBody> follow(@Body FollowData followData);
+    @POST("/graph/{senderId}/follow/{recipientId}")
+    Call<ResponseBody> follow(@Path("senderId") String senderId, @Path("recipientId") String recipientId);
 
     // 팔로우 취소
-    @DELETE("/graph/follow")
-    Call<ResponseBody> unfollow(@Body FollowData followData);
+    @DELETE("/graph/{senderId}/follow/{recipientId}")
+    Call<ResponseBody> unfollow(@Path("senderId") String senderId, @Path("recipientId") String recipientId);
 
     // 차단
-    @POST("/graph/block")
-    Call<ResponseBody> block(@Body FollowData followData);
+    @POST("/graph/{senderId}/block/{recipientId}")
+    Call<ResponseBody> block(@Path("senderId") String senderId, @Path("recipientId") String recipientId);
 
     // 차단 해제
-    @FormUrlEncoded
-    @DELETE("/graph/block")
-    Call<ResponseBody> unblock(@Field("senderId") String senderId, @Field("recipientId") String recipientId);
+    @DELETE("/graph/{senderId}/block/{recipientId}")
+    Call<ResponseBody> unblock(@Path("senderId") String senderId, @Path("recipientId") String recipientId);
 
     // blocker 목록 조회
     // FollowListResponse랑 Request Body형식이 같아서 그대로 사용함.
@@ -54,13 +53,13 @@ public interface GraphServerAPI {
     Call<FollowListResponse> getBlockingList(@Path("accountId") String accountId);
 
     // 팔로우 여부 조회
-    @GET("/feed/{accountId1}/isFollowing/{accountId2}")
-    Call<Boolean> isFollowing(@Path("accountId1") String senderId, @Path("accountId2") String recipientId);
+    @GET("/graph/{senderId}/isFollowing/{recipientId}")
+    Call<Boolean> isFollowing(@Path("senderId") String senderId, @Path("recipientId") String recipientId);
 
 
     // 차단여부 조회
-    @GET("/graph/isBlocking")
-    Call<isFollowingResponse> isBlocking(@Query("senderId") String senderId, @Query("recipientId") String recipientId);
+    @GET("/graph/{senderId}/isBlocking/{recipientId}")
+    Call<Boolean> isBlocking(@Path("senderId") String senderId, @Path("recipientId") String recipientId);
 
 }
 

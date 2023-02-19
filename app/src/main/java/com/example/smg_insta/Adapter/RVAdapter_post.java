@@ -100,14 +100,8 @@ public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHold
 
         // 2. 좋아요 기능
 
-        // 좋아요 기본 설정
-        if(isLikePostCheck(accountId, data.get(position).getPostId())) {
-            holder.btn_like.setVisibility(View.VISIBLE);
-            holder.btn_noLike.setVisibility(View.GONE);
-        } else {
-            holder.btn_like.setVisibility(View.GONE);
-            holder.btn_noLike.setVisibility(View.VISIBLE);
-        }
+        // 좋아요 기본 설정(초기화)ㅅㄷㄴㅅ
+        holder.isLikePostCheck(accountId, data.get(position).getPostId());
 
         // 좋아요 클릭시
         holder.btn_noLike.setOnClickListener(new View.OnClickListener() {
@@ -282,6 +276,32 @@ public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHold
 
         }
 
+        public void isLikePostCheck(String accountId, long postId) {
+            dataService.feedLike.isLikePost(accountId, postId).enqueue(new Callback<Boolean>() {
+                @Override
+                public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                    if(response.isSuccessful()) { // 좋아요 초기화
+                        Log.e("IsLikePostCheck", "게시글 좋아요 여부 확인 성공");
+                        if(response.body()) {   // 좋아요o
+                            btn_like.setVisibility(View.VISIBLE);
+                            btn_noLike.setVisibility(View.GONE);
+
+                        }
+
+                    } else {
+                        Log.e("IsLikePostCheck", "게시글 좋아요 여부 확인 오류");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Boolean> call, Throwable t) {
+                    t.printStackTrace();
+                    Log.e("IsLikePostCheck", "게시글 좋아요 여부 확인 실패");
+                }
+            });
+        }
+
+
         private void setupIndicators(int count) {
             ImageView[] indicators = new ImageView[count];
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -318,30 +338,5 @@ public class RVAdapter_post extends RecyclerView.Adapter<RVAdapter_post.ViewHold
         }
 
     }
-
-    public Boolean isLikePostCheck(String accountId, long postId) {
-        final Boolean[] result = new Boolean[1];
-        dataService.feedLike.isLikePost(accountId, postId).enqueue(new Callback<Boolean>() {
-            @Override
-            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                if(response.isSuccessful()) {
-                    result[0] = response.body();
-                    Log.e("IsLikePostCheck", "게시글 좋아요 여부 확인 성공");
-                } else {
-                    Log.e("IsLikePostCheck", "게시글 좋아요 여부 확인 오류");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Boolean> call, Throwable t) {
-                t.printStackTrace();
-                Log.e("IsLikePostCheck", "게시글 좋아요 여부 확인 실패");
-            }
-        });
-        return result[0];
-    }
-
-
-
 
 }
