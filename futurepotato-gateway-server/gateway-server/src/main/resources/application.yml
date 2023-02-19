@@ -30,6 +30,7 @@ spring:
             - POST
             - DELETE
             - OPTIONS
+            - PATCH
       routes:
         - id: user-server
           predicates:
