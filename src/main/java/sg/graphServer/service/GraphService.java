@@ -54,6 +54,8 @@ public class GraphService {
                     if(savedSender.getFollowingCount()>=1 && savedRecipient.getFollowerCount()>=1) {
                         //관련 속성 변경
                         savedSender.setFollowingCount(savedSender.getFollowingCount() - 1);
+                        savedSender.setFollowerCount(savedSender.getFollowerCount() - 1);
+                        savedRecipient.setFollowingCount(savedRecipient.getFollowingCount() - 1);
                         savedRecipient.setFollowerCount(savedRecipient.getFollowerCount() - 1);
                         //변경된 속성 db에 반영
                         graphRepository.save(savedRecipient); graphRepository.save(savedSender);
