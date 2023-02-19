@@ -22,6 +22,9 @@ public class Account {
 
     private String accountId;
 
+    private long followingCount;
+    private long followerCount;
+
     public Account(String accountId, String accountName) {
         this.accountId = accountId;
         this.accountName=accountName;
