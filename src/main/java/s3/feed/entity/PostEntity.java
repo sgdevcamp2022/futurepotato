@@ -64,8 +64,10 @@ public class PostEntity {
         this.content = content;
         this.modifiedDt=modifiedDt;
     }
+
     public void upCommentCount(int commentCount){
         this.commentCount= commentCount++;
     }
+
 }
 
