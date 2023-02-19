@@ -53,6 +53,7 @@ public class PostDto {
         public Long replyId;
         public String replyWriter;
         public String reply;
+        public int likeCount;
         public LocalDateTime createdDt;
         public String profileImage;
     }

@@ -93,11 +93,26 @@ public class PostService {
             int replyCount = replyEntityList.size();
             PostDto.ReqCommentListDto reqCommentListDto = new PostDto.ReqCommentListDto();
             for (ReplyEntity replyEntity : replyEntityList) {
-                reqCommentListDto.replyList.add(new PostDto.ReqReplyDto(replyEntity.getId(), replyEntity.getUserEntity().getAccountId(), replyEntity.getReply(), replyEntity.getCreatedDt(), replyEntity.getUserEntity().getProfileImage()));
+                reqCommentListDto.replyList.add(
+                        new PostDto.ReqReplyDto(replyEntity.getId(),
+                            replyEntity.getUserEntity().getAccountId(),
+                            replyEntity.getReply(), replyEntity.getLikeCount(),
+                            replyEntity.getCreatedDt(),
+                            replyEntity.getUserEntity().getProfileImage())
+                );
             }
-
-            resImageListDto.commentList.add(new PostDto.ReqCommentListDto(commentEntity.getUserEntity().getAccountId(), commentEntity.getUserEntity().getProfileImage(), commentEntity.getComment(),
-                    commentEntity.getId(), commentEntity.getLikeCount(), commentEntity.getCreatedDt(), replyCount, reqCommentListDto.replyList));
+            resImageListDto.commentList.add(
+                    new PostDto.ReqCommentListDto(
+                            commentEntity.getUserEntity().getAccountId(),
+                            commentEntity.getUserEntity().getProfileImage(),
+                            commentEntity.getComment(),
+                            commentEntity.getId(),
+                            commentEntity.getLikeCount(),
+                            commentEntity.getCreatedDt(),
+                            replyCount,
+                            reqCommentListDto.replyList
+                    )
+            );
         }
         return new PostDto.ResImageListDto(postEntity.getId(),
                 postEntity.getContent(),
