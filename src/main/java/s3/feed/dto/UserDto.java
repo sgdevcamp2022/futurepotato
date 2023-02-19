@@ -19,8 +19,8 @@ public class UserDto {
         public String accountName;
         public String accountId;
         public String profileImage;
-        public int followingCount;
-        public int followCount;
+        public long followingCount;
+        public long followerCount ;
         public int postCount;
         public List<UserDto.ReqMypagePostDto> mypagePostDtos;
     }

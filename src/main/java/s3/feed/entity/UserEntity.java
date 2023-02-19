@@ -27,6 +27,9 @@ public class UserEntity {
 
     private String accountName;
 
+    private long followingCount;
+    private long followerCount;
+
     @Relationship(type = "UPLOADED")
     private List<PostEntity> posts = new ArrayList<>();
 

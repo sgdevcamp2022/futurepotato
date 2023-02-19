@@ -103,6 +103,8 @@ public class UserService {
                 .profileImage(userEntity.getProfileImage())
                 .postCount(postCount)
                 .mypagePostDtos(mypagePostDtos)
+                .followerCount(userEntity.getFollowerCount())
+                .followingCount(userEntity.getFollowingCount())
                 .build();
         return resMypage;
     }
