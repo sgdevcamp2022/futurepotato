@@ -51,15 +51,13 @@ public class GraphService {
                 //(1) 이미 block한 상태인지 확인
                 if(!graphRepository.isBlocking(savedSenderId, savedRecipientId)
                         && !graphRepository.isBlocking(savedRecipientId, savedSenderId)){
-                    if(savedSender.getFollowingCount()>=1 && savedRecipient.getFollowerCount()>=1) {
-                        //관련 속성 변경
-                        savedSender.setFollowingCount(savedSender.getFollowingCount() - 1);
-                        savedSender.setFollowerCount(savedSender.getFollowerCount() - 1);
-                        savedRecipient.setFollowingCount(savedRecipient.getFollowingCount() - 1);
-                        savedRecipient.setFollowerCount(savedRecipient.getFollowerCount() - 1);
-                        //변경된 속성 db에 반영
-                        graphRepository.save(savedRecipient); graphRepository.save(savedSender);
-                    }
+                    //관련 속성 변경
+                    if(savedSender.getFollowingCount()>0) savedSender.setFollowingCount(savedSender.getFollowingCount() - 1);
+                    if(savedSender.getFollowerCount()>0) savedSender.setFollowerCount(savedSender.getFollowerCount() - 1);
+                    if(savedRecipient.getFollowingCount()>0) savedRecipient.setFollowingCount(savedRecipient.getFollowingCount() - 1);
+                    if(savedRecipient.getFollowerCount()>0) savedRecipient.setFollowerCount(savedRecipient.getFollowerCount() - 1);
+                    //변경된 속성 db에 반영
+                    graphRepository.save(savedRecipient); graphRepository.save(savedSender);
                     //차단
                     graphRepository.block(savedSenderId, savedRecipientId);
                 } else {throw new RuntimeException("already block");}
