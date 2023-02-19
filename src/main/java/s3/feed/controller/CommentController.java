@@ -65,7 +65,7 @@ public class CommentController {
         return new ResponseEntity<>(commentService.deleteLikeReply(replyId, accountId),HttpStatus.OK);
     }
 
-    @GetMapping("/{accountId}/isLikeReply/{storyId}")
+    @GetMapping("/{accountId}/isLikeReply/{replyId}")
     public ResponseEntity isLikeReply(@PathVariable("replyId") Long replyId, @PathVariable("accountId") String accountId) {
         return new ResponseEntity<>(commentService.isLikeReply(replyId, accountId),HttpStatus.OK);
     }
