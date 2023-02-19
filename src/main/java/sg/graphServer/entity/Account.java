@@ -20,7 +20,7 @@ public class Account {
     private String accountName;
     private String profileImage;
 
-    private int followingCount;
-    private int followerCount;
+    private long followingCount;
+    private long followerCount;
 
 }
