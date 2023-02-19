@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import sg.graphServer.dto.RequestDTO;
 import sg.graphServer.dto.ResponseDTO;
 import sg.graphServer.entity.Account;
 import sg.graphServer.service.GraphService;
@@ -21,11 +20,11 @@ public class GraphController {
     @GetMapping("")
     public String graphServer() { return "graph server ok";  }
     //1. 소셜 관계 신청 : 팔로우, 차단
-    @PostMapping("/{request}")
-    public ResponseEntity<?> socialRequest(@PathVariable String request, @RequestBody RequestDTO dto) {
+    @PostMapping("{senderId}/{request}/{recipientId}")
+    public ResponseEntity<?> socialRequest(@PathVariable String senderId, @PathVariable String request, @PathVariable String recipientId) {
         try {
-            graphService.socialRequest(request, dto.getSenderId(), dto.getRecipientId());
-            log.info("{} is {}ing {}", dto.getSenderId(),request, dto.getRecipientId());
+            graphService.socialRequest(request, senderId, recipientId);
+            log.info("{} is {}ing {}", senderId ,request, recipientId);
             return ResponseEntity.ok().build();
         }catch(Exception e){
             ResponseDTO response = ResponseDTO.builder().error(e.getMessage()).build();
@@ -34,11 +33,11 @@ public class GraphController {
     }
 
     //2. 소셜 관계 신청 취소 : 팔로우 취소, 차단 취소
-    @DeleteMapping("/{request}")
-    public ResponseEntity<?> cancelSocialRequest(@PathVariable String request, @RequestBody RequestDTO dto) {
+    @DeleteMapping("{senderId}/{request}/{recipientId}")
+    public ResponseEntity<?> cancelSocialRequest(@PathVariable String senderId, @PathVariable String request, @PathVariable String recipientId) {
         try {
-            graphService.cancelSocialRequest(request, dto.getSenderId(), dto.getRecipientId());
-            log.info("{} is un{}s {}", dto.getSenderId(), request, dto.getRecipientId());
+            graphService.cancelSocialRequest(request, senderId, recipientId);
+            log.info("{} is un{}s {}", senderId, request, recipientId);
             return ResponseEntity.ok().build();
         }catch(Exception e){
             ResponseDTO response = ResponseDTO.builder().error(e.getMessage()).build();
