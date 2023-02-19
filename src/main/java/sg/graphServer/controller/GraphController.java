@@ -60,10 +60,10 @@ public class GraphController {
     }
 
     //4. 해당 relation 을 맺고 있는지 확인 : isFollowing, isBlocking
-    @GetMapping("{accountId1}/is{request}ing/{accountId2}")
-    public ResponseEntity<?> isRequesting(@PathVariable String accountId1, @PathVariable String request, @PathVariable String accountId2){
+    @GetMapping("/{senderId}/is{request}ing/{recipientId}")
+    public ResponseEntity<?> isRequesting(@PathVariable String senderId, @PathVariable String request, @PathVariable String recipientId){
         try {
-            boolean result = graphService.isRequesting(request, accountId1, accountId2);
+            boolean result = graphService.isRequesting(request, senderId, recipientId);
             return ResponseEntity.ok().body(result);
         }catch(Exception e){
             ResponseDTO response = ResponseDTO.builder().error(e.getMessage()).build();

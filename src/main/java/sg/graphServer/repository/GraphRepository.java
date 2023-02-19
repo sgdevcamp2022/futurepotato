@@ -13,7 +13,7 @@ public interface GraphRepository extends Neo4jRepository<Account, Long> {
    @Query("MATCH (n:Account{ accountId:$id }) RETURN n")
    Account findByAccountId(String id);
 
-    //팔로우
+    //팔로우 관계 추가
     @Query("MATCH (n1:Account{accountId:$id1})" +
             "MATCH (n2:Account{accountId:$id2}) " +
            "CREATE (n1)-[:IS_FOLLOWING]->(n2) ")

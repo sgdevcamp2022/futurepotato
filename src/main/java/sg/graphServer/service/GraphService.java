@@ -5,10 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sg.graphServer.entity.Account;
-import sg.graphServer.entity.SocialRelationship;
+//import sg.graphServer.entity.SocialRelationship;
 import sg.graphServer.repository.GraphRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -35,31 +36,29 @@ public class GraphService {
                         && !graphRepository.isBlocking(savedRecipientId, savedSenderId)){
                     //(2) 이미 팔로우한 상태인지 확인
                     if(!graphRepository.isFollowing(savedSenderId, savedRecipientId)){
-                        graphRepository.follow(savedSenderId, savedRecipientId);
-                        if(savedSender.getFollowingList() == null){
-                            savedSender.setFollowingList(new HashSet<>());
-                        }
-                        savedSender.getFollowingList()
-                                .add(SocialRelationship.builder()
-                                        .target(savedRecipient)
-                                        .createDT(LocalDateTime.now())
-                                        .build());
-                    } else {throw new RuntimeException("already follow");}
+                        //관련 속성 변경
+                        savedSender.setFollowingCount(savedSender.getFollowingCount()+1);
+                        savedRecipient.setFollowerCount(savedRecipient.getFollowerCount()+1);
+                        //변경된 속성 db에 반영
+                        graphRepository.save(savedRecipient); graphRepository.save(savedSender);
+                         //팔로우
+                      graphRepository.follow(savedSenderId, savedRecipientId);
+                  } else {throw new RuntimeException("already follow");}
                 } else {throw new RuntimeException("already block");}
                 break;
             case "block":
                 //(1) 이미 block한 상태인지 확인
                 if(!graphRepository.isBlocking(savedSenderId, savedRecipientId)
                         && !graphRepository.isBlocking(savedRecipientId, savedSenderId)){
-                    graphRepository.block(savedSenderId, savedRecipientId);
-                    if(savedSender.getBlockingList() == null){
-                    savedSender.setBlockingList(new HashSet<>());
+                    if(savedSender.getFollowingCount()>=1 && savedRecipient.getFollowerCount()>=1) {
+                        //관련 속성 변경
+                        savedSender.setFollowingCount(savedSender.getFollowingCount() - 1);
+                        savedRecipient.setFollowerCount(savedRecipient.getFollowerCount() - 1);
+                        //변경된 속성 db에 반영
+                        graphRepository.save(savedRecipient); graphRepository.save(savedSender);
                     }
-                    savedSender.getBlockingList()
-                            .add(SocialRelationship.builder()
-                                    .target(savedRecipient)
-                                    .createDT(LocalDateTime.now())
-                                    .build());
+                    //차단
+                    graphRepository.block(savedSenderId, savedRecipientId);
                 } else {throw new RuntimeException("already block");}
                 break;
             default:
@@ -70,7 +69,8 @@ public class GraphService {
     //2. 소셜 관계 신청 취소 : 팔로우 취소, 차단 취소
     @Transactional
     public void cancelSocialRequest(String request, String senderId, String recipientId){
-
+        Account savedSender = graphRepository.findByAccountId(senderId);
+        Account savedRecipient = graphRepository.findByAccountId(recipientId);
         String savedSenderId = graphRepository.findByAccountId(senderId).getAccountId();
         String savedRecipientId = graphRepository.findByAccountId(recipientId).getAccountId();
         recipientValidate(savedSenderId, savedRecipientId);
@@ -79,6 +79,11 @@ public class GraphService {
             case "follow":
                 //애초에 follow한 상태인지 확인
                 if(graphRepository.isFollowing(savedSenderId, savedRecipientId)) {
+                    //관련 속성 변경
+                    savedSender.setFollowingCount(savedSender.getFollowingCount()-1);
+                    savedRecipient.setFollowerCount(savedRecipient.getFollowerCount()-1);
+                    //변경된 속성 db에 반영
+                    graphRepository.save(savedRecipient); graphRepository.save(savedSender);
                     graphRepository.unfollow(savedSenderId, savedRecipientId);
                 } else {String msg = savedSenderId+" didn't follow "+savedRecipientId; throw new RuntimeException(msg);}
                 break;
