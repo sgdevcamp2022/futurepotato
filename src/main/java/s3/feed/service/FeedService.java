@@ -35,26 +35,25 @@ public class FeedService {
     StoryService storyService;
 
     //게시물
-    public SlicedResult<PostDto.ResImageListDto> searchPostBySlice(String accountId, long lastSeenPostId, int pageSize){
+    public SlicedResult<PostDto.ResImageListDto> searchPostBySlice(String accountId, Long lastSeenPostId, int pageSize){
         //page 시작번호=0, pageSize(한 페이지에 들어갈 게시물 수)는 클라이언트가 정함
         Pageable pageable = PageRequest.of(0, pageSize);
-
-        //현재 피드에 그려진 마지막 게시물의 생성일
-        LocalDateTime lastSeenPostCreatedDt = postRepository.findById(lastSeenPostId).map(PostEntity::getCreatedDt).orElse(null);
-
-        //그 생성일 이전에 생성된 게시물들 리스트
-        List<PostEntity> unseenPostList = postRepository.getUnseenPostList(accountId,
-                lastSeenPostCreatedDt.getYear(),
-                lastSeenPostCreatedDt.getMonthValue(),
-                lastSeenPostCreatedDt.getDayOfMonth(),
-                lastSeenPostCreatedDt.getHour(),
-                lastSeenPostCreatedDt.getMinute(),
-                lastSeenPostCreatedDt.getSecond());
-
-        //Dto에 집어넣기
         List<PostDto.ResImageListDto> results = new ArrayList<>();
-        for(PostEntity p : unseenPostList){
-            results.add(postService.getImageList(p.getId()));
+        if(lastSeenPostId!=null) {
+            //현재 피드에 그려진 마지막 게시물의 생성일
+            LocalDateTime lastSeenPostCreatedDt = postRepository.findById(lastSeenPostId).map(PostEntity::getCreatedDt).orElse(null);
+            //그 생성일 이전에 생성된 게시물들 리스트
+            List<PostEntity> unseenPostList = postRepository.getUnseenPostList(accountId,
+                    lastSeenPostCreatedDt.getYear(),
+                    lastSeenPostCreatedDt.getMonthValue(),
+                    lastSeenPostCreatedDt.getDayOfMonth(),
+                    lastSeenPostCreatedDt.getHour(),
+                    lastSeenPostCreatedDt.getMinute(),
+                    lastSeenPostCreatedDt.getSecond());
+            //Dto에 집어넣기
+            for (PostEntity p : unseenPostList) {
+                results.add(postService.getImageList(p.getId()));
+            }
         }
 
         //무한 스크롤 처리를 위한 slices
@@ -72,29 +71,26 @@ public class FeedService {
     public SlicedResult<FeedDto.followingsWhoUploadedStoryDto> searchFollowingsWhoUploadedStoryBySlice(String accountId, String lastSeenFollowingId, int pageSize){
         //page 시작번호=0, pageSize(한 페이지에 들어갈 스토리 수)는 클라이언트가 정함
         Pageable pageable = PageRequest.of(0, pageSize);
-
-        //현재 피드에 그려진 마지막 팔로우의 최신 스토리의 생성일
-        LocalDateTime storyCreatedDtOfLastSeenFollowing = userRepository.getCreatedDtOfRecentStory(lastSeenFollowingId);
-
-
-        //그 생성일 이전에 스토리를 올린 팔로우 리스트
-        List<UserEntity> unseenFollowingsWhoUploadedStory = userRepository.getUnseenFollowingsWhoUploadedStory(accountId,
-                storyCreatedDtOfLastSeenFollowing.getYear(),
-                storyCreatedDtOfLastSeenFollowing.getMonthValue(),
-                storyCreatedDtOfLastSeenFollowing.getDayOfMonth(),
-                storyCreatedDtOfLastSeenFollowing.getHour(),
-                storyCreatedDtOfLastSeenFollowing.getMinute(),
-                storyCreatedDtOfLastSeenFollowing.getSecond());
-
-        //Dto에 집어넣기
         List<FeedDto.followingsWhoUploadedStoryDto> results = new ArrayList<>();
-        for(UserEntity f : unseenFollowingsWhoUploadedStory){
-            results.add(FeedDto.followingsWhoUploadedStoryDto.builder()
-                    .accountId(f.getAccountId())
-                    .profileImage(f.getProfileImage())
-                    .build());
+        if(lastSeenFollowingId!=null) {
+            //현재 피드에 그려진 마지막 팔로우의 최신 스토리의 생성일
+            LocalDateTime storyCreatedDtOfLastSeenFollowing = userRepository.getCreatedDtOfRecentStory(lastSeenFollowingId);
+            //그 생성일 이전에 스토리를 올린 팔로우 리스트
+            List<UserEntity> unseenFollowingsWhoUploadedStory = userRepository.getUnseenFollowingsWhoUploadedStory(accountId,
+                    storyCreatedDtOfLastSeenFollowing.getYear(),
+                    storyCreatedDtOfLastSeenFollowing.getMonthValue(),
+                    storyCreatedDtOfLastSeenFollowing.getDayOfMonth(),
+                    storyCreatedDtOfLastSeenFollowing.getHour(),
+                    storyCreatedDtOfLastSeenFollowing.getMinute(),
+                    storyCreatedDtOfLastSeenFollowing.getSecond());
+            //Dto에 집어넣기
+            for (UserEntity f : unseenFollowingsWhoUploadedStory) {
+                results.add(FeedDto.followingsWhoUploadedStoryDto.builder()
+                        .accountId(f.getAccountId())
+                        .profileImage(f.getProfileImage())
+                        .build());
+            }
         }
-
         //무한 스크롤 처리를 위한 slices
         Slice<FeedDto.followingsWhoUploadedStoryDto> slicedFollowings = checkLastPageForStory(pageable, results);
 

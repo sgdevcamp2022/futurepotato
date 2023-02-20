@@ -18,14 +18,14 @@ public class FeedController {
 
     @GetMapping("/{accountId}/postList")
     public ResponseEntity getPaginatedPostList(@PathVariable("accountId") String accountId,
-                                  @RequestParam long lastSeenPostId,
+                                  @RequestParam(required = false) Long lastSeenPostId,
                                   @RequestParam int pageSize){
         return new ResponseEntity<>(feedService.searchPostBySlice(accountId, lastSeenPostId, pageSize), HttpStatus.OK);
     }
 
     @GetMapping("/{accountId}/storyList")
     public ResponseEntity getPaginatedStoryList(@PathVariable("accountId") String accountId,
-                                  @RequestParam String lastSeenFollowingId,
+                                  @RequestParam(required = false) String lastSeenFollowingId,
                                   @RequestParam int pageSize){
         return new ResponseEntity<>(feedService.searchFollowingsWhoUploadedStoryBySlice(accountId, lastSeenFollowingId, pageSize), HttpStatus.OK);
     }
