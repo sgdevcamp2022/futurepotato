@@ -252,7 +252,7 @@ public class FragUserInfo extends Fragment {
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if(response.isSuccessful()) {
                             checkFollow(myId, id);
-                            checkUserInfo(myId);
+                            checkUserInfo(id);
                             Toast.makeText(getContext(), "언팔 ㅅ성공", Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(getContext(), "ErrorCode: "+response.code(), Toast.LENGTH_SHORT).show();
@@ -274,7 +274,7 @@ public class FragUserInfo extends Fragment {
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if(response.isSuccessful()) {
                             checkFollow(myId, id);
-                            checkUserInfo(myId);
+                            checkUserInfo(id);
                             Toast.makeText(getContext(), "팔로우 성공", Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(getContext(), "ErrorCode: "+response.code(), Toast.LENGTH_SHORT).show();

@@ -111,13 +111,6 @@ public class Frag5 extends Fragment {
         //3분할로 화면을 나타냄
         gridLayoutManager = new GridLayoutManager(getContext(),3);
         account_recyclerview.setLayoutManager(gridLayoutManager);
-        //adapter = new RVAdapter_profile(feeds, getContext(), dataService);
-        //account_recyclerview.setAdapter(adapter);
-
-        //-----test----
-        //adapter = new RVAdapter_profile(images, getContext(), dataService);
-        //-------
-        //account_recyclerview.setAdapter(adapter);
 
 
         // 1. mypage 정보 보여주기

@@ -7,18 +7,18 @@ import java.util.List;
 
 public class StoryResponse {
 
-    public StoryResponse(String accountId, String profileImage, ArrayList<StoryList> storyImage) {
+    public StoryResponse(String accountId, String profileImage, ArrayList<StoryList> storyList) {
         this.accountId = accountId;
         this.profileImage = profileImage;
-        this.storyImage = storyImage;
+        this.storyList = storyList;
     }
 
     @SerializedName("accountId")
     private String accountId;
     @SerializedName("profileImage")
     private String profileImage;
-    @SerializedName("storyImage")
-    private ArrayList<StoryList> storyImage;
+    @SerializedName("storyList")
+    private ArrayList<StoryList> storyList;
 
     public String getAccountId() {
         return accountId;
@@ -37,11 +37,11 @@ public class StoryResponse {
     }
 
     public ArrayList<StoryList> getStoryImage() {
-        return storyImage;
+        return storyList;
     }
 
-    public void setStoryImage(ArrayList<StoryList> storyImage) {
-        this.storyImage = storyImage;
+    public void setStoryImage(ArrayList<StoryList> storyList) {
+        this.storyList = storyList;
     }
 
     public static class StoryList {

@@ -62,7 +62,7 @@ public class Frag_follower extends Fragment {
                     followerData = response.body().getData();
                     mRecyclerView.setAdapter(new FollowerListAdapter(followerData, getContext(), dataService));
                     Toast.makeText(getContext(), "연결 성공.", Toast.LENGTH_LONG).show();
-                    if(followerData != null) {
+                    if(followerData.size() > 0) {
                         mRecyclerView.setVisibility(View.VISIBLE);
                         mTextView.setVisibility(View.GONE);
                     } else {

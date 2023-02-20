@@ -22,11 +22,11 @@ public interface FeedLikeAPI {
 
     // 스토리 좋아요
     @POST("/feed/{accountId}/likeStory/{storyId}")
-    Call<ResponseBody> likeStory(@Path("accountId") String accountId, @Path("postId") long postId);
+    Call<ResponseBody> likeStory(@Path("accountId") String accountId, @Path("storyId") long postId);
 
     // 스토리 좋아요 취소
     @DELETE("/feed/{accountId}/likeStory/{storyId}")
-    Call<ResponseBody> unlikeStory(@Path("accountId") String accountId, @Path("postId") long postId);
+    Call<ResponseBody> unlikeStory(@Path("accountId") String accountId, @Path("storyId") long postId);
 
     // 댓글 좋아요
     @POST("/feed/{accountId}/likeComment/{commentId}")

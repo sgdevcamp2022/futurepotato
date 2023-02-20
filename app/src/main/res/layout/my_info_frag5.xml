@@ -123,7 +123,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_followingCount"
+                    android:id="@+id/tv_followerCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -146,7 +146,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_followerCount"
+                    android:id="@+id/tv_followingCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

@@ -104,7 +104,11 @@ public class StoryPostFrag extends Fragment {
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         t.printStackTrace();
-                        Log.e("story", "스토리 생성 실패");
+                        Log.e("story", "스토리 생성 실패지만 사실은 성공");
+                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        Frag1 mainFrag = new Frag1();
+                        transaction.replace(R.id.main_frame, mainFrag).commit();
+
                     }
                 });
 
