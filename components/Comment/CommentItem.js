@@ -1,4 +1,4 @@
-import { useState,useCallback } from "react";
+import { useState,useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const CommentItem = (props) => {
@@ -19,13 +19,24 @@ const CommentItem = (props) => {
     }
 
     const onClickDeleteReply = (v) => {
-        dispatch({type:'DELETE_REPLY_REQUEST', data : {accountId: me.accountId, replyId:v.replyId}});
+        dispatch({type:'DELETE_REPLY_REQUEST', data : {accountId: me.accountId, replyId:v}});
     }
 
     const onSubmitReply = () => {
         dispatch({type:"ADD_REPLY_REQUEST", data:{ nickname:me.username,profileImage:me.profileimage,commentId:  comment.commentId, accountId : me.accountId, reply: reply}})
     }
 
+    const onClickCommentLike = () => {
+        dispatch({type:'LIKE_COMMENT_REQUEST', data:{accountId:me.accountId, commentId:comment.commentId}});
+    }
+
+    const onClickCommentLikeCancel = () => {
+        dispatch({type:'LIKE_COMMENT_CANCEL_REQUEST', data:{accountId:me.accountId, commentId:comment.commentId}});
+    }
+
+    useEffect(() => {
+        dispatch({type:'IS_LIKE_COMMENT_REQUEST', data:{accountId:me.accountId, commentId:comment.commentId}});
+    }, [])
 
     return(
         <div className="comment_form" >
@@ -44,12 +55,12 @@ const CommentItem = (props) => {
                         <div className = 'date-heart-reply' style = {{fontSize:11, color:'gray'}}>
                             <span>좋아요 {comment.likeCount}개&nbsp;&nbsp;&nbsp;&nbsp;</span>
                             <span style={{cursor:'pointer'}} onClick  ={() => setAddReply(!addReply)}>답글 달기&nbsp;&nbsp;&nbsp;</span>
-                            {comment.commentWriter == me.username && <span onClick={onClickDeleteComment} style={{cursor:'pointer'}}>삭제</span>} 
+                            {comment.commentWriter == me.accountId && <span onClick={onClickDeleteComment} style={{cursor:'pointer'}}>삭제</span>} 
                         </div>
                     </div>
                 </div>
                 <div className='heart'>
-                    <p>♡</p>
+                    {props.isLikeComment ? <p onClick={onClickCommentLikeCancel}>♥</p> : <p onClick={onClickCommentLike}>♡</p>}
                 </div>
             </div>
             {comment.replyList.length != 0 && <div onClick={() => setReplyView(!replyView)} style = {{fontSize:13, paddingLeft:50, color:'gray', cursor:'pointer'}}>--- 답글 보기({comment.replyList.length}개)</div>}
@@ -70,7 +81,7 @@ const CommentItem = (props) => {
                                     <span style = {{maxWidth:"100%", display:"inline-block",wordBreak:"break-all"}}>{v.reply}</span>
                                 </div>
                                 <div className = 'date-heart-reply' style = {{fontSize:11, color:'gray'}}>
-                                    <span style={{cursor:'pointer'}} onClick={(v) => onClickDeleteReply(v)}>삭제</span> 
+                                    <span style={{cursor:'pointer'}} onClick={onClickDeleteReply(v.replyId)}>삭제</span> 
                                 </div>
                             </div>
                         </div>

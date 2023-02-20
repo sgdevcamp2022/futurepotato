@@ -9,8 +9,14 @@ import {useDispatch} from 'react-redux';
 const NewPostText = (props) => {
     const dispatch = useDispatch();
     const {me} = useSelector((state) => state.user);
-    const {newImage} = useSelector((state) => state.mainpage);
-    const imageSource = window.URL.createObjectURL(newImage.get('imageList'));
+    const {newImage, currentReqPost} = useSelector((state) => state.mainpage);
+    let imageSource ="";
+    if(props.isEdit){
+        imageSource = currentReqPost.imageList[0];
+    }else{
+        imageSource = window.URL.createObjectURL(newImage.get('multipartFile'));
+    }
+
     const [postText, setPostText] = useState('');
     const onChangePostText = useCallback((e) => {
         setPostText(e.target.value);
@@ -21,8 +27,8 @@ const NewPostText = (props) => {
             newImage.append('content', postText);
             console.log(newImage.get('content'));
         } 
-        props.isEdit ? dispatch({type:'MOD_POST_REQUEST', data:{content:postText, accountId:me.accountId}})
-        : dispatch({type:'ADD_POST_REQUEST', data:{accountId:me.accountId, content:newImage}});
+        props.isEdit ? dispatch({type:'MOD_POST_REQUEST', data:{content:postText, accountId:me.accountId, postId: currentReqPost.postId}})
+        : dispatch({type:'ADD_POST_REQUEST', data:{accountId:me.accountId, content:newImage, }});
     }
 
     return(

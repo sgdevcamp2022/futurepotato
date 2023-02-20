@@ -16,7 +16,7 @@ const NewPost = () => {
         const imageFormData = new FormData();
         console.log(e.target.files);
         [].forEach.call(e.target.files, (f) => {
-            imageFormData.append('imageList', f);
+            imageFormData.append('multipartFile', f);
         });
         return dispatch({
             type: "IMAGE_UPLOAD_REQUEST",
@@ -26,7 +26,7 @@ const NewPost = () => {
 
     return(
         <div>
-        {isImagex ? <NewPostText isEdit = {false}/> : 
+        {isImage ? <NewPostText isEdit = {false}/> : 
         <div className="flex-center">
         <div className = 'modal_window'>
             <div className ='modal_title' style={{borderBottom:"1px solid lightgray", paddingBottom:15,

@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 const profile = () => {
     const router = useRouter();
     const {profileid} = router.query;
-    const dispatch = useDispatch();
+    console.log(profileid);
     return(
         <Profile id={profileid}/>
     );

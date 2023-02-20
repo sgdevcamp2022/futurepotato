@@ -2,14 +2,16 @@ import DetailPage from "../../components/DetailPage";
 import { useRouter } from 'next/router'
 import { useEffect } from "react";
 import wrapper from "../../store/configureStore";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 const detail = () => {
     const router = useRouter();
     const dispatch = useDispatch();
+    const {me} = useSelector((state)=>state.user);
     const {pid} = router.query;
     useEffect(() => {
         console.log("ASDFASDasdf");
         dispatch({type:'POST_INFO_REQUEST', data: {postId:pid}});
+        dispatch({type:'IS_LIKE_REQUEST', data: {accountId: me.accountId, postId:pid}});
     }, [])
     return(
         <div className = "flex-center">

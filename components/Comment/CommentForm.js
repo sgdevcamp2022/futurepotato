@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 const CommentForm = (props) => {
     const {me} = useSelector((state) => state.user);
+    console.log(props.checkHeart);
     const [comment, setComment] = useState('');
     const onChangeComment = useCallback((e) => {
         setComment(e.target.value);
@@ -14,13 +15,23 @@ const CommentForm = (props) => {
         console.log("1111111");
     };
 
+    const onLike = () => {
+        dispatch({type:'LIKE_POST_REQUEST', data:{accountId: me.accountId, postId:props.postId}});
+    }
+
+    const onLikeDelete = () => {
+        dispatch({type:'LIKE_POST_CANCEL_REQUEST', data:{accountId: me.accountId, postId:props.postId}});
+    }
+
     return (
         <div>
             <div className="post-content" style={{height:50}}>
                 <div className="reaction-wrapper">
-                    {props.checkHeart ? <img src="/like.PNG" className="icon" alt="" />
-                    : <img src="/like.PNG" className="icon" alt="" />}
-                    <img src="/comment.PNG" className="icon" alt="" />
+                    {props.checkHeart.data
+                    
+                    ? <img src="/likeTure.PNG" onClick={onLikeDelete} className="icon" alt="" />
+                    : <img src="/like.PNG" onClick={onLike} className="icon" alt="" />}
+                    <img src="/comment.PNG"  className="icon" alt="" />
                     <img src="/send.PNG" className="icon" alt="" />
                     <img src="/save.PNG" className="save icon" alt="" />
                 </div>

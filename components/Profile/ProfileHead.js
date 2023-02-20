@@ -14,31 +14,36 @@ const ProfileHead = (prop) => {
     const [followOpen, setFollowOpen] = useState(false);
     const [follingOpen, setFollingOpen] = useState(false);
     const {profileData, isFollowing} = useSelector((state) => state.user);
-    
+    const {me} = useSelector((state) => state.user);
     const dispatch = useDispatch();
-
-    if(!isMe){
-        dispatch({type:'GET_IS_FOLLOING_REQUEST'})//, data:{senderId: me.accountId, recipientId:prop.id}}));
-    }
 
     const onClickfollowerOpen = () => {
         setFollowOpen(true);
-        dispatch({type:'GET_FOLLOWER_REQUEST', data:'dlwogur'});
+        dispatch({type:'GET_FOLLOWER_REQUEST', data:prop.profileId.accoutId});
     }
 
     const onClickfolloingOpen = () => {
         setFollingOpen(true);
-        dispatch({type:'GET_FOLLOING_REQUEST', data:'dlwogur'});
+        dispatch({type:'GET_FOLLOING_REQUEST', data:prop.profileId.accoutId});
     }
 
     const onClickProfileOrFollow = () => {
+        console.log("isCheck");
         if(isMe){
             setProfileEdit(true);
+        }else if(isFollowing){
+            console.log("asdfisFollowing")
+            dispatch({type:'FOLLOW_CANCEL_REQUEST', data:{senderId:me.accountId, recipientId:prop.profileId}});
+        }else{
+            console.log("asdfisNotFollowing")
+            dispatch({type:'FOLLOW_FOLLOW_REQUEST', data:{senderId:me.accountId, recipientId:prop.profileId}});
+            console.log("asdfisNotFollowing")
         }
     }
     const onClickProfileIamgeChange = () => {
-        setProfileEdit(true);
+        setProfileImage(true);
     }
+
 
     return (
         <header>
@@ -49,18 +54,18 @@ const ProfileHead = (prop) => {
                     </div>
                     <div className="profile-user-settings">
                         <h1 className="profile-user-name">{profileData.accountName}</h1>
-                        <button className="btn profile-edit-btn" onClick={onClickProfileIamgeChange}>{isMe ? "프로필 편집" : isFollowing ? "팔로우" : "맞팔로우 하기"}</button>
+                        <button className="btn profile-edit-btn" onClick={onClickProfileOrFollow}>{isMe ? "프로필 편집" : isFollowing ? "팔로우" : "팔로우 하기"}</button>
                         <button className="btn profile-settings-btn" aria-label="profile settings"><img src="/setting.png" width="17px"/></button>
 					</div>
 
 			        <div className="profile-stats">
                         <ul className='profile-stats-ul'>
 					        <li>게시글 <span className="profile-stat-count">{profileData.postCount}</span></li>
-					        <li>팔로워 <span className="profile-stat-count" onClick={onClickfollowerOpen}>{profileData.followCount}</span></li>
+					        <li>팔로워 <span className="profile-stat-count" onClick={onClickfollowerOpen}>{profileData.followerCount}</span></li>
 					        <li>팔로잉 <span className="profile-stat-count" onClick={onClickfolloingOpen}>{profileData.followingCount}</span></li>
 				        </ul>
                     </div>
-                    <Modal isOpen = {followOpen} onRequestClose={() => setFollowOpen(false)} style={{content:{
+                    <Modal isOpen = {follingOpen} onRequestClose={() => setFollingOpen(false)} style={{content:{
                             position: "relative",
                             display: "inline-flex",
                             left: "50%",
@@ -72,7 +77,7 @@ const ProfileHead = (prop) => {
                         }}>
                         <FolloingModal />
                     </Modal>
-                    <Modal isOpen = {follingOpen} onRequestClose = {() => setProfileEdit(false)}  style={{content:{
+                    <Modal isOpen = {followOpen} onRequestClose = {() => setFollowOpen(false)}  style={{content:{
                             position: "relative",
                             display: "inline-flex",
                             left: "50%",

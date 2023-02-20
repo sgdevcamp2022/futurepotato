@@ -12,6 +12,8 @@ export const initialState = {
     followerList:[],
     isFollowing:false,
     isSignupSuccess: false,
+    isProfileLoading:false,
+    searchVar:null,
 }
 const userdummyPage = {
     name:'user1',
@@ -86,7 +88,6 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
                 localStorage.setItem('token', action.data.token);
                 tokenInsertHeader(action.data.token);
                 draft.isLoggedIn = true;
-                draft.me = action.data;
                 break;
             case 'LOG_IN_FAILURE' :
                 draft.isLoggedIn = true;
@@ -101,35 +102,13 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
                 break;
             
             case 'PROFILE_LOAD_REQUEST':
+                draft.isProfileLoading = false;
                 break;
             case 'PROFILE_LOAD_SUCCESS':
                 {
                     console.log(action);
                     draft.profileData = action.data;
-                    // if(action.data == draft.me.accountId){
-                    //     draft.profileData = {
-                    //         "name": "yusung",
-                    //         "profileImage": "/cover 8.png",
-                    //         "followerCount": 100,
-                    //         "followingCount": 95,
-                    //         "postCount": 10,
-                    //         "imageList": [
-                    //             {"image": "/cover 3.png",
-                    //             "postId":12,
-                    //             "isMultyImage": true},
-                    //             {"image": "/cover 5.png",
-                    //             "postId":14,
-                    //             "isMultyImage" : false
-                    //             }
-                    //         ]
-                    //     }
-                    //     console.log("좋아여여여");
-                    // }
-                    // else{
-                    //     draft.profileData = userdummyPage;
-                    // }
-                    
-                    draft.loadProfileSuccess = true;
+                    draft.isProfileLoading = true;
                     break;
                 }
             case 'PROFILE_LOAD_FAILURE':
@@ -157,16 +136,19 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
             case 'GET_FOLLOWER_FAILURE':
                 break;
             
-            case 'FOLLOW_REQUEST':
+            case 'FOLLOW_FOLLOW_REQUEST':
+                console.log("asdfasdf");
                 break;
-            case 'FOLLOW_SUCCESS':
+            case 'FOLLOW_FOLLOW_SUCCESS':
+                draft.isFollowing = true;
                 break;
-            case 'FOLLOW_FAILURE':
+            case 'FOLLOW_FOLLOW_FAILURE':
                 break;
 
             case 'FOLLOW_CANCEL_REQUEST':
                 break;
             case 'FOLLOW_CANCEL_SUCCESS':
+                draft.isFollowing = false;
                 break;
             case 'FOLLOW_CANCEL_FAILURE':
                 break;
@@ -174,7 +156,8 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
             case 'GET_IS_FOLLOING_REQUEST':
                 break;
             case 'GET_IS_FOLLOING_SUCCESS':
-                draft.isFollowing = true;
+                console.log(action);
+                draft.isFollowing = action.data;
                 break;
             case 'GET_IS_FOLLOING_FAILURE':
                 break;
@@ -195,6 +178,24 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
             case 'PROFILE_EDIT_FAILURE':
                 break;
 
+            case 'SEARCH_REQUEST':
+                break;
+            case 'SEARCH_REQUEST_SUCCESS':
+                console.log(action.data);
+                draft.searchVar = action.data;
+                break;
+            case 'SEARCH_REQUEST_FAILURE':
+                break;
+
+            case 'MY_PROFILE_REQUEST':
+                break;
+            case 'MY_PROFILE_SUCCESS':
+                draft.me.profileimage = action.data.profileImage;
+                draft.me.username = action.data.accountName;
+                break;
+            case 'MY_PROFILE_FAILURE':
+                break;
+            
             case 'LOG_OUT' :
                 localStorage.clear();
                 draft.isLoggedIn = false;

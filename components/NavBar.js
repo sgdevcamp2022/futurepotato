@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import { useEffect } from 'react';
 import Modal from 'react-modal';
 import {useDispatch, useSelector} from 'react-redux';
@@ -10,14 +10,31 @@ import NewPost from './NewPost';
 const NavBar = () => {
     const dispatch = useDispatch();
     const {clearUpload} = useSelector((state) => state.mainpage);
+    const {searchVar} = useSelector((state) => state.user);
     const [newPostOpen, setNewPost] = useState(false);
     const [alarmOpen, setAlarmopen] = useState(false);
-
+    const [search, setSearch] = useState('');
+    const onChangeSearch = useCallback((e) => {
+        setSearch(e.target.value);
+        console.log(searchVar);
+    }, [])
     const{me} = useSelector((state) => state.user);
     const logOut = () => {
         dispatch(logoutRequestAction());
     }
     
+    useEffect(() => {
+        const debounce = setTimeout(() => {
+            if(search){
+                console.log("asdfasdf");
+                dispatch({type: 'SEARCH_REQUEST', data:search});
+            }
+        }, 200)
+        return () => {
+            clearTimeout(debounce);
+        }
+    }, [search])
+
     useEffect(() => {
         if(clearUpload) setNewPost(false);
     }, [clearUpload])
@@ -37,7 +54,21 @@ const NavBar = () => {
                 <Link href = '/' legacyBehavior>
                         <img src="/logo.PNG" className="brand-img" alt="" />
                 </Link>
-                <input type="text" className="search-box" placeholder="search" />
+                <div className='search-box'>
+                    <input type="text" className="search-box" value={search} onChange={onChangeSearch} placeholder="search" />
+                    
+                    {searchVar &&
+                        <> 
+                            {searchVar.map((v, index) => (
+                                <Link  href = {`/profile/${v}`} legacyBehavior>
+                                    <div key={index} style={{zIndex:9, paddingTop:40, cursor:'pointer'}}>
+                                        {v}
+                                    </div>
+                                </Link>
+                            ))}
+                        </>
+                    }
+                </div>
                 <div className="nav-items">
                     <Link href = '/' legacyBehavior>
                         <a>

@@ -7,10 +7,10 @@ function checkPostAPI(data){
 
 function* checkPost(action){
     try{
-        //const result = yield call(checkPostAPI, action.data);
+        const result = yield call(checkPostAPI, action.data);
         yield put({
             type:'POST_INFO_SUCCESS',
-            //data: result.data,
+            data: result,
         })
     } catch (err) {
         yield put({
@@ -25,12 +25,9 @@ function* watchCheckPost(){
 }
 
 function addPostAPI(data){
-    console.log(data.content.get('content'));
-    return axios.post(`/feed/${data.accountId}/media`,
-        {
-            Header: {"Content-Type": "multipart/form-data"}
-        },
-        data.content,
+    console.log(data.content);
+    return axios.post(`/feed/${data.accountId}/media`, data.content,
+        {headers:{"Content-Type": "multipart/form-data"}}
     )
 }
 
@@ -42,6 +39,7 @@ function* addPost (action) {
             data:action.data
         })
     } catch (err){
+        console.log(err);
         yield put({
             type:'ADD_POST_FAILURE',
             data:err.response.data,
@@ -54,14 +52,13 @@ function* watchAddPost(){
 }
 
 function modifyPostAPI (data) {
-    return axios.patch(`/${data.name}/media/${data.postId}`, {
-        "content" : data.content,
-    })
+    const content = data.content;
+    return axios.patch(`/feed/${data.accountId}/media/${data.postId}?content=${content}`);
 }
 
 function* modifyPost(action){
     try{
-       // const result = yield call(modifyPostAPI, action.name, action.postId, action.content);
+       const result = yield call(modifyPostAPI, action.data);
         yield put({
             type:'MOD_POST_SUCCESS',
             data:action.data,
@@ -70,9 +67,9 @@ function* modifyPost(action){
         });
 
     } catch(err){
+        console.log(err);
         yield put({
             type:'MOD_POST_FAILURE',
-            data:err.response.data,
         })
     }
 }
@@ -82,15 +79,16 @@ function* watchModifyPost(){
 }
 
 function removePostAPI(data) {
-    return axios.delete(`/${data.accountId}/media/${data.postId}`)
+    console.log(data);
+    return axios.delete(`/feed/${data.accountId}/media/${data.postId}`);
 }
 
 function* removePost(action) {
     try{
-        //const result = yield call(removePostAPI, action.accountId,action.postId);
+        const result = yield call(removePostAPI, action.data);
         yield put({
             type:'REMOVE_POST_SUCCESS',
-            data:3,
+            //data:3,
         })
     } catch (err){
         yield put ({
@@ -105,12 +103,12 @@ function* watchRemovePost(){
 }
 
 function addReplyAPI(data){
-    return axios.post(`/feed/${data.accountId}/${commentId}/reply`, {reply : data.content});
+    return axios.post(`/feed/${data.accountId}/${data.commentId}/reply`, {reply : data.reply});
 }
 
 function* addReply(action){
     try{
-        //const result = yield call(addReplyAPI, action.data);
+        const result = yield call(addReplyAPI, action.data);
         yield put({
             type:'ADD_REPLY_SUCCESS',
             data:action.data,
@@ -129,17 +127,17 @@ function* watchAddReply(){
 
 
 function addCommentAPI(data){
-    console.log(data);
-    return axios.post(`/feed/${data.datame.accountId}/${data.dataw}/comment`, data.content)
+    const message = data.content;
+    return axios.post(`/feed/${data.datame.accountId}/${data.dataw}/comment`,{'comment': message});
 }
 
 function* addComment(action){
     try{
         //console.log(action);
-        //const result = yield call(addCommentAPI, action.data);
+        const result = yield call(addCommentAPI, action.data);
         yield put({
             type:'ADD_COMMENT_SUCCESS',
-            //data:1
+            data:result
         })
     }catch(err){
         console.log(err);
@@ -154,13 +152,14 @@ function* watchAddComment(){
     yield takeLatest('ADD_COMMENT_REQUEST', addComment);
 }
 
-function deleteCommentAPI(){
-    //return axios
+function deleteCommentAPI(data){
+    console.log("Asdfasdf");
+    return axios.delete(`/feed/${data.accountId}/comment/${data.commentId}`);
 }
 
 function* deleteComment(action){
     try{
-        //const result = yield call(deleteCommentAPI, action.data);
+        const result = yield call(deleteCommentAPI, action.data);
         yield put({
             type:'DELETE_COMMENT_SUCCESS',
             data:action.data
@@ -178,8 +177,8 @@ function* watchRemoveComment(){
     yield takeLatest('DELETE_COMMENT_REQUEST', deleteComment);
 }
 
-function deleteReplyAPI(){
-    //return axios
+function deleteReplyAPI(data){
+    return axios.delete(`/feed/${data.accountId}/reply/${data.replyId}`);
 }
 
 function* deleteReply(action){
@@ -245,12 +244,12 @@ function* watchStoryRequest(){
 }
 
 function postLikeRequestAPI(data){
-    return axios.post(`/feed/${data.accountId}/postLike/${data.postId}`)
+    return axios.post(`/feed/${data.accountId}/likePost/${data.postId}`)
 }
 
 function* postLikeRequest(action){
     try{
-        //const result = yield call(postLikeRequestAPI, action.data);
+        const result = yield call(postLikeRequestAPI, action.data);
         yield put ({
             type:'LIKE_POST_SUCCESS',
         })
@@ -264,12 +263,12 @@ function* watchPostLikeRequest(){
 }
 
 function postLikeCancelRequestAPI(data){
-    return axios.delete(`/feed/${data.accountId}/postLike/${data.postId}`)
+    return axios.delete(`/feed/${data.accountId}/likePost/${data.postId}`)
 }
 
 function* postLikeCancelRequest(action){
     try{
-        //const result = yield call(postLikeCancelRequestAPI, action.data);
+        const result = yield call(postLikeCancelRequestAPI, action.data);
         yield put ({
             type:'LIKE_POST_CANCEL_SUCCESS',
         })
@@ -283,12 +282,12 @@ function* watchPostLikeCancelRequest(){
 }
 
 function commentLikeRequestAPI(data){
-    return axios.post(`/feed/${data.accountId}/commentLike/${data.commentId}`)
+    return axios.post(`/feed/${data.accountId}/likeComment/${data.commentId}`)
 }
 
 function* commentLikeRequest(action){
     try{
-        //const result = yield call(commentLikeRequestAPI, action.data);
+        const result = yield call(commentLikeRequestAPI, action.data);
         yield put ({
             type:'LIKE_COMMENT_SUCCESS',
         })
@@ -302,7 +301,7 @@ function* watchCommentLikeRequest(){
 }
 
 function commentLikeCancelRequestAPI(data){
-    return axios.delete(`/feed/${data.accountId}/commentLike/${data.commentId}`)
+    return axios.delete(`/feed/${data.accountId}/likeComment/${data.commentId}`)
 }
 
 function* commentLikeCancelRequest(action){
@@ -318,6 +317,26 @@ function* commentLikeCancelRequest(action){
 
 function* watchCommentLikeCancelRequest(){
     yield takeLatest('LIKE_COMMENT_CANCEL_REQUEST', commentLikeCancelRequest);
+}
+
+function isLikeRequestAPI(data){
+    return axios.get(`/feed/${data.accountId}/isLikePost/${data.postId}`);
+}
+
+function* isLikeRequset(action){
+    try{
+        const result = yield call(isLikeRequestAPI, action.data);
+        yield put({
+            type: 'IS_LIKE_SUCCESS',
+            data: result
+        })
+    }catch(err){
+        yield put ({type: 'IS_LIKE_FAILURE'});
+    }
+}
+
+function* watchIsLikeRequest(){
+    yield takeLatest('IS_LIKE_REQUEST', isLikeRequset);
 }
 
 export default function* crudSaga(){
@@ -336,5 +355,6 @@ export default function* crudSaga(){
         fork(watchPostLikeCancelRequest),
         fork(watchCommentLikeRequest),
         fork(watchCommentLikeCancelRequest),
+        fork(watchIsLikeRequest),
     ])
 }

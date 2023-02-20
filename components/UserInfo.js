@@ -7,6 +7,7 @@ import NewPostText from "./NewPostText";
 const UserInfo = (props) => {
     const [optionOpen, setoptionOpen] = useState(false);
     const {me} = useSelector((state) => state.user);
+    const{currentReqPost} = useSelector((state)=>state.mainpage);
     const dispatch = useDispatch();
 
     const onClickMoveProfile = () => {
@@ -14,7 +15,7 @@ const UserInfo = (props) => {
     }
 
     const onClickDelete = () => {
-        dispatch({type:'REMOVE_POST_REQUEST', accountId:me.accountId, postId:props.postId})
+        dispatch({type:'REMOVE_POST_REQUEST', data:{accountId:me.accountId, postId:currentReqPost.postId}})
     }
 
     const [newPostOpen, setNewPost] = useState(false);

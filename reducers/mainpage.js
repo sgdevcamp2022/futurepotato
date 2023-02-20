@@ -16,173 +16,10 @@ export const initialMainState = {
     last:null,
     pagingState:null,
     currentReqPost:null,
-}
-
-const dummyData = {
-    "storyList" : [{"name" : "user1", "profileImage" : "/cover 1.png"},
-    {"name" : "user1", "profileImage" : "/cover 2.png"},
-    {"name" : "user1", "profileImage" : "/cover 3.png"},
-    {"name" : "user1", "profileImage" : "/cover 3.png"},
-    {"name" : "user1", "profileImage" : "/cover 3.png"},
-    {"name" : "user1", "profileImage" : "/cover 3.png"},
-    {"name" : "user1", "profileImage" : "/cover 3.png"},
-    {"name" : "user1", "profileImage" : "/cover 3.png"},
-    {"name" : "user1", "profileImage" : "/cover 3.png"},
-    {"name" : "user1", "profileImage" : "/cover 3.png"}],
-    
-    "content" : [
-        {'postId':1, 
-        'accountId' : "user1", 
-        "content": "게시글1",
-        "createdDt": "2023-01-01T12:11:00",   
-        "modifiedDt": "2023-01-01T13:11:00",
-        'likeCount': 12,
-        'likesCheck': true,
-        "commentCount": 110,
-        "profileImage" : '/cover 1.png',
-        "commentList" : [
-            {
-                "commentWriter": "user2",
-                "profileImage": "/cover 3.png",
-                "comment": "게시글 댓글1",
-                "likeCount": 100,
-                'commentId' : 1,
-                'replyCount' : 2,
-                'createdDt' : "2023-02-10T12:18:57.614259",
-                "replyList":[
-                    {
-                        'replyId':3,
-                        "replyWriter": "user1", "reply":"reply1",
-                        'profileImage': '/cover 8.png',
-                        "createdDt":""
-                    },
-                    {
-                        'replyId':1,
-                        "replyWriter": "user2", "reply":"reply2",
-                        "profileImage":'/cover 8.png',
-                        "createdDt":""
-                    },
-                ]
-            }
-        ],
-        "imageList":[
-                {"image": "./cover 1.png"},
-                {"image": "./cover 2.png"},
-                {"image": "./cover 3.png"},
-                {"image": "./cover 4.png"},
-            ],
-        "multyimage" : false,
-        }
-    ],
-
-    "last":false,
-    "pagingState" : "Page request [number: 0, size 2, sort: UNSORTED]",
-
-}
-
-const dummyPostRe = {
-    'postId':1, 
-        'accountId' : "user1", 
-        "content": "게시글1",
-        "createdDt": "2023-01-01T12:11:00",   
-        "modifiedDt": "2023-01-01T13:11:00",
-        'likeCount': 12,
-        'likesCheck': true,
-        "commentCount": 110,
-        "profileImage" : '/cover 1.png',
-        "commentList" : [
-            {
-                "commentWriter": "user2",
-                "profileImage": "/cover 3.png",
-                "comment": "게시글 댓글1",
-                "likeCount": 100,
-                'commentId' : 1,
-                'replyCount' : 2,
-                'createdDt' : "2023-02-10T12:18:57.614259",
-                "replyList":[
-                    {
-                        'replyId':3,
-                        "replyWriter": "user1", "reply":"reply1",
-                        'profileImage': '/cover 8.png',
-                        "createdDt":""
-                    },
-                    {
-                        'replyId':1,
-                        "replyWriter": "user2", "reply":"reply2",
-                        "profileImage":'/cover 8.png',
-                        "createdDt":""
-                    },
-                ]
-            }
-        ],
-        "imageList":[
-                {"image": "./cover 1.png"},
-                {"image": "./cover 2.png"},
-                {"image": "./cover 3.png"},
-                {"image": "./cover 4.png"},
-            ],
-        "multyimage" : false,
-        
-}
-
-const dummyStory = {
-    accountId:'유우우성',
-    "profileImage": "../public/cover 5.png",
-    "storyList": [
-        {
-            "storyId": 24,
-            "storedStoryImage": "../public/cover 6.png",
-            "createdDt": "2023-02-10T11:43:59.193341"
-        },
-        {
-            "storyId": 25,
-            "storedStoryImage": "../public/cover 7.png",
-            "createdDt": "2023-02-10T11:45:24.080901"
-        }
-    ]
-}
-
-const dummyAlarm = [
-    {
-        "id": 9,
-        "sender": "user5",
-        "receiver": "user6",
-        "place": "user6's post",
-        "action": "댓글을 달았습니다.",
-        "actionMessage": "user5님이 user6's post에 댓글을 달았습니다."
-    },
-    {
-        "id": 10,
-        "sender": "user8",
-        "receiver": "user6",
-        "place": "user6's post",
-        "action": "댓글을 달았습니다.",
-        "actionMessage": "user8님이 user6's post에 댓글을 달았습니다."
-    },
-    {
-        "id": 12,
-        "sender": "user7",
-        "receiver": "user6",
-        "place": " ccmet",
-        "action": "대댓글을 달았습니다.",
-        "actionMessage": "user7님이  ccmet에 대댓글을 달았습니다."
-    } 
-]
-
-const dummyPost = {
-    id:3, 
-    name : "yusung", 
-    "content": "게시글4",
-    "profileImage" : '/cover 8.png',
-    "createdDate": "2023-01-01T12:11:00",
-    "modifiedDate": "2023-01-01T13:11:00",
-    likeCount: 0,
-    likesCheck: false,
-    "commentCount": 0,
-    "commentList" : [],
-    "imageList" : [{"image": "./cover 4.png"},
-    {"image": "./cover 3.png"},{"image": "./cover 2.png"}],
-    "isMultyImage" : false,
+    isLoadingPost:false,
+    profileLoad:false,
+    isLikePost:false,
+    isCommentLike:[],
 }
 
 export const mainPageRequestAction = () => ({
@@ -192,14 +29,11 @@ export const mainPageRequestAction = () => ({
 const reducer = (state = initialMainState, action) => produce(state, (draft) => {
     switch(action.type){
         case 'MAIN_PAGE_REQUEST' : 
-            console.log("이게뭘까요?");
             break;
         case 'MAIN_PAGE_SUCCESS' :
-            draft.storyList = draft.storyList.concat(dummyData.storyList);
-            draft.content = draft.content.concat(dummyData.content);//dummyData.postList;//draft.postList.concat(dummyData.postList);
-            draft.limit = dummyData.limit;
-            draft.last = dummyData.last;
-            draft.pagingState = dummyData.pagingState;
+            console.log(action.data);
+            draft.content = draft.content.concat(action.data.content);
+            draft.last = action.data.last;
             break;
         case 'MAIN_PAGE_FAIRLUE' :
             break;
@@ -208,7 +42,9 @@ const reducer = (state = initialMainState, action) => produce(state, (draft) => 
             
             break;
         case 'POST_INFO_SUCCESS':
-            draft.currentReqPost = dummyPostRe;
+            draft.currentReqPost = action.data.data;
+            draft.isLoadingPost = true;
+            console.log("slslslslslsls");
             break;
         case 'POST_INFO_FAILURE':
             break;
@@ -329,7 +165,6 @@ const reducer = (state = initialMainState, action) => produce(state, (draft) => 
         case 'ALARM_REQUEST':
             break;
         case 'ALARM_REQUEST_SUCCESS':
-            draft.alarmData = dummyAlarm;
             break;
         case 'ALARM_REQUEST_FAILURE':
             break;
@@ -337,7 +172,6 @@ const reducer = (state = initialMainState, action) => produce(state, (draft) => 
         case 'STORY_REQUEST':
             break;
         case 'STORY_REQUEST_SUCCESS':
-            draft.storyListId = dummyStory;
             draft.isStoryReady = true;
             break;
         case 'STORY_REQUEST_FAILURE':
@@ -369,6 +203,29 @@ const reducer = (state = initialMainState, action) => produce(state, (draft) => 
         case 'LIKE_COMMENT_CANCEL_SUCCESS':
             break;
         case 'LIKE_COMMENT_CANCEL_FAILURE':
+            break;
+
+        case 'IS_LIKE_REQUEST':
+            break;
+        case 'IS_LIKE_SUCCESS':
+            draft.isLikePost = action.data;
+            break;
+        case 'IS_LIKE_FAILURE':
+            break;
+
+        case 'IS_LIKE_COMMENT_REQUEST':
+            break;
+        case 'IS_LIKE_COMMENT_SUCCESS':
+            draft.isCommentLike.push(action.data);
+            break;
+        case 'IS_LIKE_COMMENT_FAILURE':
+            break;
+
+        case 'IS_LIKE_REPLY_REQUEST':
+            break;
+        case 'IS_LIKE_REPLY_SUCCESS':
+            break;
+        case 'IS_LIKE_REPLY_FAILURE':
             break;
 
         default:

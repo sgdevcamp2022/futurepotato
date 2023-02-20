@@ -9,13 +9,12 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 const DetailPage = (data) => {
-    const {currentReqPost} = useSelector((state) => state.mainpage);
+    const {currentReqPost, isLoadingPost, isLikePost} = useSelector((state) => state.mainpage);
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
     const dispatch = useDispatch();
     
     useEffect(() => {
-        console.log(data.data);
         dispatch({type:'POST_INFO_REQUEST', data: {postId:data.data}});
         setIsLoading(false);
     }, []);
@@ -29,7 +28,7 @@ const DetailPage = (data) => {
     }
     return(
         <>
-        {isLoading ? <div>로딩중</div> :
+        {!isLoadingPost ? <div>로딩중</div> :
         <div>
         <NavBar />
         <div className = 'detail_window' style={{marginTop:70}}>
@@ -39,7 +38,7 @@ const DetailPage = (data) => {
                         afterChange={(slide) => setCurrentSlide(slide)}
                     >
                         {currentReqPost.imageList.map((i, index) => (
-                            <img key={index} src={i.image} className="post-image" alt="" />
+                            <img key={index} src={i} className="post-image" alt="" />
                         ))}
                     </Slider>   
                 </div>
@@ -53,7 +52,7 @@ const DetailPage = (data) => {
                             </div>
                             {currentReqPost.commentList.length != 0 ? <CommentList /> : <></>}
                         </div>
-                        <CommentForm checkHeart = {currentReqPost.likesCheck} postId = {currentReqPost.postId} heartCount = {currentReqPost.likeCount}/>
+                        <CommentForm checkHeart = {isLikePost} postId = {currentReqPost.postId} heartCount = {currentReqPost.likeCount}/>
                     </div>  
                 </div>
             </div>

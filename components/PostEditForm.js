@@ -7,9 +7,12 @@ const PostEditForm = (props) => {
 
     const dispatch = useDispatch();
     const {me} = useSelector((state) => state.user);
-
+    const {postId} = useSelector((state) =>state.mainpage.currentReqPost);
+    console.log(postId);
+    
     const onClickDelete = () => {
-        dispatch({type:'REMOVE_POST_REQUEST', accountId:me.accountId, postId:props.postId})
+        console.log("asdfasdf");
+        dispatch({type:'REMOVE_POST_REQUEST', accountId:me.accountId, postId:postId})
     }
 
     const [newPostOpen, setNewPost] = useState(false);

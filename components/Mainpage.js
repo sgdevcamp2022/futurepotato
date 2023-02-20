@@ -7,11 +7,13 @@ import { useCallback, useEffect, useState } from "react";
 
 const Mainpage = () => {
     const dispatch = useDispatch();
-    const {postList} = useSelector((state) => state.mainpage);
-    console.log(postList);
+    const {postList, last} = useSelector((state) => state.mainpage);
+    const {me} = useSelector((state) => state.user);
     const [fetching, setFetching] = useState(false);
+
     useEffect(() => {
-        dispatch({type: 'MAIN_PAGE_REQUEST', data:{accountId:'dlwogur', lastSeenPostId:0, pageSize:1}});
+        dispatch({type: 'MAIN_PAGE_REQUEST', data:{accountId:me.accountId,lastSeenPostId:0, pageSize:1}});
+        dispatch({type:'MY_PROFILE_REQUEST', data: me.accountId});
     },[]);
 
     const handleScroll = () => {
@@ -20,7 +22,8 @@ const Mainpage = () => {
         const clientHeight = document.documentElement.clientHeight;
         if(scrollTop + clientHeight >= scrollHeight && fetching === false){
             setFetching(true);
-            dispatch({type:'MAIN_PAGE_REQUEST', data:{lastSeenPostId:2, pageSize: 2}});
+            if(last)
+                dispatch({type:'MAIN_PAGE_REQUEST', data:{lastSeenPostId:2, pageSize: 2}});
             setFetching(false);
         }
         

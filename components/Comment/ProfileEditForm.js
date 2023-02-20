@@ -1,7 +1,9 @@
 import { useCallback, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 const ProfileEditForm = () => {
     const imageInput = useRef();
-
+    const dispatch = useDispatch();
+    const {me} = useSelector((state) => state.user);
     const onClickImageUpload = useCallback(() => {
         imageInput.current.click();
     }, [imageInput.current]);
@@ -10,12 +12,11 @@ const ProfileEditForm = () => {
         const imageFormData = new FormData();
         console.log(e.target.files);
         [].forEach.call(e.target.files, (f) => {
-            imageFormData.append('image', f);
+            imageFormData.append('multipartFile', f);
         });
-        console.log(imageFormData.get('image'));
         return dispatch({
-            type: "IMAGE_UPLOAD_REQUEST",
-            data: imageFormData,
+            type: "PROFILE_IMAGE_REQUEST",
+            data: {image: imageFormData, accountId: me.accountId},
         });
     }, []);
 

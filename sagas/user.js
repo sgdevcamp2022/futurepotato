@@ -1,4 +1,4 @@
-import { all , fork, takeLatest, put, call} from "redux-saga/effects";
+import { all , fork, takeLatest, put, call, takeEvery,take} from "redux-saga/effects";
 import axios from "axios";
 
 function logInAPI(data) {
@@ -129,44 +129,38 @@ function* watchFollowerLoad() {
 }
 
 function followRequestAPI(data){
-    return axios.post('/follow', {
-        senderId:data.senderId,
-        recipientId:data.recipientId,
-    })
+    console.log('요청이 들어가나여');
+    return axios.post(`/graph/${data.senderId}/follow/${data.recipientId}`);
 }
 
 function* followRequest(action){
     try{
-        //const result = yield call(followRequestAPI, action.data);
+        const result = yield call(followRequestAPI, action.data);
          yield put({
-            type:'FOLLOW_SUCCESS',
-            //data:result.data
+            type:'FOLLOW_FOLLOW_SUCCESS',
         })
     }catch(err){
         yield put({
-            type:'FOLLOW_FAILURE',
+            type:'FOLLOW_FOLLOW_FAILURE',
             data:err.response.data,
         })
     }
 }
 
 function* watchFollow(){
-    yield takeLatest('FOLLOW_REQUEST', followRequest);
+    yield takeLatest('FOLLOW_FOLLOW_REQUEST', followRequest);
 }
 
 function followCancelAPI(data) {
-    return axios.delete('/follow', {
-        senderId:data.senderId,
-        recipientId:data.recipientId,
-    })
+    
+    return axios.delete(`/graph/${data.senderId}/follow/${data.recipientId}`);
 }
 
 function* followCancel(action){
     try{
-        //const result = yield call(followCancelAPI, action.data);
+        const result = yield call(followCancelAPI, action.data);
         yield put({
             type:'FOLLOW_CANCEL_SUCCESS',
-            //data:result.data
         })
     }catch(err){
         yield put({
@@ -182,18 +176,16 @@ function* watchFollowCancel(){
 
 
 function isFollowAPI(data){
-    return axios.get('/isFollowing', {
-        senderId:data.senderId,
-        recipientId:data.recipientId
-    })
+    return axios.get(`/graph/${data.senderId}/isFollowing/${data.recipientId}`);
 }
 
 function* isFollow(action){
     try{
-        //const result = yield call(isFollowAPI, action.data);
+        const result = yield call(isFollowAPI, action.data);
+        console.log(result);
         yield put({
             type:'GET_IS_FOLLOING_SUCCESS',
-            //data:result.result,
+            data:result.data,
         })
     }catch(err){
         yield put({
@@ -208,15 +200,14 @@ function* watchIsFolloing(){
 }
 
 function editProfileImageAPI(data){
-    return axios.post(`feed/profileImage/${data.accountId}`,{image:data.image});
+    return axios.post(`feed/profileImage/${data.accountId}`,data.image,  {headers:{"Content-Type": "multipart/form-data"}});
 }
 
 function* editProfileImage(action){
     try{
-        //const result = yield call(editProfileImageAPI, action.data);
+        const result = yield call(editProfileImageAPI, action.data);
         yield put({
             type:'PROFILE_IMAGE_SUCCESS',
-            data:action.data,
         })
     }catch(err){
         yield put({
@@ -231,8 +222,8 @@ function* watchProfileImage() {
 }
 
 function profileEditAPI(data){
-    console.log(data);
-    return axios.patch(`/feed/mypage/${data.originalId}`, {accountId: data.accountID, accountName:data.accountName});
+    console.log(data.accountId);
+    return axios.patch(`/feed/mypage/${data.accountId}`, {accountId: data.accountID, accountName:data.accountName});
 }
 
 function* profileEdit(action){
@@ -254,6 +245,42 @@ function* watchProfileEdit(){
     yield takeLatest('PROFILE_EDIT_REQUEST', profileEdit);
 }
 
+function searchAPI(data){
+    return axios.get(`/feed/users?keyword=${data}`);
+}
+
+function* search(action){
+    try{
+        const result = yield call(searchAPI, action.data);
+        console.log(result);
+        yield put({type:'SEARCH_REQUEST_SUCCESS', data:result.data});
+    }
+    catch(err){
+        yield put({type: 'SEARCH_REQUEST_FAILURE'});
+    }
+}
+function* watchSearch(){
+    yield takeLatest('SEARCH_REQUEST', search);
+}
+
+
+function myProfileAPI(data){
+    return axios.get(`/feed/mypage/${data}`);
+}
+
+function* myProfile(action){
+    try{
+        const result = yield call(myProfileAPI,action.data);
+        yield put({type:'MY_PROFILE_SUCCESS', data:result.data})
+    }catch(err){
+        yield put({type:'MY_PROFILE_FAILURE'});
+    }
+}
+
+function* watchMyProfile(){
+    yield takeLatest('MY_PROFILE_REQUEST', myProfile);
+}
+
 export default function* userSaga(){
     yield all([
         fork(watchLogIn),
@@ -266,5 +293,7 @@ export default function* userSaga(){
         fork(watchIsFolloing),
         fork(watchProfileImage),
         fork(watchProfileEdit),
+        fork(watchSearch),
+        fork(watchMyProfile),
     ])
 }

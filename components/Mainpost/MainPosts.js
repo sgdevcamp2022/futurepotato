@@ -17,7 +17,7 @@ const MainPosts = () => {
         slidesToShow: 1,
         slidesToScroll: 1,
     }
-
+    console.log(content);
     return (
         <>
             {content.map((v, index) => (
