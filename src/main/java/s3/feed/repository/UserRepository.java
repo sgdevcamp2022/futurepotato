@@ -27,9 +27,18 @@ public interface UserRepository extends Neo4jRepository<UserEntity, Long> {
             "RETURN f\n" +
             "ORDER BY m DESC")
     List<UserEntity> getUnseenFollowingsWhoUploadedStory(String accountId, int year, int month, int day, int hour, int minute, int second);
+
     @Query("MATCH (f:Account {accountId:$accountId})-[:UPLOADED]->(fs:Story)\n" +
             "RETURN max(fs.createdDt)")
     LocalDateTime getCreatedDtOfRecentStory(String accountId);
+
+    //스토리를 올린 팔로우들의 프로필 리스트 반환(최근에 스토리를 올린 순으로 리스트 반환)
+    @Query("MATCH (a:Account {accountId:$accountId})-[:IS_FOLLOWING]-(f:Account)-[:UPLOADED]->(fs:Story)\n" +
+            "with f, max(fs.createdDt) as m\n" +
+            "RETURN f\n" +
+            "ORDER BY m DESC LIMIT $pageSize")
+    List<UserEntity> getFollowingsWhoUploadedStoryPerPageSize(String accountId, int pageSize);
+
     //스토리를 올린 팔로우들의 프로필 리스트 반환(최근에 스토리를 올린 순으로 리스트 반환)
     @Query("MATCH (a:Account {accountId:$accountId})-[:IS_FOLLOWING]-(f:Account)-[:UPLOADED]->(fs:Story)\n" +
             "with f, max(fs.createdDt) as m\n" +

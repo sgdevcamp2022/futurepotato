@@ -30,6 +30,16 @@ public interface PostRepository extends Neo4jRepository<PostEntity, Long> {
     List<PostEntity> getUnseenPostList(String accountId, int year, int month, int day, int hour, int minute, int second);
 
 
+    //(pageSize만큼) 자신을 포함한 팔로우한 사람들의 게시물 리스트 반환
+    @Query("PROFILE MATCH (a:Account {accountId:$accountId}) \n" +
+            "OPTIONAL MATCH (p:Post)<-[:UPLOADED]-(a) \n" +
+            "OPTIONAL MATCH (a)-[:IS_FOLLOWING]->(f:Account)-[:UPLOADED]->(fp:Post) \n" +
+            "UNWIND [p,fp] AS posts WITH posts WHERE posts IS NOT NULL \n" +
+            "RETURN DISTINCT posts \n" +
+            "ORDER BY posts.createdDt DESC\n" +
+            "LIMIT $pageSize ")
+    List<PostEntity> getPostsPerPageSize(String accountId, int pageSize);
+
     //자신을 포함한 팔로우한 사람들의 게시물 리스트 반환
     @Query("MATCH (a:Account {accountId:$accountId}) "+
             "OPTIONAL MATCH (p:Post)<-[:UPLOADED]-(a) " +
