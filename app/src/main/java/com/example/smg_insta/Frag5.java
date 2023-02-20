@@ -55,43 +55,15 @@ public class Frag5 extends Fragment {
 
     String name, profile;
 
-
-    // 로그인시 받아와야 함!!
     String accountId;
-    String JWT;
 
     @Nullable
     @Override
     public View onCreateView(@Nullable LayoutInflater inflater,@Nullable ViewGroup container,@Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.my_info_frag5, container, false);
 
-        //Bundle bundle = getArguments();
-        //accountId = bundle.getString("ID");
-        //JWT = bundle.getString("JWT");
-
         accountId = PreferenceManager.getString(getContext(), "accountID");
         Toast.makeText(getContext(), "accountId값 : " + accountId, Toast.LENGTH_LONG).show();
-
-        //--------마이페이지 테스트 더미데이터-----------------
-//        MypageResponse testData = new MypageResponse();
-//        testData.setAccountId("_id_Test1");
-//        testData.setName("_user1_test_");
-//        testData.setProfileImage("https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg");
-//        testData.setFollowerCount(101);
-//        testData.setFollowingCount(95);
-//        testData.setPostCount(10);
-//
-//        List<MypageResponse.MyImage> images = new ArrayList<>();
-//        images.add(new MypageResponse.MyImage("https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg", 12, true));
-//        images.add(new MypageResponse.MyImage("https://cdn.pixabay.com/photo/2020/11/04/15/29/coffee-beans-5712780_1280.jpg", 14, false));
-//        images.add(new MypageResponse.MyImage("https://cdn.pixabay.com/photo/2020/03/08/21/41/landscape-4913841_1280.jpg", 20, true));
-//        images.add(new MypageResponse.MyImage("https://cdn.pixabay.com/photo/2020/09/02/18/03/girl-5539094_1280.jpg", 21, false));
-//        images.add(new MypageResponse.MyImage("https://cdn.pixabay.com/photo/2014/03/03/16/15/mosque-279015_1280.jpg", 30, false));
-//
-//        testData.setImageList(images);
-
-
-        //----------------------------------
 
         userImage = view.findViewById(R.id.iv_account_profile);
         userId = view.findViewById(R.id.tv_myInfo_id);

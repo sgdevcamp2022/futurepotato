@@ -128,7 +128,7 @@ public class FragUserInfo extends Fragment {
                                 });
                                 popup.show();
 
-                            } else {    // !response.isSuccessful() 해도 일단 차단하기 뜸ㅋㅋㅋㅋ
+                            } else {
                                 // 차단하기
                                 //PopupMenu 객체 생성
                                 PopupMenu popup= new PopupMenu(getActivity(), btn_menu); //두 번째 파라미터가 팝업메뉴가 붙을 뷰
@@ -182,18 +182,6 @@ public class FragUserInfo extends Fragment {
         //3분할로 화면을 나타냄
         mGridLayoutManager = new GridLayoutManager(getContext(),3);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
-
-        //-------test
-        List<MypageResponse.MyImage> images = new ArrayList<>();
-        images.add(new MypageResponse.MyImage("https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg", 12, true));
-        images.add(new MypageResponse.MyImage("https://cdn.pixabay.com/photo/2020/11/04/15/29/coffee-beans-5712780_1280.jpg", 14, false));
-        images.add(new MypageResponse.MyImage("https://cdn.pixabay.com/photo/2020/03/08/21/41/landscape-4913841_1280.jpg", 20, true));
-        images.add(new MypageResponse.MyImage("https://cdn.pixabay.com/photo/2020/09/02/18/03/girl-5539094_1280.jpg", 21, false));
-        images.add(new MypageResponse.MyImage("https://cdn.pixabay.com/photo/2014/03/03/16/15/mosque-279015_1280.jpg", 30, false));
-
-        mRecyclerView.setAdapter(new RVAdapter_profile(images, getContext(), dataService));
-        //----
-
 
         // 3. 유저 정보 + feed 사진 띄우기
         profileImage = view.findViewById(R.id.iv_user_profile);
@@ -253,7 +241,7 @@ public class FragUserInfo extends Fragment {
                         if(response.isSuccessful()) {
                             checkFollow(myId, id);
                             checkUserInfo(id);
-                            Toast.makeText(getContext(), "언팔 ㅅ성공", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "팔로우를 취소하였습니다.", Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(getContext(), "ErrorCode: "+response.code(), Toast.LENGTH_SHORT).show();
                         }
@@ -275,7 +263,7 @@ public class FragUserInfo extends Fragment {
                         if(response.isSuccessful()) {
                             checkFollow(myId, id);
                             checkUserInfo(id);
-                            Toast.makeText(getContext(), "팔로우 성공", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "팔로우를 성공하였습니다.", Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(getContext(), "ErrorCode: "+response.code(), Toast.LENGTH_SHORT).show();
                         }
@@ -329,27 +317,10 @@ public class FragUserInfo extends Fragment {
                         Toast.makeText(getContext(), "현재 팔로우하고 있음, 팔로잉 버튼", Toast.LENGTH_LONG).show();
                     } else {
                         //팔로우 안하고 있을 때
-                        Toast.makeText(getContext(), "현재 팔로우ㄴㄴ", Toast.LENGTH_LONG).show();
-                        dataService.graph.isFollowing(recipientId, SenderId).enqueue(new Callback<Boolean>() {
-                            @Override
-                            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                                if (response.isSuccessful() && response.body()) {
-                                    // 맞팔하기 버튼 추가하기
-
-                                    Toast.makeText(getContext(), "현재 팔로우ㄴ, 근데 쟤는 나 팔로우, 맞팔 버튼 추가", Toast.LENGTH_LONG).show();
-                                } else {
-                                    // 팔로우 버튼
-                                    btnFollow.setVisibility(View.VISIBLE);
-                                    btnUnfollow.setVisibility(View.GONE);
-                                    Toast.makeText(getContext(), "현재 팔로우ㄴㄴ, 팔로우버튼", Toast.LENGTH_LONG).show();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<Boolean> call, Throwable t) {
-                                t.printStackTrace();
-                            }
-                        });
+                        // 팔로우 버튼
+                        btnFollow.setVisibility(View.VISIBLE);
+                        btnUnfollow.setVisibility(View.GONE);
+                        Toast.makeText(getContext(), "현재 팔로우ㄴㄴ, 팔로우버튼", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     Toast.makeText(getContext(), "isFollowing error: " + response.code(), Toast.LENGTH_LONG).show();

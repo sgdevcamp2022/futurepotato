@@ -136,17 +136,6 @@ public class Frag1 extends Fragment {
                     }
                 });
 
-
-                // 내 스토리가 있으면
-//                if (isMyStories) {
-//                    Intent intent = new Intent(getActivity(), StoryActivity.class);
-//                    startActivity(intent);
-//
-//                } else {    // 스토리가 없으면
-//                    Toast.makeText(getContext(), "길게 눌러서 스토리를 생성하세요..", Toast.LENGTH_LONG).show();
-
-
-              //  }
             }
         });
 
