@@ -44,25 +44,6 @@ public class Frag_following extends Fragment {
             accountID = bundle.getString("userId");
         } else {
             accountID = PreferenceManager.getString(getActivity(), "accountID");
-            dataService.graph.readFollowing(accountID).enqueue(new Callback<FollowListResponse>() {
-                @Override
-                public void onResponse(Call<FollowListResponse> call, Response<FollowListResponse> response) {
-                    if(response.isSuccessful()) {
-                        //followerData = response.body().getData();
-                        mRecyclerView.setAdapter(new FollowingListAdapter(followingData, getContext(), dataService));
-                        Toast.makeText(getContext(), "연결 성공.", Toast.LENGTH_LONG).show();
-                    }
-                    else {
-                        Toast.makeText(getContext(), "Error code: "+response.code(), Toast.LENGTH_LONG).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<FollowListResponse> call, Throwable t) {
-                    Toast.makeText(getContext(), "연결 실패.", Toast.LENGTH_LONG).show();
-                }
-            });
-
         }
 
         mTextView = view.findViewById(R.id.tv_noFollowing);
@@ -84,10 +65,9 @@ public class Frag_following extends Fragment {
                         mRecyclerView.setVisibility(View.VISIBLE);
                         mTextView.setVisibility(View.GONE);
                     } else {
-
+                        mRecyclerView.setVisibility(View.GONE);
+                        mTextView.setVisibility(View.VISIBLE);
                     }
-                    mRecyclerView.setVisibility(View.GONE);
-                    mTextView.setVisibility(View.VISIBLE);
                 }
                 else {
                     Toast.makeText(getContext(), "Error code: "+response.code(), Toast.LENGTH_LONG).show();

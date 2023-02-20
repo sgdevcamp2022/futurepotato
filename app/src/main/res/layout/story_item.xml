@@ -9,8 +9,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/civ_storyImage"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         android:background="@drawable/bg_story"
         android:hapticFeedbackEnabled="true"
         android:src="@drawable/user_default" />
